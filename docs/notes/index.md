@@ -1,29 +1,46 @@
 # Agent Notes
 
-这里记录我对 agent 论文、代码和系统设计的理解。形式更接近个人技术 blog：每篇文章只解决一个问题，尽量写清楚上下文、判断和可复用结论。
+Agent Notes 是我整理 agent 论文、代码和系统设计的地方。它不是访谈记录，也不是论文摘要库，而是把读到的机制、边界和判断沉淀成以后能复用的笔记。
 
 当前主线是从 ReAct 读到 SWE-agent：先理解语言模型如何在 `Thought -> Action -> Observation` 循环里行动，再理解为什么真实软件工程任务需要专门的 Agent-Computer Interface。
 
-## 文章
+## 为什么这样写
 
-| 标题 | 主题 | 状态 |
-| --- | --- | --- |
-| [读法：三遍读论文](reading-route.md) | 如何把论文读成可复用笔记 | 可复习 |
-| [ReAct：推理和行动交替](papers/react.md) | agent loop 的基本范式 | 可复习 |
-| [SWE-agent：给语言模型设计电脑界面](papers/swe-agent.md) | ACI 与 coding agent | 可复习 |
-| [Agent 基本概念](topics/agent-basics.md) | ReAct、CoT、Act-only、ACI 的关系 | 持续更新 |
-| [实现与 provider 边界](topics/implementation-boundaries.md) | 哪些能替换，哪些不该重写 | 持续更新 |
-| [长期记忆](topics/long-term-memory.md) | memory、session、compact 的区别 | 草稿 |
+这个站点参考 OpenAI Agents SDK 文档的组织方式：入口页先给概念地图，再给最小组件，最后告诉读者下一步应该去哪一页。区别是这里不是 SDK 手册，而是个人学习笔记，所以正文会保留更多“我如何理解”和“这个边界为什么重要”。
 
-## 写作原则
+写作时遵守三个约束：
 
-- 先写自己的理解，再补原文证据。
-- 不把对话逐字搬进笔记；只沉淀稳定概念、判断和反例。
-- 每篇文章保留一个明确主题，不把所有内容塞进首页。
-- 代码和论文原文可以作为证据，但正文要尽量转成可复用解释。
+1. 先写自己的理解，再补原文证据。
+2. 不把对话逐字搬进笔记，只保留稳定结论。
+3. 每篇文章只解决一个问题，避免把所有内容堆到首页。
 
-## 资料位置
+## 基本组件
 
-论文 PDF 不放在笔记目录下，统一保存在 `docs/paper/`。笔记页面引用原文要点时优先摘出关键句和段落含义，而不是只留一个下载链接。
+| 组件 | 用途 |
+| --- | --- |
+| 读法 | 统一每篇论文的阅读输出形状，避免越读越散。 |
+| 论文笔记 | 记录一篇论文的核心问题、机制和边界。 |
+| 主题笔记 | 把多次阅读中反复出现的概念抽出来，例如 agent loop、provider boundary、memory。 |
+| 原文材料 | PDF 保存在 `docs/paper/`，页面中只摘关键原文抓手和自己的理解。 |
+
+## 入门起点
+
+如果第一次打开这个站点，按这个顺序读：
+
+1. [快速开始](reading-route.md)：了解笔记怎样从论文里抽取问题、机制和边界。
+2. [Agent 基本概念](topics/agent-basics.md)：先建立 `agent loop -> feedback -> interface` 这条主线。
+3. [ReAct](papers/react.md)：理解推理和行动为什么要交替。
+4. [SWE-agent](papers/swe-agent.md)：理解为什么 coding agent 需要 ACI。
+
+## 路径选择
+
+| 如果你想要... | 接下来读 |
+| --- | --- |
+| 快速知道站点怎么读 | [快速开始](reading-route.md) |
+| 理解 ReAct、CoT、Act-only 的关系 | [Agent 基本概念](topics/agent-basics.md) |
+| 读 ReAct 论文的核心贡献 | [ReAct：推理和行动交替](papers/react.md) |
+| 读 SWE-agent 论文的接口贡献 | [SWE-agent：给语言模型设计电脑界面](papers/swe-agent.md) |
+| 判断换模型时哪些代码该动 | [实现与 provider 边界](topics/implementation-boundaries.md) |
+| 理解 memory、session、compact 的区别 | [长期记忆](topics/long-term-memory.md) |
 
 这个站点以后会继续扩展，不只服务 ReAct 和 SWE-agent。
