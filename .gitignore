@@ -1,0 +1,16 @@
+# 系统 / 编辑器垃圾
+.DS_Store
+__pycache__/
+*.pyc
+docs/site/
+
+# resume.io 是独立的 GitHub 仓库，不收进本仓库
+applications/resume-io/
+
+# 临时收件箱 + 探针目录，整理完再决定要哪些
+materials/photos-inbox/
+
+# 大体积参考资料 / 模板 / 附件 —— 单独备份，不进 git 历史
+materials/references/
+resume/templates/
+archive/*.zip
