@@ -1,10 +1,10 @@
 ---
-description: AI study notes organized by topics, articles, and papers.
+description: Writing and study notes on AI agents, deep learning, and software systems.
 ---
 
-# Wenyao's AI Notes
+# Blog
 
-从第一性原理、图解和代码化表达出发，整理 AI Agent、Deep Learning 和 AI Engineering 的长期学习笔记。
+写作和学习笔记的入口。这里会放 AI Agent、Deep Learning、AI Engineering，以及之后更宽泛的软件系统文章。
 
 [开始阅读](./notes/index.md){ .md-button .md-button--primary }
 [查看 Topics](./notes/reading-route.md){ .md-button }
@@ -15,13 +15,16 @@ description: AI study notes organized by topics, articles, and papers.
 
 ```mermaid
 flowchart LR
-  Notes["AI Notes"] --> Agent["Topic: AI Agent"]
+  Blog["Blog"] --> Notes["Notes"]
+  Blog --> Posts["Posts"]
+  Notes --> Agent["Topic: AI Agent"]
   Notes --> DL["Topic: Deep Learning"]
   Agent --> Runtime["Articles: loop / tools / memory"]
   Agent --> Papers["Papers: ReAct / SWE-agent"]
   DL --> NN["Articles: neural networks"]
   DL --> OPT["Articles: optimization / backprop"]
   DL --> TFM["Articles: Transformer / attention"]
+  Posts --> Essays["Essays / project notes"]
 ```
 
 ## 起点选择

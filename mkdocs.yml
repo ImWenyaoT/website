@@ -35,7 +35,11 @@ markdown_extensions:
   - attr_list
   - tables
   - admonition
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
       emoji_index: !!python/name:material.extensions.emoji.twemoji
@@ -112,6 +116,8 @@ hooks:
   - hooks/socialmedia.py
 extra_css:
   - notes/assets/styles.css
+extra_javascript:
+  - javascripts/mermaid.mjs
 watch:
   - layouts
 copyright: Copyright &copy; 2026 ImWenyaoT
