@@ -10,12 +10,12 @@ description: Writing and study notes on AI agents, deep learning, and software s
     这里记录我学 AI、写代码、读论文和折腾系统时留下的东西。短的会像笔记，长的会像文章；共同点是尽量把一个问题讲到以后还能重新捡起来。
   </p>
   <div class="home-actions">
-    <a class="md-button md-button--primary" href="./notes/">开始阅读</a>
-    <a class="md-button" href="./notes/reading-route/">查看 Topics</a>
+    <a class="md-button md-button--primary" href="./notes/ai-agent/">开始阅读</a>
+    <a class="md-button" href="#topics">查看 Topics</a>
   </div>
 </section>
 
-<section class="home-section" data-reveal>
+<section class="home-section" id="topics" data-reveal>
   <h2>现在主要写什么</h2>
   <p>
     我会把内容先按 topic 收起来，比如 AI Agent 和 Deep Learning；也会保留一些更随手的 blog posts。这里不追求每天更新，更在意一篇东西过几个月再看时，是否还能帮我继续往下想。
@@ -53,24 +53,24 @@ flowchart LR
 </section>
 
 <section class="home-section" data-reveal>
-  <h2>怎么读</h2>
-  <div class="home-path-list">
-    <a href="./notes/reading-route/">
-      <span>先看结构</span>
-      <strong>快速开始：如何读这些笔记</strong>
-    </a>
-    <a href="./notes/ai-agent/">
-      <span>理解 agent 的基本循环</span>
-      <strong>AI Agent Topic</strong>
-    </a>
-    <a href="./notes/deep-learning/">
-      <span>从深度学习基础补到 Transformer</span>
-      <strong>Deep Learning Topic</strong>
-    </a>
-    <a href="./notes/papers/react/">
-      <span>看一篇具体论文笔记</span>
-      <strong>ReAct</strong>
-    </a>
+  <h2>怎么读论文</h2>
+  <div class="home-principles">
+    <div>
+      <strong>先读出问题</strong>
+      <span>只看标题、摘要、引言、图表和结论，先答清“解决什么问题、方法叫什么、和已有做法差在哪”。</span>
+    </div>
+    <div>
+      <strong>抓方法和证据</strong>
+      <span>读方法、关键图、实验设置和主要结果，讲清主张和证据链，先不纠结附录。</span>
+    </div>
+    <div>
+      <strong>回到代码和失败模式</strong>
+      <span>再看 prompt、接口、parser、guardrails，带着“这个设计减少了哪种错误”去读。</span>
+    </div>
+    <div>
+      <strong>复习输出</strong>
+      <span>每篇只留三样：一句话贡献、一个关键机制、一个失败模式或边界。</span>
+    </div>
   </div>
 </section>
 

@@ -7,7 +7,6 @@ repo_url: https://github.com/ImWenyaoT/blog/
 site_url: https://imwenyaot.github.io/blog/
 edit_uri: edit/main/docs/
 exclude_docs: |
-  notes/mkdocs.yml
   blog/tags.md
 theme:
   name: material
@@ -64,6 +63,7 @@ nav:
       - 反向传播算法: notes/deep-learning/backpropagation.md
       - GPT 是什么: notes/deep-learning/gpt-transformer.md
       - 注意力机制: notes/deep-learning/attention.md
+      - Attention 原文: notes/deep-learning/attention-paper.md
   - AI Agent:
       - Topic 导读: notes/ai-agent/index.md
       - Agent 基本概念: notes/topics/agent-basics.md
@@ -71,11 +71,10 @@ nav:
       - 长期记忆: notes/topics/long-term-memory.md
       - Papers:
           - ReAct: notes/papers/react.md
+          - ReAct 原文: notes/papers/react-paper.md
           - SWE-agent: notes/papers/swe-agent.md
+          - SWE-agent 原文: notes/papers/swe-agent-paper.md
   - Tags: tags.md
-  - Notes:
-      - 介绍: notes/index.md
-      - 快速开始: notes/reading-route.md
 plugins:
   - search
   - blog:
@@ -119,6 +118,7 @@ extra_css:
 extra_javascript:
   - javascripts/mermaid.mjs
   - javascripts/home.js
+  - javascripts/pdf-viewer.mjs
 watch:
   - layouts
 copyright: Copyright &copy; 2026 ImWenyaoT

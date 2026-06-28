@@ -545,3 +545,107 @@ body {
     transition: none;
   }
 }
+
+/* PDF.js 论文阅读器 ----------------------------------------------------- */
+.md-typeset .pdf-viewer {
+  margin: 1.4rem 0 1.8rem;
+  border: 1px solid var(--blog-border);
+  border-radius: 0.5rem;
+  background: var(--blog-surface);
+  overflow: hidden;
+}
+
+.md-typeset .pdf-viewer__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--blog-border);
+  background: var(--md-default-bg-color);
+}
+
+.md-typeset .pdf-viewer__title {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.md-typeset .pdf-viewer__spacer {
+  flex: 1 1 auto;
+}
+
+.md-typeset .pdf-viewer__page-label,
+.md-typeset .pdf-viewer__zoom-label {
+  min-width: 2.8rem;
+  color: var(--blog-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.md-typeset .pdf-viewer__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--blog-border);
+  border-radius: 0.35rem;
+  background: transparent;
+  color: var(--md-default-fg-color);
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.md-typeset .pdf-viewer__btn:hover {
+  border-color: rgb(var(--blog-blue) / 54%);
+  background: rgb(var(--blog-blue) / 6%);
+}
+
+.md-typeset .pdf-viewer__btn--icon {
+  width: 1.7rem;
+  padding: 0.2rem 0;
+  font-size: 13px;
+}
+
+.md-typeset a.pdf-viewer__btn {
+  text-decoration: none;
+}
+
+.md-typeset .pdf-viewer__pages {
+  display: flex;
+  max-height: 80vh;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem;
+  overflow: auto;
+  background: rgb(var(--blog-gray) / 8%);
+}
+
+.md-typeset .pdf-viewer__page {
+  max-width: 100%;
+  border: 1px solid var(--blog-border);
+  background: rgb(var(--blog-white));
+  box-shadow: 0 1px 4px rgb(var(--blog-black) / 8%);
+}
+
+.md-typeset .pdf-viewer__error {
+  padding: 1.2rem;
+  color: var(--blog-muted);
+  font-size: 12px;
+}
+
+@media screen and (max-width: 44rem) {
+  .md-typeset .pdf-viewer__title {
+    max-width: 38%;
+  }
+
+  .md-typeset .pdf-viewer__pages {
+    max-height: 70vh;
+    padding: 0.5rem;
+  }
+}
