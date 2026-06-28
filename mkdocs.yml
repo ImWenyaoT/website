@@ -13,6 +13,9 @@ theme:
   name: material
   language: zh
   custom_dir: overrides
+  font:
+    text: Noto Sans SC
+    code: Roboto Mono
   icon:
     logo: logo-monochrome
   features:
