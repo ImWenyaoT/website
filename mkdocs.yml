@@ -113,6 +113,7 @@ extra_css:
   - notes/assets/styles.css
 extra_javascript:
   - javascripts/mermaid.mjs
+  - javascripts/home.js
 watch:
   - layouts
 copyright: Copyright &copy; 2026 ImWenyaoT
