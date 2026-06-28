@@ -84,17 +84,6 @@ plugins:
           short: true
   - meta
   - tags
-  - rss:
-      match_path: "blog/posts/.*"
-      feeds_filenames:
-        rss_created: feed_rss_created.xml
-        rss_updated: feed_rss_updated.xml
-      date_from_meta:
-        as_creation: date.created
-        as_update: date.updated
-      categories:
-        - categories
-        - tags
   - social:
       cards_layout: default/variant
       cards_layout_options:
@@ -103,10 +92,14 @@ plugins:
       cards_layout_dir: layouts
 extra:
   social:
-    - icon: fontawesome/solid/rss
-      link: feed_rss_created.xml
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/_wenyao
     - icon: fontawesome/brands/github
       link: https://github.com/ImWenyaoT
+    - icon: fontawesome/solid/book-open
+      link: https://www.xiaohongshu.com/user/profile/61712cee00000000020243e7
+    - icon: fontawesome/brands/bilibili
+      link: https://space.bilibili.com/2138115
 hooks:
   - hooks/socialmedia.py
 extra_css:
