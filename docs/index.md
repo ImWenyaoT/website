@@ -4,14 +4,14 @@ description: Writing and study notes on AI agents, deep learning, and software s
 
 # Blog
 
-写作和学习笔记的入口。这里会放 AI Agent、Deep Learning、AI Engineering，以及之后更宽泛的软件系统文章。
+这里记录我学 AI、写代码、读论文和折腾系统时留下的东西。短的会像笔记，长的会像文章；共同点是尽量把一个问题讲到以后还能重新捡起来。
 
 [开始阅读](./notes/index.md){ .md-button .md-button--primary }
 [查看 Topics](./notes/reading-route.md){ .md-button }
 
 ## 概述
 
-这个站点不是新闻流，也不是论文摘要库。它更像一套个人学习系统：把一个概念拆到能用图、伪代码和例子复述为止。
+我会把内容先按 topic 收起来，比如 AI Agent 和 Deep Learning；也会保留一些更随手的 blog posts。这里不追求每天更新，更在意一篇东西过几个月再看时，是否还能帮我继续往下想。
 
 ```mermaid
 flowchart LR
