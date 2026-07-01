@@ -1,0 +1,125 @@
+/* 深度学习笔记手绘 SVG 图示（.dl-*）+ 阅读时间 + 论文 PDF 内嵌样式。
+ * 由 Astro Starlight 迁移而来：原 --sl-color-* 令牌映射到 Material --md-* 令牌
+ * （随亮/暗调色自动适配）；语义色（蓝/绿/橙/灰）沿用固定 RGB。 */
+:root {
+  --dl-blue: 0 110 243;
+  --dl-green: 28 193 53;
+  --dl-orange: 243 137 0;
+  --dl-gray: 130 130 135;
+}
+
+.dl-figure {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 920px;
+  height: auto;
+  margin: 1.4rem auto 1.8rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.45rem;
+  background: var(--md-default-bg-color);
+}
+.dl-compact-figure { max-width: 560px; }
+.dl-box,
+.dl-token {
+  fill: var(--md-default-bg-color);
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.5;
+}
+.dl-box-accent,
+.dl-token-accent {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 1.8;
+}
+.dl-token-muted {
+  fill: rgb(var(--dl-gray) / 10%);
+  stroke: rgb(var(--dl-gray) / 72%);
+  stroke-width: 1.3;
+}
+.dl-node {
+  fill: var(--md-default-bg-color);
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.5;
+}
+.dl-node-accent {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 1.6;
+}
+.dl-label {
+  fill: var(--md-default-fg-color);
+  font-size: 14px;
+  font-weight: 600;
+}
+.dl-small { fill: var(--md-default-fg-color); font-size: 11px; }
+.dl-arrow,
+.dl-axis {
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 2;
+  fill: none;
+}
+.dl-muted-arrow { stroke: rgb(var(--dl-gray)); stroke-width: 1.8; fill: none; }
+.dl-back-arrow { stroke: rgb(var(--dl-orange)); stroke-width: 2; fill: none; }
+.dl-thin { stroke: rgb(var(--dl-gray)); stroke-width: 1.2; fill: none; }
+.dl-curve { stroke: var(--md-default-fg-color); stroke-width: 2.5; }
+.dl-curve-muted { stroke: rgb(var(--dl-gray)); stroke-width: 2; }
+.dl-point { fill: rgb(var(--dl-blue)); }
+.dl-point-warn { fill: rgb(var(--dl-orange)); }
+.dl-line-blue { stroke: rgb(var(--dl-blue)); stroke-width: 2.5; }
+.dl-line-green { stroke: rgb(var(--dl-green)); stroke-width: 2.5; }
+.dl-line-orange { stroke: rgb(var(--dl-orange)); stroke-width: 2.5; }
+.dl-blue { fill: rgb(var(--dl-blue)); }
+.dl-green { fill: rgb(var(--dl-green)); }
+.dl-orange { fill: rgb(var(--dl-orange)); }
+.dl-cell-on {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+.dl-cell-off {
+  fill: rgb(var(--dl-gray) / 10%);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+
+/* 阅读时间（hook 注入的 <p class="reading-time"> 段落） */
+.reading-time {
+  margin: 0.5rem 0 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.75rem;
+}
+
+/* 论文原文 PDF 内嵌（替代旧 PdfViewer.astro） */
+.pdf-viewer {
+  margin: 1.5rem 0;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.pdf-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.8rem;
+}
+.pdf-title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pdf-open {
+  margin-inline-start: auto;
+  color: var(--md-primary-fg-color);
+  white-space: nowrap;
+}
+.pdf-frame { display: block; width: 100%; height: 80vh; border: 0; }
+.pdf-fallback {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}

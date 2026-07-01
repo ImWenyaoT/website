@@ -1,0 +1,23 @@
+# 构建产物
+site/
+
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+.cache/
+
+# 工具产物
+.remember/
+
+# 系统/编辑器
+.DS_Store
+.idea/
+.vscode/
+
+# 日志/环境
+*.log
+.env
+.env.*
