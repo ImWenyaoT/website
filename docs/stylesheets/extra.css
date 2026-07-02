@@ -60,15 +60,17 @@
   fill: none;
 }
 .dl-muted-arrow { stroke: rgb(var(--dl-gray)); stroke-width: 1.8; fill: none; }
-.dl-back-arrow { stroke: rgb(var(--dl-orange)); stroke-width: 2; fill: none; }
+/* 反向=橙 + 虚线：不靠颜色也能与前向(蓝实线)区分（HIG「别只靠颜色」）。 */
+.dl-back-arrow { stroke: rgb(var(--dl-orange)); stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
 .dl-thin { stroke: rgb(var(--dl-gray)); stroke-width: 1.2; fill: none; }
 .dl-curve { stroke: var(--md-default-fg-color); stroke-width: 2.5; }
 .dl-curve-muted { stroke: rgb(var(--dl-gray)); stroke-width: 2; }
 .dl-point { fill: rgb(var(--dl-blue)); }
 .dl-point-warn { fill: rgb(var(--dl-orange)); }
+/* 三线图：除颜色外再用线型区分（蓝实线 / 绿长虚线 / 橙点线），色盲也可读。 */
 .dl-line-blue { stroke: rgb(var(--dl-blue)); stroke-width: 2.5; }
-.dl-line-green { stroke: rgb(var(--dl-green)); stroke-width: 2.5; }
-.dl-line-orange { stroke: rgb(var(--dl-orange)); stroke-width: 2.5; }
+.dl-line-green { stroke: rgb(var(--dl-green)); stroke-width: 2.5; stroke-dasharray: 8 5; }
+.dl-line-orange { stroke: rgb(var(--dl-orange)); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
 .dl-blue { fill: rgb(var(--dl-blue)); }
 .dl-green { fill: rgb(var(--dl-green)); }
 .dl-orange { fill: rgb(var(--dl-orange)); }
