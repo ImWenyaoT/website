@@ -1,7 +1,7 @@
 ---
 name: website-guide
 description: >-
-  动手改 Wenyao Notes 网站（projects/website，mkdocs-material + uv 的中文知识库）前必读——
+  动手改 Tian "Edward" Wenyao 网站（projects/website，mkdocs-material + uv 的中文知识库）前必读——
   样式/配色/字体/主题/导航/内容/配置/部署 任一改动都先看这里。沉淀了 Geist×HIG 设计系统与其
   token 架构、用真实代价换来的坑（绝不引入 CJK webfont——会让滚动卡顿；Material 三态 auto
   palette 默认露 indigo；social cards 对中文站成本过高）、设计原则（HIG 有规定照 HIG、其余以
@@ -10,7 +10,7 @@ description: >-
   凡触碰本站就用它，省去重踩那些花了很多轮才解决的问题。
 ---
 
-# Working on the Wenyao Notes website
+# Working on the Tian "Edward" Wenyao website
 
 个人知识库,`projects/website`,**mkdocs-material + uv**,全中文内容(深度学习 / AI agent 笔记)。
 线上 `https://imwenyaot.github.io/website/`,GitHub Pages(source = GitHub Actions)。

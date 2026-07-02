@@ -1,5 +1,5 @@
 ---
-title: Wenyao Notes
+title: 'Tian "Edward" Wenyao'
 description: 深度学习、AI agent 与更多学习笔记。
 ---
 
