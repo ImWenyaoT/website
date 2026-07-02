@@ -2,7 +2,7 @@
  * 由 Astro Starlight 迁移而来：原 --sl-color-* 令牌映射到 Material --md-* 令牌
  * （随亮/暗调色自动适配）；语义色（蓝/绿/橙/灰）沿用固定 RGB。 */
 :root {
-  --dl-blue: 0 122 255; /* 与站点强调色对齐：Apple 系统蓝 #007AFF */
+  --dl-blue: 0 102 204; /* = 站点强调色/链接蓝 #0066cc（深色档由 slate 覆盖为 #2997ff），全站同一个蓝 */
   --dl-green: 28 193 53;
   --dl-orange: 243 137 0;
   --dl-gray: 130 130 135;
@@ -149,6 +149,7 @@
   --md-primary-bg-color--light: #86868b;
   --md-accent-fg-color: #2997ff;
   --md-typeset-a-color: #2997ff;
+  --dl-blue: 41 151 255; /* 图示蓝跟随强调色到深色档 #2997ff，保持全站同一个蓝 */
 }
 
 /* 顶栏滚动分隔：把 Material 默认那团柔和投影换成 Apple 式 1px 发丝线（更干净、不糊、不加高度）。
