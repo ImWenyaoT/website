@@ -22,6 +22,9 @@ validation:
 theme:
   name: material
   language: zh
+  font:
+    text: Geist # Vercel 开源字体（SF 系、Swiss 几何）；纯拉丁，中文走系统字体回退，性能同 Roboto
+    code: Geist Mono
   favicon: assets/favicon.svg
   icon:
     repo: fontawesome/brands/github

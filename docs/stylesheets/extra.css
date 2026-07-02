@@ -1,10 +1,23 @@
 /* 深度学习笔记手绘 SVG 图示（.dl-*）+ 阅读时间 + 论文 PDF 内嵌样式。
  * 由 Astro Starlight 迁移而来：原 --sl-color-* 令牌映射到 Material --md-* 令牌
  * （随亮/暗调色自动适配）；语义色（蓝/绿/橙/灰）沿用固定 RGB。 */
+/* ============================================================
+   WEBSITE DESIGN SYSTEM —— Geist(开源 SF 字体) × Apple HIG 融合
+   · 排版 = Geist Sans/Mono（见 mkdocs.yml theme.font）+ 系统 CJK 回退
+   · 结构 = HIG：中性(黑白，靠透明度分层) + 单一强调色 + 语义色(仅图示)
+   · 强调色 = Vercel 蓝 #0070f3（深色档 #3291ff）；单一真源 = --ds-accent-rgb
+   · 分隔 = 1px hairline(--md-default-fg-color--lightest)
+   · 原则 = HIG 有规定照 HIG（对比≥4.5:1、别只靠颜色），其余以本 token 自洽
+   完整说明见根目录 DESIGN.md。
+   ============================================================ */
 :root {
-  --dl-blue: 0 102 204; /* = 站点强调色/链接蓝 #0066cc（深色档由 slate 覆盖为 #2997ff），全站同一个蓝 */
-  --dl-green: 28 193 53;
-  --dl-orange: 243 137 0;
+  /* 唯一强调色的单一真源：链接 / UI 交互 / 图示蓝 全部由它派生（改这一处即全站生效） */
+  --ds-accent-rgb: 0 112 243; /* Vercel 蓝 #0070f3 */
+  --ds-accent: rgb(var(--ds-accent-rgb));
+
+  --dl-blue: var(--ds-accent-rgb); /* 图示蓝 = 强调色，随明暗自动跟随 */
+  --dl-green: 28 193 53; /* 语义色（图示专用）：正向/成功 */
+  --dl-orange: 243 137 0; /* 语义色（图示专用）：反向/警示 */
   --dl-gray: 130 130 135;
 }
 
@@ -138,18 +151,18 @@
   --md-primary-fg-color--dark: #d2d2d7; /* 顶栏底分隔/阴影 */
   --md-primary-bg-color: #1d1d1f; /* 顶栏文字/图标/搜索：墨黑 */
   --md-primary-bg-color--light: #6e6e73;
-  --md-accent-fg-color: #0066cc;
-  --md-typeset-a-color: #0066cc;
+  --md-accent-fg-color: var(--ds-accent);
+  --md-typeset-a-color: var(--ds-accent);
 }
 [data-md-color-scheme="slate"] {
+  --ds-accent-rgb: 50 145 255; /* 深色档强调色 #3291ff；链接/图示蓝自动跟随此单一真源 */
   --md-primary-fg-color: #1d1d1f; /* 近黑顶栏 */
   --md-primary-fg-color--light: #2d2d2f;
   --md-primary-fg-color--dark: #000000;
   --md-primary-bg-color: #f5f5f7;
   --md-primary-bg-color--light: #86868b;
-  --md-accent-fg-color: #2997ff;
-  --md-typeset-a-color: #2997ff;
-  --dl-blue: 41 151 255; /* 图示蓝跟随强调色到深色档 #2997ff，保持全站同一个蓝 */
+  --md-accent-fg-color: var(--ds-accent);
+  --md-typeset-a-color: var(--ds-accent);
 }
 
 /* 顶栏滚动分隔：把 Material 默认那团柔和投影换成 Apple 式 1px 发丝线（更干净、不糊、不加高度）。
