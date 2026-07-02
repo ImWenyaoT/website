@@ -151,6 +151,12 @@
   --md-typeset-a-color: #2997ff;
 }
 
+/* 顶栏滚动分隔：把 Material 默认那团柔和投影换成 Apple 式 1px 发丝线（更干净、不糊、不加高度）。
+ * 想彻底去掉这条线，把下面整条规则的 box-shadow 改成 none 即可。 */
+.md-header--shadow {
+  box-shadow: 0 1px 0 var(--md-default-fg-color--lightest);
+}
+
 /* 排版：Apple 式抗锯齿 + 舒展行距 + 克制的粗体层级（字体用 Material 默认）。 */
 body {
   -webkit-font-smoothing: antialiased;
