@@ -164,11 +164,8 @@
   box-shadow: 0 1px 0 var(--md-default-fg-color--lightest);
 }
 
-/* 排版：Apple 式抗锯齿 + 舒展行距 + 克制的粗体层级（字体用 Material 默认）。 */
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* 排版：舒展行距 + 克制的粗体层级（字体 Geist，见 mkdocs.yml）。
+ * 刻意不设 -webkit-font-smoothing: antialiased——它把字渲染得更细更淡，深色模式下夜间可读性变差。 */
 .md-typeset {
   line-height: 1.7; /* CJK 充足行距，阅读更松弛 */
 }
