@@ -98,13 +98,6 @@
   stroke-width: 2;
 }
 
-/* 阅读时间（hook 注入的 <p class="reading-time"> 段落） */
-.reading-time {
-  margin: 0.5rem 0 0;
-  color: var(--md-default-fg-color--light);
-  font-size: 0.75rem;
-}
-
 /* 论文原文 PDF 内嵌（替代旧 PdfViewer.astro） */
 .pdf-viewer {
   margin: 1.5rem 0;

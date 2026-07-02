@@ -1,23 +1,9 @@
-# AGENTS.md
-
-## TL;DR
-
 - 请保持对话语言为中文
 - 我的系统为 Mac/Linux
 - 请在生成代码时添加函数级注释
-
-## Setup commands
-- 安装依赖：`uv sync`
-- 本地预览：`uv run mkdocs serve`
-- 严格构建：`uv run mkdocs build --strict`
-
-## Python 质量门（改动 hooks/ 后必跑）
-- `uv run ruff format`（格式化）
-- `uv run ruff check`（lint）
-- `uv run ty check`（类型检查）
-- `uv run pytest -q`（hook 单测）
-
-## 约定
-- Python 一律经 uv，不新增 shell 脚本
-- 内链用源文件相对的 `.md` 目标；`mkdocs build --strict` 必须过
-- 提交身份固定 `ImWenyaoT <tianwenyao02@gmail.com>`
+- 踏踏实实写 test，多写 test，让 test coverage 尽可能高
+- 认真做好 CI/CD，千方百计避免 messed up
+- 对于一个新项目，做好 top-down design(specs driven)，从 features 和 requirement 出发，设计 architecture 和 interface，一层一层设计下去
+- 对于一个快速增长的项目，先切分好文件，再切分好 module，再划分成一堆 service 或者 executives，提前解耦
+- 对于一类的功能，提前做好 design pattern 的功课，减少重复，增加复用
+- 如果 codebase 足够大，要么一点点修复但是提高 test coverage，要么保持好 specs、test、interface 直接推倒重写，有空就重写，永远重写，重写重写重写

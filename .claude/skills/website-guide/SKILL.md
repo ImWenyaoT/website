@@ -59,8 +59,11 @@ description: >-
 
 ## 工作流纪律
 
-- **Python 一律 uv**:`uv sync` / `uv run mkdocs serve` / `uv run mkdocs build --strict`。改了
-  `hooks/` 就跑 `uv run ruff format && uv run ruff check && uv run ty check && uv run pytest`。**不写 .sh 脚本。**
+- **Python 一律 uv**:`uv sync` / `uv run mkdocs serve` / `uv run mkdocs build --strict`。**不写 .sh 脚本。**
+- **站内无一手 Python(有意为之·匀称工程)**:曾有个阅读时间 hook + 一整套 ruff/ty/pytest,后判定
+  「为一个不 essential、不可复用、只是估算的功能养一套工具链」属**过度工程**,连功能带工具链一并砍掉。
+  **别再为这类小功能引 Python hook**(Material 也没有普通文档页的原生阅读时间);`mkdocs build --strict`
+  就是这个静态站**唯一且匀称**的质量门。真要写 Python 了,再按需引工具链并配 CI + 补测试。
 - **构建门**:`uv run mkdocs build --strict` 必须 exit 0;它配合 `mkdocs.yml` 的 `validation:` 块
   把断链/断锚点提级为失败。**`exclude_docs: superpowers/` 别删**(否则设计/计划文档被当"缺页"而失败)。
 - **实测不臆测。** 字体、性能这类结论别靠猜:用 `curl` 量(`@font-face` 数、payload 大小)、用
@@ -76,9 +79,9 @@ description: >-
 
 - **颜色 / 样式 / 图示**:`docs/stylesheets/extra.css`(token 在 `:root` 与两个 `[data-md-color-scheme]`)。
 - **字体 / 主题 / 导航 / markdown 扩展 / palette / validation**:`mkdocs.yml`。
-- **每页标题 + 阅读时间**:`hooks/reading_time.py`(原生 hook;内容页普遍无正文 H1,靠它从 frontmatter
-  `title` 合成 H1 再挂阅读时间;首页豁免阅读时间)。
+- **每页标题**:每个内容页 `docs/**` 正文首行写真 `# H1`(标准 markdown;frontmatter 只留 `description`)。
+  首页标题也放正文 H1 而非 frontmatter——否则 Material 的 `page.meta.title` 分支不跳过首页,`<title>` 会重复站名。
 - **内容**:`docs/**`。**内链用源文件相对的 `.md` 路径**(不是目录 slug),否则 `--strict` 报断链。
   mermaid 用 ```mermaid 围栏(客户端渲染);论文 PDF 用原生 HTML `<iframe class="pdf-frame">` 内嵌,
   路径 `../../paper/xxx.pdf`(目录 URL 下三个论文页同为深度 2)。
-- **CI**:`.github/workflows/deploy.yml`(lint → build --strict → deploy 三段)。
+- **CI**:`.github/workflows/deploy.yml`(build --strict → deploy 两段;无 lint job——站内无一手 Python)。
