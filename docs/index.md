@@ -1,7 +1,8 @@
 ---
-title: 'Tian "Edward" Wenyao'
 description: 深度学习、AI agent 与更多学习笔记。
 ---
+
+# Tian "Edward" Wenyao
 
 我的学习笔记：从深度学习到 AI agent，之后还会陆续加线性代数、面经等内容。
 
