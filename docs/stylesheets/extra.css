@@ -2,17 +2,17 @@
  * 由 Astro Starlight 迁移而来：原 --sl-color-* 令牌映射到 Material --md-* 令牌
  * （随亮/暗调色自动适配）；语义色（蓝/绿/橙/灰）沿用固定 RGB。 */
 /* ============================================================
-   WEBSITE DESIGN SYSTEM —— Geist(开源 SF 字体) × Apple HIG 融合
+   WEBSITE DESIGN SYSTEM —— Geist(Vercel 开源设计系统)
    · 排版 = Geist Sans/Mono（见 mkdocs.yml theme.font）+ 系统 CJK 回退
-   · 结构 = HIG：中性(黑白，靠透明度分层) + 单一强调色 + 语义色(仅图示)
-   · 强调色 = Vercel 蓝 #0070f3（深色档 #3291ff）；单一真源 = --ds-accent-rgb
+   · 配色 = Vercel Geist Light/Dark，直接取自 vercel.com/design.md 与 design.dark.md
+     （浅色 bg #fff/文字 #171717；深色 bg #000/文字 #ededed；边框/代码底见各档）
+   · 强调色 = Vercel blue-700 #006bff(浅)/#006efe(深)；单一真源 = --ds-accent-rgb
    · 分隔 = 1px hairline(--md-default-fg-color--lightest)
-   · 原则 = HIG 有规定照 HIG（对比≥4.5:1、别只靠颜色），其余以本 token 自洽
-   完整说明见根目录 DESIGN.md。
+   · 原则 = 别只靠颜色(图示叠线型)、对比≥4.5:1；其余以本 token 自洽。详见根目录 DESIGN.md。
    ============================================================ */
 :root {
   /* 唯一强调色的单一真源：链接 / UI 交互 / 图示蓝 全部由它派生（改这一处即全站生效） */
-  --ds-accent-rgb: 0 112 243; /* Vercel 蓝 #0070f3 */
+  --ds-accent-rgb: 0 107 255; /* Vercel blue-700 #006bff（浅色档；深色档 slate 覆盖为 #006efe） */
   --ds-accent: rgb(var(--ds-accent-rgb));
 
   --dl-blue: var(--ds-accent-rgb); /* 图示蓝 = 强调色，随明暗自动跟随 */
@@ -138,22 +138,38 @@
    顶栏白/近黑走 Material 内置 primary=white/black；此处只把强调色与链接钉成 Apple 蓝。
    系统蓝 #007AFF(浅)/#0A84FF(深)；链接用 apple.com web 蓝 #0066cc(浅)/#2997ff(深，对比更佳)。
    ============================================================ */
+/* 浅色 = Vercel Geist Light（vercel.com/design.md） */
 [data-md-color-scheme="default"] {
-  --md-primary-fg-color: #ffffff; /* 白顶栏（Apple 极简 chrome） */
-  --md-primary-fg-color--light: #f5f5f7;
-  --md-primary-fg-color--dark: #d2d2d7; /* 顶栏底分隔/阴影 */
-  --md-primary-bg-color: #1d1d1f; /* 顶栏文字/图标/搜索：墨黑 */
-  --md-primary-bg-color--light: #6e6e73;
+  --md-default-bg-color: #ffffff; /* background-100 页面底 */
+  --md-default-bg-color--light: #fafafa; /* background-200 次级面 */
+  --md-default-fg-color: #171717; /* gray-1000 主文字 */
+  --md-default-fg-color--light: #4d4d4d; /* gray-900 次要文字 */
+  --md-default-fg-color--lighter: #8f8f8f; /* gray-700 弱文字 */
+  --md-default-fg-color--lightest: #ebebeb; /* gray-200 边框/分隔 */
+  --md-primary-fg-color: #ffffff; /* 白顶栏 */
+  --md-primary-fg-color--light: #fafafa;
+  --md-primary-fg-color--dark: #ebebeb;
+  --md-primary-bg-color: #171717; /* 顶栏文字/搜索 */
+  --md-primary-bg-color--light: #8f8f8f;
+  --md-code-bg-color: #fafafa; /* 代码底 */
   --md-accent-fg-color: var(--ds-accent);
   --md-typeset-a-color: var(--ds-accent);
 }
+/* 深色 = Vercel Geist Dark（vercel.com/design.dark.md） */
 [data-md-color-scheme="slate"] {
-  --ds-accent-rgb: 50 145 255; /* 深色档强调色 #3291ff；链接/图示蓝自动跟随此单一真源 */
-  --md-primary-fg-color: #1d1d1f; /* 近黑顶栏 */
-  --md-primary-fg-color--light: #2d2d2f;
+  --ds-accent-rgb: 0 110 254; /* blue-700 #006efe（深色链接/图示蓝自动跟随） */
+  --md-default-bg-color: #000000; /* background-100 纯黑 */
+  --md-default-bg-color--light: #1a1a1a; /* gray-100 次级面 */
+  --md-default-fg-color: #ededed; /* gray-1000 主文字（高对比，夜间清晰） */
+  --md-default-fg-color--light: #a0a0a0; /* gray-900 次要 */
+  --md-default-fg-color--lighter: #878787; /* gray-600 弱 */
+  --md-default-fg-color--lightest: #2e2e2e; /* gray-400 边框/分隔 */
+  --md-primary-fg-color: #000000; /* 黑顶栏（与页同色，靠发丝线分隔，Vercel 风） */
+  --md-primary-fg-color--light: #1a1a1a;
   --md-primary-fg-color--dark: #000000;
-  --md-primary-bg-color: #f5f5f7;
-  --md-primary-bg-color--light: #86868b;
+  --md-primary-bg-color: #ededed; /* 顶栏文字/搜索 */
+  --md-primary-bg-color--light: #a0a0a0;
+  --md-code-bg-color: #1a1a1a; /* 代码底（纯黑上可见） */
   --md-accent-fg-color: var(--ds-accent);
   --md-typeset-a-color: var(--ds-accent);
 }
