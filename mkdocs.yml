@@ -95,6 +95,9 @@ markdown_extensions:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/zoom.js
+
 plugins:
   - search
 

@@ -197,6 +197,52 @@
   outline-offset: 2px;
   border-radius: 3px;
 }
+
+/* 点击放大（灯箱）——由 docs/javascripts/zoom.js 触发；覆盖内联 SVG 图(.dl-figure/mermaid)与 <img>。 */
+.md-typeset .dl-figure,
+.md-typeset .mermaid,
+.md-typeset img {
+  cursor: zoom-in;
+}
+.zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  background: rgb(0 0 0 / 72%);
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.zoom-overlay.is-open {
+  opacity: 1;
+}
+.zoom-overlay .zoom-content {
+  /* 突破原图 max-width，铺满可用空间（高特异性覆盖 .dl-figure 的 920px 限制） */
+  margin: 0;
+  width: auto;
+  height: auto;
+  max-width: 94vw;
+  max-height: 90vh;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  cursor: default;
+  overflow: auto;
+}
+.zoom-overlay .zoom-content svg,
+.zoom-overlay .zoom-content img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 84vh;
+}
 .md-typeset h1 {
   font-weight: 700;
 }
