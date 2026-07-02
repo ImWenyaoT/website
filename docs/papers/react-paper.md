@@ -1,7 +1,8 @@
 ---
-title: ReAct（原文）
 description: ReAct 原始论文的原文 PDF。
 ---
+
+# ReAct（原文）
 
 Yao et al., 2022 · arXiv [2210.03629](https://arxiv.org/abs/2210.03629)。配套阅读笔记见 [ReAct](react.md)。
 

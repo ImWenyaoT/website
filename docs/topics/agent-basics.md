@@ -1,7 +1,8 @@
 ---
-title: Agent 基本概念
 description: 把 agent 理解为可迭代状态更新的系统，并厘清 CoT、Tool use、ReAct、ACI 的区别。
 ---
+
+# Agent 基本概念
 
 我现在把 agent 先理解成：会根据环境反馈继续行动的系统。它和一次性问答模型的区别，不是是否调用工具，而是是否存在可迭代的状态更新。
 

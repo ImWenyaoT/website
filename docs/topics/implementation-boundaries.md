@@ -1,7 +1,8 @@
 ---
-title: 实现与 provider 边界
 description: 区分模型 provider 适配与 agent 方法机制，避免“换模型”演变成无必要的大重构。
 ---
+
+# 实现与 provider 边界
 
 读 ReAct 和 SWE-agent 代码时，一个重要判断是：哪些部分只是模型 provider，哪些部分是论文方法或系统机制。
 

@@ -1,7 +1,8 @@
 ---
-title: SWE-agent：给语言模型设计电脑界面
 description: SWE-agent 把 Agent-Computer Interface 放到 coding agent 中心，用接口设计降低模型在真实仓库里的失败率。
 ---
+
+# SWE-agent：给语言模型设计电脑界面
 
 SWE-agent 的核心不是“让模型会写代码”，而是把接口设计放到 coding agent 的中心。论文提出 Agent-Computer Interface，把模型能用的命令、电脑返回的反馈、上下文管理和防错机制都视为影响 agent 表现的变量。
 

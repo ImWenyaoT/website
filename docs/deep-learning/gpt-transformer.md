@@ -1,7 +1,8 @@
 ---
-title: GPT 是什么？直观讲解 Transformer
 description: 把 GPT 理解成做下一个 token 预测的语言模型，并拆解 Transformer 主干与 causal mask。
 ---
+
+# GPT 是什么？直观讲解 Transformer
 
 GPT 可以先理解成一个做下一个 token 预测的语言模型：
 

@@ -1,7 +1,8 @@
 ---
-title: SWE-agent（原文）
 description: SWE-agent 原始论文的原文 PDF。
 ---
+
+# SWE-agent（原文）
 
 Yang et al., 2024 · arXiv [2405.15793](https://arxiv.org/abs/2405.15793)。配套阅读笔记见 [SWE-agent](swe-agent.md)。
 

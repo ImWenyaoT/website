@@ -1,7 +1,8 @@
 ---
-title: Deep Learning Topic
 description: 从最小神经网络出发，沿第一性原理一路走到 Transformer 和注意力机制的学习路线。
 ---
+
+# Deep Learning Topic
 
 这个 topic 从最小的神经网络开始，一路走到 Transformer 和注意力机制。它不是百科目录，也不是公式速查表；更像一条从第一性原理出发的学习路线：
 

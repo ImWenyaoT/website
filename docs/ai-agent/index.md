@@ -1,7 +1,8 @@
 ---
-title: AI Agent Topic
 description: 围绕“语言模型反复行动时系统需要哪些额外结构”组织的 agent 文章与论文笔记导航。
 ---
+
+# AI Agent Topic
 
 这个 topic 收集 agent 相关的文章和论文笔记。它的主线不是“列出所有 agent 名词”，而是回答一个更基础的问题：
 
