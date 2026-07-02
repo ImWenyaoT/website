@@ -185,6 +185,18 @@
 .md-typeset {
   line-height: 1.7; /* CJK 充足行距，阅读更松弛 */
 }
+
+/* 键盘可见焦点：强调色描边 + 2px 间隙（HIG「焦点管理」+ Vercel 焦点环观感），随明暗自适配。
+ * 仅 :focus-visible，鼠标点击不显、键盘 Tab 才显——无障碍必备。 */
+.md-typeset a:focus-visible,
+.md-nav__link:focus-visible,
+.md-header__button:focus-visible,
+.md-search__input:focus-visible,
+.md-tabs__link:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
 .md-typeset h1 {
   font-weight: 700;
 }
