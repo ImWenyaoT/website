@@ -1,4 +1,4 @@
-/* 深度学习笔记手绘 SVG 图示（.dl-*）+ 阅读时间 + 论文 PDF 内嵌样式。
+/* 深度学习笔记手绘 SVG 图示（.dl-*）+ mermaid + 论文 PDF 内嵌样式。
  * 由 Astro Starlight 迁移而来：原 --sl-color-* 令牌映射到 Material --md-* 令牌
  * （随亮/暗调色自动适配）；语义色（蓝/绿/橙/灰）沿用固定 RGB。 */
 /* ============================================================
@@ -25,14 +25,14 @@
   box-sizing: border-box;
   display: block;
   width: 100%;
-  max-width: 920px;
+  max-width: 760px;
   height: auto;
-  margin: 1.4rem auto 1.8rem;
+  margin: 1.1rem auto 1.35rem;
   border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 0.45rem;
+  border-radius: 0.4rem;
   background: var(--md-default-bg-color);
 }
-.dl-compact-figure { max-width: 560px; }
+.dl-compact-figure { max-width: 520px; }
 .dl-box,
 .dl-token {
   fill: var(--md-default-bg-color);
@@ -62,10 +62,10 @@
 }
 .dl-label {
   fill: var(--md-default-fg-color);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
 }
-.dl-small { fill: var(--md-default-fg-color); font-size: 11px; }
+.dl-small { fill: var(--md-default-fg-color); font-size: 12.5px; }
 .dl-arrow,
 .dl-axis {
   stroke: rgb(var(--dl-blue));
@@ -198,50 +198,37 @@
   border-radius: 3px;
 }
 
-/* 点击放大（灯箱）——由 docs/javascripts/zoom.js 触发；覆盖内联 SVG 图(.dl-figure/mermaid)与 <img>。 */
-.md-typeset .dl-figure,
-.md-typeset .mermaid,
-.md-typeset img {
-  cursor: zoom-in;
-}
-.zoom-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+/* 图示直接在正文内读清楚：收紧容器、放大节点文字，避免依赖点击放大。 */
+.md-typeset .mermaid {
   box-sizing: border-box;
-  background: rgb(0 0 0 / 72%);
-  cursor: zoom-out;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  width: 100%;
+  max-width: 760px;
+  margin: 1rem auto 1.25rem;
+  text-align: center;
 }
-.zoom-overlay.is-open {
-  opacity: 1;
-}
-.zoom-overlay .zoom-content {
-  /* 突破原图 max-width，铺满可用空间（高特异性覆盖 .dl-figure 的 920px 限制） */
-  margin: 0;
-  width: auto;
-  height: auto;
-  max-width: 94vw;
-  max-height: 90vh;
-  padding: 1.25rem;
-  box-sizing: border-box;
-  background: var(--md-default-bg-color);
-  border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 6px;
-  cursor: default;
-  overflow: auto;
-}
-.zoom-overlay .zoom-content svg,
-.zoom-overlay .zoom-content img {
+.md-typeset .mermaid svg {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 84vh;
+  margin: 0 auto;
+}
+.md-typeset .mermaid text {
+  font-size: 15px !important;
+}
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .label {
+  line-height: 1.35;
+}
+@media screen and (max-width: 44.9844em) {
+  .dl-label {
+    font-size: 22px;
+  }
+  .dl-small {
+    font-size: 17px;
+  }
+  .md-typeset .mermaid text {
+    font-size: 16px !important;
+  }
 }
 .md-typeset h1 {
   font-weight: 700;

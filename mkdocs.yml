@@ -1,5 +1,5 @@
 site_name: 'Tian "Edward" Wenyao'
-site_description: 深度学习、AI agent 与更多学习笔记。
+site_description: Model、Harness 与更多学习笔记。
 site_url: https://imwenyaot.github.io/website/
 repo_url: https://github.com/ImWenyaoT/website
 repo_name: ImWenyaoT/website
@@ -7,6 +7,7 @@ edit_uri: edit/main/docs/
 
 exclude_docs: |
   superpowers/
+  topics/
 
 validation:
   nav:
@@ -86,6 +87,10 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path:
+        - .
+      check_paths: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -94,9 +99,6 @@ markdown_extensions:
 
 extra_css:
   - stylesheets/extra.css
-
-extra_javascript:
-  - javascripts/zoom.js
 
 plugins:
   - search
@@ -108,21 +110,22 @@ extra:
 
 nav:
   - Home: index.md
-  - Deep Learning:
-      - deep-learning/index.md
-      - deep-learning/neural-network-structure.md
-      - deep-learning/gradient-descent.md
-      - deep-learning/backpropagation.md
-      - deep-learning/gpt-transformer.md
-      - deep-learning/attention.md
-      - deep-learning/attention-paper.md
-  - AI Agent:
-      - ai-agent/index.md
-      - topics/agent-basics.md
-      - topics/implementation-boundaries.md
-      - topics/long-term-memory.md
-      - papers/react.md
-      - papers/react-paper.md
-      - papers/swe-agent.md
-      - papers/swe-agent-paper.md
+  - Model:
+      - model/index.md
+      - Neural Networks:
+          - model/neural-networks/index.md
+          - model/neural-networks/neural-network-structure.md
+          - model/neural-networks/gradient-descent.md
+          - model/neural-networks/backpropagation.md
+          - model/neural-networks/gpt-transformer.md
+          - model/neural-networks/attention.md
+          - model/neural-networks/attention-paper.md
+      - Linear Algebra:
+          - model/linear-algebra/index.md
+  - Harness:
+      - ReAct（原文）: papers/react-paper.md
+      - SWE-agent（原文）: papers/swe-agent-paper.md
+      - minimal SWE Agent: harness/minimal-swe-agent.md
+      - Codex 的 Agent 设计: harness/openai.md
+      - Claude Code 的 Agent 设计: harness/anthropic.md
   - About: about.md

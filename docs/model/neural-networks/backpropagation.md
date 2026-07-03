@@ -118,7 +118,7 @@ stateDiagram-v2
 
 ### 一个最小计算图
 
-<svg class="dl-figure" viewBox="0 0 920 360" role="img" aria-labelledby="bp-title">
+<svg class="dl-figure" viewBox="0 0 720 320" role="img" aria-labelledby="bp-title">
   <title id="bp-title">前向传播和反向传播计算图</title>
   <defs>
     <marker id="arrow-bp" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
@@ -128,23 +128,23 @@ stateDiagram-v2
       <path d="M0,0 L0,6 L9,3 z" fill="#b35c23"></path>
     </marker>
   </defs>
-  <rect x="60" y="105" width="100" height="60" rx="8" class="dl-box"></rect>
-  <text x="110" y="142" text-anchor="middle" class="dl-label">x</text>
-  <rect x="60" y="205" width="100" height="60" rx="8" class="dl-box"></rect>
-  <text x="110" y="242" text-anchor="middle" class="dl-label">w, b</text>
-  <rect x="290" y="150" width="150" height="80" rx="8" class="dl-box-accent"></rect>
-  <text x="365" y="184" text-anchor="middle" class="dl-label">pred</text>
-  <text x="365" y="210" text-anchor="middle" class="dl-small">w x + b</text>
-  <rect x="570" y="150" width="150" height="80" rx="8" class="dl-box"></rect>
-  <text x="645" y="184" text-anchor="middle" class="dl-label">loss</text>
-  <text x="645" y="210" text-anchor="middle" class="dl-small">(pred - y)^2</text>
-  <line x1="162" y1="135" x2="280" y2="178" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
-  <line x1="162" y1="235" x2="280" y2="202" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
-  <line x1="448" y1="190" x2="560" y2="190" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
-  <path d="M570 245 C450 315, 260 305, 160 255" fill="none" class="dl-back-arrow" marker-end="url(#arrow-bp-back)"></path>
-  <path d="M570 135 C450 65, 270 70, 165 118" fill="none" class="dl-back-arrow" marker-end="url(#arrow-bp-back)"></path>
-  <text x="385" y="50" class="dl-small dl-blue">前向：计算值</text>
-  <text x="385" y="330" class="dl-small dl-orange">反向：传回梯度</text>
+  <rect x="44" y="96" width="104" height="58" rx="8" class="dl-box"></rect>
+  <text x="96" y="131" text-anchor="middle" class="dl-label">x</text>
+  <rect x="44" y="194" width="104" height="58" rx="8" class="dl-box"></rect>
+  <text x="96" y="229" text-anchor="middle" class="dl-label">w, b</text>
+  <rect x="252" y="136" width="156" height="78" rx="8" class="dl-box-accent"></rect>
+  <text x="330" y="169" text-anchor="middle" class="dl-label">pred</text>
+  <text x="330" y="194" text-anchor="middle" class="dl-small">w x + b</text>
+  <rect x="536" y="136" width="156" height="78" rx="8" class="dl-box"></rect>
+  <text x="614" y="169" text-anchor="middle" class="dl-label">loss</text>
+  <text x="614" y="194" text-anchor="middle" class="dl-small">(pred - y)^2</text>
+  <line x1="150" y1="124" x2="242" y2="162" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
+  <line x1="150" y1="222" x2="242" y2="190" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
+  <line x1="416" y1="175" x2="526" y2="175" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
+  <path d="M536 230 C430 286, 250 282, 150 244" fill="none" class="dl-back-arrow" marker-end="url(#arrow-bp-back)"></path>
+  <path d="M536 121 C430 62, 252 64, 151 109" fill="none" class="dl-back-arrow" marker-end="url(#arrow-bp-back)"></path>
+  <text x="316" y="48" class="dl-small dl-blue">前向：计算值</text>
+  <text x="316" y="302" class="dl-small dl-orange">反向：传回梯度</text>
 </svg>
 
 这张图里只有一个线性单元，但它已经包含了反向传播的关键结构：每个节点都知道自己在前向阶段算出了什么，也知道在反向阶段如何把上游梯度传给自己的输入。
