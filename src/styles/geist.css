@@ -66,6 +66,19 @@
   --sl-color-text-accent: var(--sl-color-accent);
 }
 
+/* Mermaid 客户端渲染容器（astro-mermaid 输出 class="mermaid"）：居中、限宽、图能在正文内读清。 */
+.sl-markdown-content .mermaid {
+  margin: 1.25rem auto;
+  max-width: 760px;
+  text-align: center;
+}
+.sl-markdown-content .mermaid svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
 /* 键盘可见焦点环：Geist 焦点观感（HIG 焦点管理），随明暗自适配；仅 :focus-visible。 */
 :where(a, button, input, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--sl-color-accent);

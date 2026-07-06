@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
+import mermaid from 'astro-mermaid';
 
 // 迁移目标（见 docs/superpowers/specs/2026-07-06-mkdocs-to-astro-starlight-design.md）：
 // - site + base：GitHub Pages 项目站 https://imwenyaot.github.io/website/
@@ -12,6 +13,9 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [
+    // 客户端 Mermaid（懒加载 + 随亮/暗切换主题）。放 starlight 之前，
+    // 由它把 ```mermaid 围栏转为客户端渲染容器，绕过 Expressive Code。
+    mermaid({ theme: 'neutral', autoTheme: true }),
     starlight({
       title: 'Tian "Edward" Wenyao',
       description: 'Model、Harness 与更多学习笔记。',
