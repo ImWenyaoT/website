@@ -8,6 +8,7 @@ edit_uri: edit/main/docs/
 exclude_docs: |
   superpowers/
   topics/
+  agents/
 
 validation:
   nav:

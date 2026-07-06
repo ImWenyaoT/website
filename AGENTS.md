@@ -7,3 +7,17 @@
 - 对于一个快速增长的项目，先切分好文件，再切分好 module，再划分成一堆 service 或者 executives，提前解耦
 - 对于一类的功能，提前做好 design pattern 的功课，减少重复，增加复用
 - 如果 codebase 足够大，要么一点点修复但是提高 test coverage，要么保持好 specs、test、interface 直接推倒重写，有空就重写，永远重写，重写重写重写
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs for this repo live in GitHub Issues (via the `gh` CLI). External PRs are **not** a triage surface. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default vocabulary — `needs-triage` / `needs-info` / `ready-for-agent` / `ready-for-human` / `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context — one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
