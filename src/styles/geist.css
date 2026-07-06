@@ -1,0 +1,186 @@
+/* ============================================================
+   WEBSITE DESIGN SYSTEM —— Vercel Geist（主） + Apple HIG（辅，冲突 Vercel>Apple）
+   迁移自 mkdocs extra.css。做法：
+   1) 只覆盖 Starlight 的 primitive token（white/gray-1..7/black/accent 三档），
+      语义（--sl-color-text/bg/hairline/text-accent…）整体级联成 Geist；
+   2) 一层 --md-* 兼容别名指向 --sl-*，让移植来的 .dl- 与 .pdf- 图示 CSS 一字不改即可用。
+   配色取自 vercel.com/design.md（浅）与 design.dark.md（深）。详见 DESIGN.md。
+   ============================================================ */
+
+:root {
+  /* 唯一强调色真源（深色档默认；浅色档下方覆盖）。图示蓝随它走。 */
+  --ds-accent-rgb: 0 110 254; /* Vercel blue-700 深 #006efe */
+  --dl-blue: var(--ds-accent-rgb);
+  --dl-green: 28 193 53; /* 语义色：正向/成功 */
+  --dl-orange: 243 137 0; /* 语义色：反向/警示 */
+  --dl-gray: 130 130 135;
+
+  /* --md-* 兼容别名 → Starlight token（主题感知，用时自动解析亮/暗）。
+     仅供移植来的 .dl- 与 .pdf- 图示 CSS 复用，未来可逐步改为直接引用 --sl-*。 */
+  --md-default-bg-color: var(--sl-color-bg);
+  --md-default-bg-color--light: var(--sl-color-bg-nav);
+  --md-default-fg-color: var(--sl-color-text);
+  --md-default-fg-color--light: var(--sl-color-gray-3);
+  --md-default-fg-color--lighter: var(--sl-color-gray-4);
+  --md-default-fg-color--lightest: var(--sl-color-hairline);
+  --md-primary-fg-color: var(--sl-color-text-accent);
+  --md-code-bg-color: var(--sl-color-bg-nav);
+}
+
+/* ---- Geist 深色 = Starlight :root（默认档）；bg #000 / text #ededed ---- */
+:root {
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #f5f5f5;
+  --sl-color-gray-2: #ededed; /* → --sl-color-text 主文字 */
+  --sl-color-gray-3: #a0a0a0; /* 次要文字 */
+  --sl-color-gray-4: #878787; /* 弱文字 */
+  --sl-color-gray-5: #2e2e2e; /* hairline-light / inline-code 底 */
+  --sl-color-gray-6: #1a1a1a; /* → hairline / bg-nav / bg-sidebar 面 */
+  --sl-color-black: #000000; /* → --sl-color-bg 纯黑 */
+  --sl-color-accent-low: #0a1f4d;
+  --sl-color-accent: #006efe;
+  --sl-color-accent-high: #6aa8ff;
+  --sl-color-text-accent: var(--sl-color-accent); /* 链接=强调色（Geist 做法，覆盖默认的 accent-high） */
+}
+
+/* ---- Geist 浅色 = Starlight [data-theme='light']；bg #fff / text #171717 ---- */
+:root[data-theme='light'] {
+  --ds-accent-rgb: 0 107 255; /* Vercel blue-700 浅 #006bff */
+  --sl-color-white: #171717;
+  --sl-color-gray-1: #171717;
+  --sl-color-gray-2: #171717; /* → 主文字（Geist 高对比近黑） */
+  --sl-color-gray-3: #4d4d4d; /* 次要文字 gray-900 */
+  --sl-color-gray-4: #8f8f8f; /* 弱文字 gray-700 */
+  --sl-color-gray-5: #c9c9c9; /* hover 边框 gray-500 */
+  --sl-color-gray-6: #ebebeb; /* → hairline / 边框 gray-200 */
+  --sl-color-gray-7: #fafafa; /* → bg-nav 次级面 */
+  --sl-color-black: #ffffff; /* → --sl-color-bg 白 */
+  --sl-color-accent-low: #d9e8ff;
+  --sl-color-accent: #006bff;
+  --sl-color-accent-high: #0044cc;
+  --sl-color-text-accent: var(--sl-color-accent);
+}
+
+/* 键盘可见焦点环：Geist 焦点观感（HIG 焦点管理），随明暗自适配；仅 :focus-visible。 */
+:where(a, button, input, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   深度学习笔记手绘 SVG 图示（.dl-*）—— 从 mkdocs extra.css 原样移植，
+   经上方 --md-* 兼容别名接到 Geist token；语义色（蓝/绿/橙）叠线型，不只靠颜色。
+   ============================================================ */
+.dl-figure {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 1.1rem auto 1.35rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.4rem;
+  background: var(--md-default-bg-color);
+}
+.dl-compact-figure { max-width: 520px; }
+.dl-box,
+.dl-token {
+  fill: var(--md-default-bg-color);
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.5;
+}
+.dl-box-accent,
+.dl-token-accent {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 1.8;
+}
+.dl-token-muted {
+  fill: rgb(var(--dl-gray) / 10%);
+  stroke: rgb(var(--dl-gray) / 72%);
+  stroke-width: 1.3;
+}
+.dl-node {
+  fill: var(--md-default-bg-color);
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.5;
+}
+.dl-node-accent {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 1.6;
+}
+.dl-label {
+  fill: var(--md-default-fg-color);
+  font-size: 15px;
+  font-weight: 600;
+}
+.dl-small { fill: var(--md-default-fg-color); font-size: 12.5px; }
+.dl-arrow,
+.dl-axis {
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 2;
+  fill: none;
+}
+.dl-muted-arrow { stroke: rgb(var(--dl-gray)); stroke-width: 1.8; fill: none; }
+/* 反向=橙 + 虚线：不靠颜色也能与前向(蓝实线)区分（HIG「别只靠颜色」）。 */
+.dl-back-arrow { stroke: rgb(var(--dl-orange)); stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+.dl-thin { stroke: rgb(var(--dl-gray)); stroke-width: 1.2; fill: none; }
+.dl-curve { stroke: var(--md-default-fg-color); stroke-width: 2.5; }
+.dl-curve-muted { stroke: rgb(var(--dl-gray)); stroke-width: 2; }
+.dl-point { fill: rgb(var(--dl-blue)); }
+.dl-point-warn { fill: rgb(var(--dl-orange)); }
+/* 三线图：除颜色外再用线型区分（蓝实线 / 绿长虚线 / 橙点线），色盲也可读。 */
+.dl-line-blue { stroke: rgb(var(--dl-blue)); stroke-width: 2.5; }
+.dl-line-green { stroke: rgb(var(--dl-green)); stroke-width: 2.5; stroke-dasharray: 8 5; }
+.dl-line-orange { stroke: rgb(var(--dl-orange)); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
+.dl-blue { fill: rgb(var(--dl-blue)); }
+.dl-green { fill: rgb(var(--dl-green)); }
+.dl-orange { fill: rgb(var(--dl-orange)); }
+.dl-cell-on {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+.dl-cell-off {
+  fill: rgb(var(--dl-gray) / 10%);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+
+/* ============================================================
+   论文原文 PDF 内嵌（.pdf-*）—— 供 <PdfViewer> 组件复用（见 src/components/PdfViewer.astro）
+   ============================================================ */
+.pdf-viewer {
+  margin: 1.5rem 0;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.pdf-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.8rem;
+}
+.pdf-title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pdf-open {
+  margin-inline-start: auto;
+  color: var(--md-primary-fg-color);
+  white-space: nowrap;
+}
+.pdf-frame { display: block; width: 100%; height: 80vh; border: 0; }
+.pdf-fallback {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
