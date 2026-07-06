@@ -1,0 +1,35 @@
+---
+/**
+ * 论文原文 PDF 内嵌。用法：<PdfViewer slug="react" />
+ * 据 slug 从 registry 派生 arXiv 链接与本地 PDF 路径（构建期解析，消除旧站 ../../ 深度耦合）。
+ * 样式见 src/styles/geist.css 的 .pdf-* 规则。
+ */
+import { papers, type PaperSlug } from '../data/papers';
+
+interface Props {
+  slug: PaperSlug;
+}
+
+const { slug } = Astro.props;
+const paper = papers[slug];
+
+// fail-loud：未知 slug 构建期报错，而非静默产出坏链
+if (!paper) {
+  throw new Error(`PdfViewer: 未知论文 slug "${slug}"（见 src/data/papers.ts）`);
+}
+
+const arxivAbs = `https://arxiv.org/abs/${paper.arxivId}`;
+// import.meta.env.BASE_URL 含尾斜杠（/website/）→ 站点绝对路径，无 ../ 耦合
+const pdfPath = `${import.meta.env.BASE_URL}paper/${paper.arxivId}.pdf`;
+---
+
+<figure class="pdf-viewer">
+  <figcaption class="pdf-bar">
+    <a class="pdf-title" href={arxivAbs} target="_blank" rel="noopener">{paper.title}</a>
+    <a class="pdf-open" href={pdfPath} target="_blank" rel="noopener">在新标签打开 ↗</a>
+  </figcaption>
+  <iframe class="pdf-frame" src={pdfPath} title={paper.title} loading="lazy"></iframe>
+  <p class="pdf-fallback">
+    无法内嵌 PDF？<a href={pdfPath} download>下载</a>。
+  </p>
+</figure>
