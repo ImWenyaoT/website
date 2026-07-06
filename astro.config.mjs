@@ -19,8 +19,10 @@ export default defineConfig({
     starlight({
       title: 'Tian "Edward" Wenyao',
       description: 'Model、Harness 与更多学习笔记。',
-      // 坏链校验：承接旧 mkdocs `--strict`，断链/断锚点即构建失败退出（迁移头号风险=内链反转）
-      plugins: [starlightLinksValidator()],
+      // 坏链校验：承接旧 mkdocs `--strict`，断链/断锚点即构建失败退出（迁移头号风险=内链反转）。
+      // errorOnRelativeLinks:false —— 内链用相对路径（base 无关，站在 /website 下仍正确），
+      // 验证器仍会校验它们解析到真实页面，安全网不丢。
+      plugins: [starlightLinksValidator({ errorOnRelativeLinks: false })],
       // Geist 设计系统：先自托管字体（Fontsource variable），再 token/图示样式
       customCss: [
         '@fontsource-variable/geist/index.css',
