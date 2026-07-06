@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightLinksValidator from 'starlight-links-validator';
 
 // 迁移目标（见 docs/superpowers/specs/2026-07-06-mkdocs-to-astro-starlight-design.md）：
 // - site + base：GitHub Pages 项目站 https://imwenyaot.github.io/website/
@@ -14,6 +15,8 @@ export default defineConfig({
     starlight({
       title: 'Tian "Edward" Wenyao',
       description: 'Model、Harness 与更多学习笔记。',
+      // 坏链校验：承接旧 mkdocs `--strict`，断链/断锚点即构建失败退出（迁移头号风险=内链反转）
+      plugins: [starlightLinksValidator()],
     }),
   ],
 });
