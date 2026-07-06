@@ -17,8 +17,12 @@ export default defineConfig({
       description: 'Model、Harness 与更多学习笔记。',
       // 坏链校验：承接旧 mkdocs `--strict`，断链/断锚点即构建失败退出（迁移头号风险=内链反转）
       plugins: [starlightLinksValidator()],
-      // Geist 设计系统：覆盖 --sl-* token + .dl-*/.pdf-* 图示样式
-      customCss: ['./src/styles/geist.css'],
+      // Geist 设计系统：先自托管字体（Fontsource variable），再 token/图示样式
+      customCss: [
+        '@fontsource-variable/geist/index.css',
+        '@fontsource-variable/geist-mono/index.css',
+        './src/styles/geist.css',
+      ],
     }),
   ],
 });

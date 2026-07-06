@@ -15,6 +15,11 @@
   --dl-orange: 243 137 0; /* 语义色：反向/警示 */
   --dl-gray: 130 130 135;
 
+  /* 字体：Geist 自托管（Fontsource variable，见 astro.config customCss）；
+     Starlight 会把它与 --sl-font-system 组合，CJK 自动走系统回退。 */
+  --sl-font: 'Geist Variable';
+  --sl-font-mono: 'Geist Mono Variable';
+
   /* --md-* 兼容别名 → Starlight token（主题感知，用时自动解析亮/暗）。
      仅供移植来的 .dl- 与 .pdf- 图示 CSS 复用，未来可逐步改为直接引用 --sl-*。 */
   --md-default-bg-color: var(--sl-color-bg);
