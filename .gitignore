@@ -1,5 +1,10 @@
 # 构建产物
 site/
+dist/
+.astro/
+
+# Node / pnpm
+node_modules/
 
 # Python / uv
 .venv/
