@@ -2,10 +2,11 @@
  * 论文 registry：slug → 元数据。
  * <PdfViewer slug> 据此派生 arXiv 链接与本地 PDF 路径——把旧站三处逐字手抄的
  * <figure class="pdf-viewer"> 及深度耦合的 ../../ 路径收敛成单一真源（架构评审候选 1）。
- * 日后若做「PDF 同地/人名化」（候选 2），只改这里的 arxivId/文件名映射即可，调用方不动。
+ * PDF 已人名化（候选 2 落地）：文件名 = slug（public/paper/<slug>.pdf，由 PdfViewer 派生）；
+ * arxivId 现仅用于 arXiv abs 链接。
  */
 export interface Paper {
-  /** arXiv id，用于派生 abs 链接与 public/paper/<id>.pdf 资产路径 */
+  /** arXiv id，用于派生 arXiv abs 链接（PDF 文件名走 slug，不再用 id） */
   arxivId: string;
   /** 论文标题（用于 caption 链接文本与 iframe title） */
   title: string;

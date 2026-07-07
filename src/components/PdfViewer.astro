@@ -19,8 +19,9 @@ if (!paper) {
 }
 
 const arxivAbs = `https://arxiv.org/abs/${paper.arxivId}`;
-// import.meta.env.BASE_URL 含尾斜杠（/website/）→ 站点绝对路径，无 ../ 耦合
-const pdfPath = `${import.meta.env.BASE_URL}paper/${paper.arxivId}.pdf`;
+// PDF 文件名 = slug（人名化，见 public/paper/react.pdf 等）；
+// BASE_URL 含尾斜杠（/website/）→ 站点绝对路径，无 ../ 耦合
+const pdfPath = `${import.meta.env.BASE_URL}paper/${slug}.pdf`;
 ---
 
 <figure class="pdf-viewer">
