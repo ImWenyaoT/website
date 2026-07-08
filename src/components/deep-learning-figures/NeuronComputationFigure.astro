@@ -1,0 +1,23 @@
+<svg class="dl-figure" viewBox="0 0 920 260" role="img" aria-labelledby="neuron-title">
+  <title id="neuron-title">单个神经元的计算流程</title>
+  <defs>
+    <marker id="arrow-neuron" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2f5f9f"></path>
+    </marker>
+  </defs>
+  <circle cx="95" cy="85" r="32" class="dl-node"></circle>
+  <text x="95" y="91" text-anchor="middle" class="dl-label">x1</text>
+  <circle cx="95" cy="175" r="32" class="dl-node"></circle>
+  <text x="95" y="181" text-anchor="middle" class="dl-label">x2</text>
+  <line x1="130" y1="85" x2="315" y2="120" class="dl-arrow" marker-end="url(#arrow-neuron)"></line>
+  <line x1="130" y1="175" x2="315" y2="140" class="dl-arrow" marker-end="url(#arrow-neuron)"></line>
+  <text x="218" y="84" class="dl-small">乘以 w1</text>
+  <text x="218" y="184" class="dl-small">乘以 w2</text>
+  <rect x="330" y="82" width="220" height="96" rx="8" class="dl-box"></rect>
+  <text x="440" y="122" text-anchor="middle" class="dl-label">w1 x1 + w2 x2 + b</text>
+  <text x="440" y="150" text-anchor="middle" class="dl-small">线性组合</text>
+  <line x1="560" y1="130" x2="665" y2="130" class="dl-arrow" marker-end="url(#arrow-neuron)"></line>
+  <rect x="680" y="82" width="150" height="96" rx="8" class="dl-box-accent"></rect>
+  <text x="755" y="122" text-anchor="middle" class="dl-label">activation</text>
+  <text x="755" y="150" text-anchor="middle" class="dl-small">非线性</text>
+</svg>

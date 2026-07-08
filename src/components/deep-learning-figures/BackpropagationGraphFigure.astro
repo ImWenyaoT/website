@@ -1,0 +1,28 @@
+<svg class="dl-figure" viewBox="0 0 720 320" role="img" aria-labelledby="bp-title">
+  <title id="bp-title">前向传播和反向传播计算图</title>
+  <defs>
+    <marker id="arrow-bp" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2f5f9f"></path>
+    </marker>
+    <marker id="arrow-bp-back" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#b35c23"></path>
+    </marker>
+  </defs>
+  <rect x="44" y="96" width="104" height="58" rx="8" class="dl-box"></rect>
+  <text x="96" y="131" text-anchor="middle" class="dl-label">x</text>
+  <rect x="44" y="194" width="104" height="58" rx="8" class="dl-box"></rect>
+  <text x="96" y="229" text-anchor="middle" class="dl-label">w, b</text>
+  <rect x="252" y="136" width="156" height="78" rx="8" class="dl-box-accent"></rect>
+  <text x="330" y="169" text-anchor="middle" class="dl-label">pred</text>
+  <text x="330" y="194" text-anchor="middle" class="dl-small">w x + b</text>
+  <rect x="536" y="136" width="156" height="78" rx="8" class="dl-box"></rect>
+  <text x="614" y="169" text-anchor="middle" class="dl-label">loss</text>
+  <text x="614" y="194" text-anchor="middle" class="dl-small">(pred - y)^2</text>
+  <line x1="150" y1="124" x2="242" y2="162" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
+  <line x1="150" y1="222" x2="242" y2="190" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
+  <line x1="416" y1="175" x2="526" y2="175" class="dl-arrow" marker-end="url(#arrow-bp)"></line>
+  <path d="M536 230 C430 286, 250 282, 150 244" fill="none" class="dl-back-arrow" marker-end="url(#arrow-bp-back)"></path>
+  <path d="M536 121 C430 62, 252 64, 151 109" fill="none" class="dl-back-arrow" marker-end="url(#arrow-bp-back)"></path>
+  <text x="316" y="48" class="dl-small dl-blue">前向：计算值</text>
+  <text x="316" y="302" class="dl-small dl-orange">反向：传回梯度</text>
+</svg>

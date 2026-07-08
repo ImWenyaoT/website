@@ -3,6 +3,8 @@ title: '梯度下降法'
 description: 把训练看成在损失曲面上沿梯度反方向调整参数，并解释学习率与小批量的作用。
 ---
 
+import GradientDescentPathFigure from '@/components/deep-learning-figures/GradientDescentPathFigure.astro';
+import LearningRateComparisonFigure from '@/components/deep-learning-figures/LearningRateComparisonFigure.astro';
 
 训练神经网络时，我们先定义一个损失函数。损失越小，模型越接近目标。梯度下降的想法很直接：梯度指向损失上升最快的方向，所以参数更新时往梯度的反方向走。
 
@@ -35,27 +37,7 @@ flowchart LR
 
 ## 损失曲线上的下降路径
 
-<svg class="dl-figure" viewBox="0 0 920 360" role="img" aria-labelledby="gd-title">
-  <title id="gd-title">梯度下降沿损失曲线移动</title>
-  <defs>
-    <marker id="arrow-gd" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#2f5f9f"></path>
-    </marker>
-  </defs>
-  <line x1="90" y1="290" x2="820" y2="290" class="dl-axis"></line>
-  <line x1="90" y1="290" x2="90" y2="45" class="dl-axis"></line>
-  <text x="835" y="295" class="dl-small">w</text>
-  <text x="70" y="45" class="dl-small">loss</text>
-  <path d="M125 80 C220 170, 280 245, 420 266 C570 288, 640 190, 770 70" fill="none" class="dl-curve"></path>
-  <circle cx="735" cy="92" r="8" class="dl-point-warn"></circle>
-  <circle cx="650" cy="174" r="8" class="dl-point"></circle>
-  <circle cx="560" cy="234" r="8" class="dl-point"></circle>
-  <circle cx="455" cy="263" r="8" class="dl-point"></circle>
-  <line x1="728" y1="98" x2="665" y2="164" class="dl-arrow" marker-end="url(#arrow-gd)"></line>
-  <line x1="642" y1="181" x2="575" y2="228" class="dl-arrow" marker-end="url(#arrow-gd)"></line>
-  <line x1="550" y1="238" x2="470" y2="260" class="dl-arrow" marker-end="url(#arrow-gd)"></line>
-  <text x="565" y="318" text-anchor="middle" class="dl-small">每一步都用当前梯度决定方向</text>
-</svg>
+<GradientDescentPathFigure />
 
 ## 用一个权重拟合直线
 
@@ -77,18 +59,7 @@ def gradient_descent_step(w, x, y, lr):
 
 ## 学习率对比
 
-<svg class="dl-figure" viewBox="0 0 920 310" role="img" aria-labelledby="lr-title">
-  <title id="lr-title">不同学习率的更新路径</title>
-  <line x1="70" y1="250" x2="850" y2="250" class="dl-axis"></line>
-  <line x1="70" y1="250" x2="70" y2="50" class="dl-axis"></line>
-  <path d="M90 70 C220 210, 310 246, 460 250 C630 252, 710 190, 830 72" fill="none" class="dl-curve-muted"></path>
-  <polyline points="760,92 720,125 680,155 640,180 600,202 560,220 520,234" fill="none" class="dl-line-blue"></polyline>
-  <polyline points="760,92 610,198 500,238 448,248" fill="none" class="dl-line-green"></polyline>
-  <polyline points="760,92 390,246 690,150 420,248" fill="none" class="dl-line-orange"></polyline>
-  <text x="540" y="110" class="dl-small dl-blue">太小：慢</text>
-  <text x="485" y="205" class="dl-small dl-green">合适：稳定下降</text>
-  <text x="690" y="210" class="dl-small dl-orange">太大：震荡</text>
-</svg>
+<LearningRateComparisonFigure />
 
 ## 关键操作
 

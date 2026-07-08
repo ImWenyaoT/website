@@ -3,6 +3,7 @@ title: 'Neural Networks'
 description: 从最小神经网络出发，沿第一性原理一路走到 Transformer 和注意力机制的学习路线。
 ---
 
+import TrainingLoopFigure from '@/components/deep-learning-figures/TrainingLoopFigure.astro';
 
 这个 topic 从最小的神经网络开始，一路走到 Transformer 和注意力机制。它不是百科目录，也不是公式速查表；更像 model 主题下的一条从第一性原理出发的学习路线：
 
@@ -83,27 +84,7 @@ flowchart LR
 
 所以这里会同时保留两个层次：每篇 article 先用小例子讲清楚机制，再说明它在大模型里扮演什么角色。
 
-<svg class="dl-figure" viewBox="0 0 920 210" role="img" aria-labelledby="dl-overview-title">
-  <title id="dl-overview-title">深度学习训练主线</title>
-  <defs>
-    <marker id="arrow-overview" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#2f5f9f"></path>
-    </marker>
-  </defs>
-  <rect x="30" y="55" width="190" height="90" rx="8" class="dl-box"></rect>
-  <text x="125" y="92" text-anchor="middle" class="dl-label">模型</text>
-  <text x="125" y="120" text-anchor="middle" class="dl-small">带参数的函数</text>
-  <line x1="230" y1="100" x2="335" y2="100" class="dl-arrow" marker-end="url(#arrow-overview)"></line>
-  <rect x="350" y="55" width="190" height="90" rx="8" class="dl-box"></rect>
-  <text x="445" y="92" text-anchor="middle" class="dl-label">损失</text>
-  <text x="445" y="120" text-anchor="middle" class="dl-small">当前错得多离谱</text>
-  <line x1="550" y1="100" x2="655" y2="100" class="dl-arrow" marker-end="url(#arrow-overview)"></line>
-  <rect x="670" y="55" width="190" height="90" rx="8" class="dl-box"></rect>
-  <text x="765" y="92" text-anchor="middle" class="dl-label">更新</text>
-  <text x="765" y="120" text-anchor="middle" class="dl-small">沿梯度反方向调参数</text>
-  <path d="M760 154 C730 190, 180 190, 130 154" fill="none" class="dl-muted-arrow" marker-end="url(#arrow-overview)"></path>
-  <text x="445" y="190" text-anchor="middle" class="dl-small">重复很多次，模型逐渐变好</text>
-</svg>
+<TrainingLoopFigure />
 
 Transformer 只是这条主线上的一种强大模型结构。先把“参数如何学习”讲清楚，再看注意力机制，理解成本会低很多。
 
