@@ -1,8 +1,8 @@
-# Design System —— Vercel Geist × Apple HIG
+# Design System —— Starlight × Geist × Apple HIG
 
-本站设计系统的两个权威来源:
-- **Vercel Geist**——具体 token(字体/配色/圆角/动效/焦点),逐字取自
-  `https://vercel.com/design.md`(浅色)与 `https://vercel.com/design.dark.md`(深色)。
+本站设计系统的三个来源:
+- **Starlight**——亮色、暗色与强调色基础 token，保持框架默认值。
+- **Vercel Geist**——拉丁字体、间距、圆角、动效与焦点细节。
 - **Apple HIG**——横切原则(易读、对比、减少动效、焦点管理、别只靠颜色),见
   `https://developer.apple.com/design/human-interface-guidelines`。
 
@@ -15,20 +15,10 @@
 
 ## Tokens
 
-### 颜色(直接取自 Vercel Geist Light / Dark)
-`--ds-accent-rgb` 是**唯一强调色单一真源**;链接/UI/图示蓝全由它派生(改一处即全站)。
+### 颜色
+站点 UI 不覆盖 `--sl-color-*` primitive token，直接使用 Starlight 默认亮暗配色与强调色。自定义组件只引用语义 token，不写死另一套站点 palette。
 
-| 角色 | Material 变量 | 浅色 | 深色 |
-|---|---|---|---|
-| 页面底 | `--md-default-bg-color` | `#ffffff` | `#000000` |
-| 主文字 | `--md-default-fg-color` | `#171717` | `#ededed` |
-| 次要 / 弱文字 | `--md-default-fg-color--light` / `--lighter` | `#4d4d4d` / `#8f8f8f` | `#a0a0a0` / `#878787` |
-| 边框/分隔 | `--md-default-fg-color--lightest` | `#ebebeb` | `#2e2e2e` |
-| 顶栏底 / 文字 | `--md-primary-fg-color` / `-bg-color` | `#ffffff` / `#171717` | `#000000` / `#ededed` |
-| 代码底 | `--md-code-bg-color` | `#fafafa` | `#1a1a1a` |
-| 强调/链接 blue-700 | `--ds-accent-rgb` | `#006bff` (`0 107 255`) | `#006efe` (`0 110 254`) |
-
-- **语义色(仅图示)**:`--dl-green`(正向)、`--dl-orange`(反向)+ 叠线型;代码高亮多色豁免。
+- **语义色(仅教学图)**：`--dl-blue`、`--dl-green`、`--dl-orange`，并叠加线型；代码高亮多色豁免。
 
 ### 排版
 - 正文/标题 = **Geist Sans**,代码 = **Geist Mono**(`mkdocs.yml` → `theme.font`);纯拉丁,中文走系统 CJK。
@@ -42,7 +32,6 @@
 - **分隔线**:统一 `1px var(--md-default-fg-color--lightest)`(图示框/PDF 框/顶栏滚动发丝线同 token)。
 
 ## 改色/改字的正确姿势
-- 换强调色:只改 `extra.css` 的 `--ds-accent-rgb`(两档各一处),全站(含图示)自动跟随。
-- 改明/暗配色:改两个 `[data-md-color-scheme]` 块的 `--md-*`(值取自 Vercel `design[.dark].md`)。
-- 换字体:改 `mkdocs.yml` 的 `theme.font`;**勿引 CJK webfont**(几十 MB、会卡),中文交给系统字体。
+- 改站点配色：优先保持 Starlight 默认 token；确有必要时只覆盖语义 token，不重写整套 primitive palette。
+- 换字体：修改 `src/site/siteStyles.ts`；**勿引 CJK webfont**，中文交给系统字体。
 - 加新颜色前先问:能不能用「现有强调色 + 透明度」或「现有语义色」表达?能就别加新色相。

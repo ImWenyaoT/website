@@ -1,16 +1,12 @@
 /* ============================================================
-   WEBSITE DESIGN SYSTEM —— Vercel Geist（主） + Apple HIG（辅，冲突 Vercel>Apple）
-   迁移自 mkdocs extra.css。做法：
-   1) 只覆盖 Starlight 的 primitive token（white/gray-1..7/black/accent 三档），
-      语义（--sl-color-text/bg/hairline/text-accent…）整体级联成 Geist；
-   2) 一层 --md-* 兼容别名指向 --sl-*，让移植来的 .dl- 与 .pdf- 图示 CSS 一字不改即可用。
-   配色取自 vercel.com/design.md（浅）与 design.dark.md（深）。详见 DESIGN.md。
+   WEBSITE DESIGN SYSTEM —— Starlight 默认配色 + Geist 字体 + Apple HIG 原则
+   只定制排版、布局与内容组件；亮暗主题的基础颜色交还 Starlight。
+   一层 --md-* 兼容别名指向 --sl-*，让移植来的 .dl- 与 .pdf- 图示 CSS 继续复用。
    ============================================================ */
 
 :root {
-  /* 唯一强调色真源（深色档默认；浅色档下方覆盖）。图示蓝随它走。 */
-  --ds-accent-rgb: 0 110 254; /* Vercel blue-700 深 #006efe */
-  --dl-blue: var(--ds-accent-rgb);
+  /* 教学图语义色独立于站点主题；站点 UI 使用 Starlight 默认强调色。 */
+  --dl-blue: 0 110 254;
   --dl-green: 28 193 53; /* 语义色：正向/成功 */
   --dl-orange: 243 137 0; /* 语义色：反向/警示 */
   --dl-gray: 130 130 135;
@@ -379,40 +375,6 @@ header.header {
   .home-card:hover .home-card-arrow {
     transform: none;
   }
-}
-
-/* ---- Geist 深色 = Starlight :root（默认档）；bg #000 / text #ededed ---- */
-:root {
-  --sl-color-white: #ffffff;
-  --sl-color-gray-1: #f5f5f5;
-  --sl-color-gray-2: #ededed; /* → --sl-color-text 主文字 */
-  --sl-color-gray-3: #a0a0a0; /* 次要文字 */
-  --sl-color-gray-4: #878787; /* 弱文字 */
-  --sl-color-gray-5: #2e2e2e; /* hairline-light / inline-code 底 */
-  --sl-color-gray-6: #1a1a1a; /* → hairline / bg-nav / bg-sidebar 面 */
-  --sl-color-black: #000000; /* → --sl-color-bg 纯黑 */
-  --sl-color-accent-low: #0a1f4d;
-  --sl-color-accent: #006efe;
-  --sl-color-accent-high: #6aa8ff;
-  --sl-color-text-accent: var(--sl-color-accent); /* 链接=强调色（Geist 做法，覆盖默认的 accent-high） */
-}
-
-/* ---- Geist 浅色 = Starlight [data-theme='light']；bg #fff / text #171717 ---- */
-:root[data-theme='light'] {
-  --ds-accent-rgb: 0 107 255; /* Vercel blue-700 浅 #006bff */
-  --sl-color-white: #171717;
-  --sl-color-gray-1: #171717;
-  --sl-color-gray-2: #171717; /* → 主文字（Geist 高对比近黑） */
-  --sl-color-gray-3: #4d4d4d; /* 次要文字 gray-900 */
-  --sl-color-gray-4: #8f8f8f; /* 弱文字 gray-700 */
-  --sl-color-gray-5: #c9c9c9; /* hover 边框 gray-500 */
-  --sl-color-gray-6: #ebebeb; /* → hairline / 边框 gray-200 */
-  --sl-color-gray-7: #fafafa; /* → bg-nav 次级面 */
-  --sl-color-black: #ffffff; /* → --sl-color-bg 白 */
-  --sl-color-accent-low: #d9e8ff;
-  --sl-color-accent: #006bff;
-  --sl-color-accent-high: #0044cc;
-  --sl-color-text-accent: var(--sl-color-accent);
 }
 
 /* Mermaid 客户端渲染容器（astro-mermaid 输出 class="mermaid"）：居中、限宽、图能在正文内读清。 */
