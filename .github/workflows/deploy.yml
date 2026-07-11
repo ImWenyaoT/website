@@ -32,6 +32,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Test
         run: pnpm test
+      - name: Audit Dictionary terms
+        run: pnpm dictionary:audit
       - name: Check
         run: pnpm check
       - name: Build (Astro)

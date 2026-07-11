@@ -17,7 +17,7 @@ The top-level catalog area containing all published Model and Harness notes. It 
 _Avoid_: Blog, Work, Course
 
 **Dictionary term**:
-A canonical English AI-coding term whose meaning matches an entry in Matt Pocock's AI Coding Dictionary. Every semantically matching occurrence in prose remains untranslated and links to that external entry; the site does not mirror the entry's definition.
+A canonical English AI-coding term whose meaning matches an entry in Matt Pocock's AI Coding Dictionary. Every semantically matching occurrence in body prose, lists, tables, and captions remains untranslated and links to that external entry, including repeated occurrences in the same paragraph or section. Headings are outside this occurrence rule and remain unlinked. Mixed Chinese-English prose such as “这个 model 的 context window” is intentional because visible canonical terms and Wikipedia-like outbound definition links take priority over reducing link density; the site does not mirror the entry's definition.
 _Avoid_: Translated term, glossary copy, automatic keyword replacement
 
 **Dictionary section**:

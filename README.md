@@ -12,13 +12,18 @@ pnpm dev                # http://localhost:4321/website/
 ## 构建
 
 ```bash
-pnpm build              # 唯一质量门：Astro 构建 + Starlight 坏链校验（断链/断锚点失败退出）
+pnpm test               # 单元测试
+pnpm dictionary:audit   # Dictionary term 漏链审计，只报告、不改写
+pnpm check              # Astro / TypeScript 检查
+pnpm build              # Astro 构建 + Starlight 坏链校验（断链/断锚点失败退出）
 pnpm preview            # 本地预览 dist
 ```
 
+维护术语映射后可显式运行 `pnpm dictionary:link`，但生成的正文改动必须逐页人工审阅；构建和 CI 不会自动改写内容。
+
 ## 部署
 
-推送到 `main` 后，GitHub Actions 跑 `pnpm build` 并部署到 GitHub Pages（`https://imwenyaot.github.io/website/`）。
+推送到 `main` 后，GitHub Actions 依次运行测试、Dictionary term 审计、类型检查和生产构建，再部署到 GitHub Pages（`https://imwenyaot.github.io/website/`）。
 
 ## 结构
 
