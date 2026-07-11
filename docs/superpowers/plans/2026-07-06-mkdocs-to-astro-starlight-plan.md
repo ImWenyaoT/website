@@ -1,5 +1,8 @@
 # 实现计划：mkdocs-material → Astro Starlight 迁移
 
+> 迁移已经完成；Astro/Starlight 继续作为当前平台。后续打磨方向见
+> [`../../adr/0003-retain-astro-starlight.md`](../../adr/0003-retain-astro-starlight.md)。
+
 - 日期：2026-07-06
 - 分支：`migrate/astro`（已建）
 - 关联 spec：[`../specs/2026-07-06-mkdocs-to-astro-starlight-design.md`](../specs/2026-07-06-mkdocs-to-astro-starlight-design.md)

@@ -1,5 +1,8 @@
 # 迁移设计：mkdocs-material → Astro Starlight（+ Geist 重设计）
 
+> 当前平台决策仍为 Astro/Starlight；后续打磨方向见
+> [`../../adr/0003-retain-astro-starlight.md`](../../adr/0003-retain-astro-starlight.md)。
+
 - 日期：2026-07-06
 - 状态：待批准
 - 范围：整体技术栈从 mkdocs-material 迁回 **Astro + Starlight + TypeScript**，同时把视觉**重设计**为 Vercel Geist 主题。内容按结构 1:1 搬运（不改笔记正文的语义），只改**呈现**与**外壳**。
