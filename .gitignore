@@ -4,6 +4,7 @@ dist/
 
 # Node / pnpm
 node_modules/
+.pnpm-store/
 
 # 工具产物
 .remember/
