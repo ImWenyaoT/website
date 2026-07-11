@@ -1,5 +1,5 @@
 /* ============================================================
-   WEBSITE DESIGN SYSTEM —— Starlight 默认配色 + Geist 字体 + Apple HIG 原则
+   WEBSITE STYLES —— Starlight 默认视觉 + 少量站点结构与内容样式
    只定制排版、布局与内容组件；亮暗主题的基础颜色交还 Starlight。
    一层 --md-* 兼容别名指向 --sl-*，让移植来的 .dl- 与 .pdf- 图示 CSS 继续复用。
    ============================================================ */
@@ -10,11 +10,6 @@
   --dl-green: 28 193 53; /* 语义色：正向/成功 */
   --dl-orange: 243 137 0; /* 语义色：反向/警示 */
   --dl-gray: 130 130 135;
-
-  /* 字体：Geist 自托管（Fontsource variable，见 astro.config customCss）；
-     Starlight 会把它与 --sl-font-system 组合，CJK 自动走系统回退。 */
-  --sl-font: 'Geist Variable';
-  --sl-font-mono: 'Geist Mono Variable';
 
   /* 阅读骨架：正文保持舒适行长，导航保留足够扫描宽度。 */
   --sl-content-width: 48rem;
@@ -380,7 +375,7 @@ header.header {
 /* Mermaid 客户端渲染容器（astro-mermaid 输出 class="mermaid"）：居中、限宽、图能在正文内读清。 */
 .sl-markdown-content .mermaid {
   margin: 1.25rem auto;
-  max-width: 760px;
+  max-width: 680px;
   text-align: center;
 }
 .sl-markdown-content .mermaid svg {
@@ -390,7 +385,7 @@ header.header {
   margin: 0 auto;
 }
 
-/* 键盘可见焦点环：Geist 焦点观感（HIG 焦点管理），随明暗自适配；仅 :focus-visible。 */
+/* 键盘可见焦点环：沿用 Starlight 强调色，仅在 :focus-visible 出现。 */
 :where(a, button, input, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--sl-color-accent);
   outline-offset: 2px;
@@ -399,20 +394,20 @@ header.header {
 
 /* ============================================================
    深度学习笔记手绘 SVG 图示（.dl-*）—— 从 mkdocs extra.css 原样移植，
-   经上方 --md-* 兼容别名接到 Geist token；语义色（蓝/绿/橙）叠线型，不只靠颜色。
+   经上方 --md-* 兼容别名接到 Starlight token；语义色（蓝/绿/橙）叠线型，不只靠颜色。
    ============================================================ */
 .dl-figure {
   box-sizing: border-box;
   display: block;
   width: 100%;
-  max-width: 760px;
+  max-width: 680px;
   height: auto;
   margin: 1.1rem auto 1.35rem;
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 0.4rem;
   background: var(--md-default-bg-color);
 }
-.dl-compact-figure { max-width: 520px; }
+.dl-compact-figure { max-width: 480px; }
 .dl-box,
 .dl-token {
   fill: var(--md-default-bg-color);

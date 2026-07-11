@@ -60,14 +60,10 @@ describe('Site chrome', () => {
     });
   });
 
-  it('loads the Geist design system and strict link validation adapters', () => {
+  it('loads the site styles and strict link validation adapters', () => {
     const chrome = siteChrome();
 
-    expect(chrome.customCss).toEqual([
-      '@fontsource-variable/geist/index.css',
-      '@fontsource-variable/geist-mono/index.css',
-      './src/styles/geist.css',
-    ]);
+    expect(chrome.customCss).toEqual(['./src/styles/site.css']);
     expect(chrome.plugins).toHaveLength(1);
     expect(chrome.plugins?.[0]?.name).toBe('starlight-links-validator');
   });
