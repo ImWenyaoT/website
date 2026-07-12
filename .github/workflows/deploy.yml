@@ -33,6 +33,7 @@ jobs:
       - name: Test
         run: pnpm test
       - name: Audit Dictionary terms
+        continue-on-error: true
         run: pnpm dictionary:audit
       - name: Check
         run: pnpm check

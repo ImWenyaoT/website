@@ -13,13 +13,13 @@ pnpm dev                # http://localhost:4321/website/
 
 ```bash
 pnpm test               # 单元测试
-pnpm dictionary:audit   # Dictionary term 漏链审计，只报告、不改写
+pnpm dictionary:audit   # Dictionary term 候选审计，只报告、不改写
 pnpm check              # Astro / TypeScript 检查
 pnpm build              # Astro 构建 + Starlight 坏链校验（断链/断锚点失败退出）
 pnpm preview            # 本地预览 dist
 ```
 
-维护术语映射后可显式运行 `pnpm dictionary:link`，但生成的正文改动必须逐页人工审阅；构建和 CI 不会自动改写内容。
+审计结果必须由作者或 agent 逐项判断语义，再通过普通内容编辑添加链接；构建和 CI 不会自动改写内容。CI 中该步骤只提供报告，不阻断部署。
 
 ## 部署
 

@@ -16,7 +16,7 @@ import NeuronComputationFigure from '@/components/deep-learning-figures/NeuronCo
 
 ## 动机
 
-传统程序通常由人写规则：如果条件 A 成立，就执行动作 B。神经网络换了一种路线：人只规定[model](https://www.aihero.dev/ai-coding-dictionary/model) 的大致结构和[training](https://www.aihero.dev/ai-coding-dictionary/training) 目标，具体规则藏在参数里，由数据来调整。
+传统程序通常由人写规则：如果条件 A 成立，就执行动作 B。神经网络换了一种路线：人只规定 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的大致结构和 [training](https://www.aihero.dev/ai-coding-dictionary/training) 目标，具体规则藏在参数里，由数据来调整。
 
 ```mermaid
 flowchart LR
@@ -64,7 +64,7 @@ class TinyMLP(nn.Module):
         return probability
 ```
 
-这个 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的输入是二维点，输出是一个 0 到 1 之间的概率。此时它还没有[training](https://www.aihero.dev/ai-coding-dictionary/training)，所以输出只是随机初始化参数下的结果。
+这个 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的输入是二维点，输出是一个 0 到 1 之间的概率。此时它还没有 [training](https://www.aihero.dev/ai-coding-dictionary/training)，所以输出只是随机初始化参数下的结果。
 
 ## 层结构
 

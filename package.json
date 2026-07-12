@@ -10,8 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "dictionary:audit": "node --experimental-strip-types scripts/dictionary-terms.ts",
-    "dictionary:link": "node --experimental-strip-types scripts/dictionary-terms.ts --write"
+    "dictionary:audit": "node --experimental-strip-types scripts/dictionary-terms.ts"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.3",

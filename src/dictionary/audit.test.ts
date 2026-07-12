@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { auditDictionaryTerms, linkDictionaryTerms } from './audit';
+import { auditDictionaryTerms } from './audit';
 import type { DictionaryTerm } from './terms';
 
 const terms: DictionaryTerm[] = [
@@ -58,34 +58,15 @@ flowchart LR
     ]);
   });
 
-  it('links every body occurrence while preserving excluded content', () => {
-    const source = `# 模型
-
-这个模型的上下文窗口属于 model。
-
-\`模型\` 与 [model](https://www.aihero.dev/ai-coding-dictionary/model)
-`;
-
-    expect(linkDictionaryTerms(source, terms)).toBe(`# 模型
-
-这个 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的 [context window](https://www.aihero.dev/ai-coding-dictionary/context-window) 属于 [model](https://www.aihero.dev/ai-coding-dictionary/model)。
-
-\`模型\` 与 [model](https://www.aihero.dev/ai-coding-dictionary/model)
-`);
-  });
-
-  it('does not insert spaces before Chinese punctuation', () => {
-    const punctuationTerms: DictionaryTerm[] = [
+  it('does not split Model Context Protocol into component concepts', () => {
+    const source = 'MCP (Model Context Protocol，模型上下文协议)';
+    const mcpTerms: DictionaryTerm[] = [
       ...terms,
-      {
-        canonical: 'tool',
-        url: 'https://www.aihero.dev/ai-coding-dictionary/tool',
-        aliases: ['工具'],
-      },
+      { canonical: 'context', url: 'https://www.aihero.dev/ai-coding-dictionary/context', aliases: ['context', '上下文'] },
+      { canonical: 'MCP', url: 'https://www.aihero.dev/ai-coding-dictionary/mcp', aliases: ['MCP'] },
     ];
 
-    expect(linkDictionaryTerms('工具、模型。', punctuationTerms)).toBe(
-      '[tool](https://www.aihero.dev/ai-coding-dictionary/tool)、[model](https://www.aihero.dev/ai-coding-dictionary/model)。',
-    );
+    expect(auditDictionaryTerms(source, mcpTerms).map((hit) => hit.canonical)).toEqual(['MCP']);
   });
+
 });
