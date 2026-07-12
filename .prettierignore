@@ -1,0 +1,11 @@
+dist/
+.astro/
+.cache/
+.venv/
+coverage/
+node_modules/
+public/
+src/content/docs/
+DESIGN.md
+docs/superpowers/
+docs/topics/

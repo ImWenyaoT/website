@@ -66,20 +66,30 @@ function hasAsciiBoundaries(value: string, start: number, length: number): boole
 /**
  * Converts a character offset inside a text node to a source line and column.
  */
-function sourcePosition(node: MdastNode, value: string, offset: number): { line: number; column: number } {
+function sourcePosition(
+  node: MdastNode,
+  value: string,
+  offset: number,
+): { line: number; column: number } {
   const prefix = value.slice(0, offset);
   const lines = prefix.split('\n');
   const lineOffset = lines.length - 1;
   return {
     line: (node.position?.start.line ?? 1) + lineOffset,
-    column: lineOffset === 0 ? (node.position?.start.column ?? 1) + offset : (lines.at(-1)?.length ?? 0) + 1,
+    column:
+      lineOffset === 0
+        ? (node.position?.start.column ?? 1) + offset
+        : (lines.at(-1)?.length ?? 0) + 1,
   };
 }
 
 /**
  * Finds every unlinked Dictionary term candidate in MDX body content.
  */
-export function auditDictionaryTerms(source: string, terms: DictionaryTerm[]): DictionaryAuditHit[] {
+export function auditDictionaryTerms(
+  source: string,
+  terms: DictionaryTerm[],
+): DictionaryAuditHit[] {
   const tree = unified().use(remarkParse).use(remarkMdx).parse(source) as MdastNode;
   const aliases = terms
     .flatMap((term) => term.aliases.map((alias) => ({ term, alias })))
@@ -90,20 +100,27 @@ export function auditDictionaryTerms(source: string, terms: DictionaryTerm[]): D
    * Walks eligible prose nodes while preserving exclusion boundaries.
    */
   function visit(node: MdastNode, excluded = false): void {
-    const nextExcluded = excluded || excludedNodeTypes.has(node.type) || (node.type === 'code' && node.lang === 'mermaid');
+    const nextExcluded =
+      excluded ||
+      excludedNodeTypes.has(node.type) ||
+      (node.type === 'code' && node.lang === 'mermaid');
     if (!nextExcluded && node.type === 'text' && node.value) {
       let cursor = 0;
       const lowerValue = node.value.toLowerCase();
       const protectedSourceRanges = protectedRanges(node.value);
       while (cursor < node.value.length) {
-        const protectedRange = protectedSourceRanges.find((range) => cursor >= range.start && cursor < range.end);
+        const protectedRange = protectedSourceRanges.find(
+          (range) => cursor >= range.start && cursor < range.end,
+        );
         if (protectedRange) {
           cursor = protectedRange.end;
           continue;
         }
         const candidate = aliases.find(({ alias }) => {
           if (!lowerValue.startsWith(alias.toLowerCase(), cursor)) return false;
-          return /[A-Za-z0-9]/.test(alias) ? hasAsciiBoundaries(node.value ?? '', cursor, alias.length) : true;
+          return /[A-Za-z0-9]/.test(alias)
+            ? hasAsciiBoundaries(node.value ?? '', cursor, alias.length)
+            : true;
         });
         if (!candidate) {
           cursor += 1;

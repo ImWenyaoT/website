@@ -17,7 +17,9 @@ async function mdxFiles(root: string): Promise<string[]> {
   const nested = await Promise.all(
     entries.map((entry) => {
       const path = join(root, entry.name);
-      return entry.isDirectory() ? mdxFiles(path) : Promise.resolve(path.endsWith('.mdx') ? [path] : []);
+      return entry.isDirectory()
+        ? mdxFiles(path)
+        : Promise.resolve(path.endsWith('.mdx') ? [path] : []);
     }),
   );
   return nested.flat();
@@ -35,11 +37,15 @@ async function main(): Promise<void> {
     const hits = auditDictionaryTerms(source, dictionaryTerms);
     totalHits += hits.length;
     for (const hit of hits) {
-      process.stdout.write(`${file}:${hit.line}:${hit.column} ${hit.matched} -> ${hit.canonical}\n`);
+      process.stdout.write(
+        `${file}:${hit.line}:${hit.column} ${hit.matched} -> ${hit.canonical}\n`,
+      );
     }
   }
 
-  process.stdout.write(`Found ${totalHits} candidate occurrence(s) across ${files.length} file(s).\n`);
+  process.stdout.write(
+    `Found ${totalHits} candidate occurrence(s) across ${files.length} file(s).\n`,
+  );
   if (totalHits > 0) process.exitCode = 1;
 }
 

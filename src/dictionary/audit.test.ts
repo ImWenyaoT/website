@@ -62,11 +62,18 @@ flowchart LR
     const source = 'MCP (Model Context Protocol，模型上下文协议)';
     const mcpTerms: DictionaryTerm[] = [
       ...terms,
-      { canonical: 'context', url: 'https://www.aihero.dev/ai-coding-dictionary/context', aliases: ['context', '上下文'] },
-      { canonical: 'MCP', url: 'https://www.aihero.dev/ai-coding-dictionary/mcp', aliases: ['MCP'] },
+      {
+        canonical: 'context',
+        url: 'https://www.aihero.dev/ai-coding-dictionary/context',
+        aliases: ['context', '上下文'],
+      },
+      {
+        canonical: 'MCP',
+        url: 'https://www.aihero.dev/ai-coding-dictionary/mcp',
+        aliases: ['MCP'],
+      },
     ];
 
     expect(auditDictionaryTerms(source, mcpTerms).map((hit) => hit.canonical)).toEqual(['MCP']);
   });
-
 });

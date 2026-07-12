@@ -243,7 +243,11 @@ header.header {
   border-radius: 0.75rem;
   padding: 1.25rem;
   background:
-    linear-gradient(145deg, color-mix(in srgb, var(--sl-color-accent) 6%, transparent), transparent 48%),
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--sl-color-accent) 6%, transparent),
+      transparent 48%
+    ),
     var(--sl-color-bg);
   transition:
     transform 180ms var(--ds-ease-out),
@@ -408,7 +412,9 @@ header.header {
   border-radius: 0.4rem;
   background: var(--md-default-bg-color);
 }
-.dl-compact-figure { max-width: 480px; }
+.dl-compact-figure {
+  max-width: 480px;
+}
 .dl-box,
 .dl-token {
   fill: var(--md-default-bg-color);
@@ -441,28 +447,72 @@ header.header {
   font-size: 15px;
   font-weight: 600;
 }
-.dl-small { fill: var(--md-default-fg-color); font-size: 12.5px; }
+.dl-small {
+  fill: var(--md-default-fg-color);
+  font-size: 12.5px;
+}
 .dl-arrow,
 .dl-axis {
   stroke: rgb(var(--dl-blue));
   stroke-width: 2;
   fill: none;
 }
-.dl-muted-arrow { stroke: rgb(var(--dl-gray)); stroke-width: 1.8; fill: none; }
+.dl-muted-arrow {
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.8;
+  fill: none;
+}
 /* 反向=橙 + 虚线：不靠颜色也能与前向(蓝实线)区分（HIG「别只靠颜色」）。 */
-.dl-back-arrow { stroke: rgb(var(--dl-orange)); stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
-.dl-thin { stroke: rgb(var(--dl-gray)); stroke-width: 1.2; fill: none; }
-.dl-curve { stroke: var(--md-default-fg-color); stroke-width: 2.5; }
-.dl-curve-muted { stroke: rgb(var(--dl-gray)); stroke-width: 2; }
-.dl-point { fill: rgb(var(--dl-blue)); }
-.dl-point-warn { fill: rgb(var(--dl-orange)); }
+.dl-back-arrow {
+  stroke: rgb(var(--dl-orange));
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 6 4;
+}
+.dl-thin {
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.2;
+  fill: none;
+}
+.dl-curve {
+  stroke: var(--md-default-fg-color);
+  stroke-width: 2.5;
+}
+.dl-curve-muted {
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 2;
+}
+.dl-point {
+  fill: rgb(var(--dl-blue));
+}
+.dl-point-warn {
+  fill: rgb(var(--dl-orange));
+}
 /* 三线图：除颜色外再用线型区分（蓝实线 / 绿长虚线 / 橙点线），色盲也可读。 */
-.dl-line-blue { stroke: rgb(var(--dl-blue)); stroke-width: 2.5; }
-.dl-line-green { stroke: rgb(var(--dl-green)); stroke-width: 2.5; stroke-dasharray: 8 5; }
-.dl-line-orange { stroke: rgb(var(--dl-orange)); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
-.dl-blue { fill: rgb(var(--dl-blue)); }
-.dl-green { fill: rgb(var(--dl-green)); }
-.dl-orange { fill: rgb(var(--dl-orange)); }
+.dl-line-blue {
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 2.5;
+}
+.dl-line-green {
+  stroke: rgb(var(--dl-green));
+  stroke-width: 2.5;
+  stroke-dasharray: 8 5;
+}
+.dl-line-orange {
+  stroke: rgb(var(--dl-orange));
+  stroke-width: 2.5;
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+}
+.dl-blue {
+  fill: rgb(var(--dl-blue));
+}
+.dl-green {
+  fill: rgb(var(--dl-green));
+}
+.dl-orange {
+  fill: rgb(var(--dl-orange));
+}
 .dl-cell-on {
   fill: rgb(var(--dl-blue) / 8%);
   stroke: var(--md-default-bg-color);
@@ -502,7 +552,12 @@ header.header {
   color: var(--md-primary-fg-color);
   white-space: nowrap;
 }
-.pdf-frame { display: block; width: 100%; height: 80vh; border: 0; }
+.pdf-frame {
+  display: block;
+  width: 100%;
+  height: 80vh;
+  border: 0;
+}
 .pdf-fallback {
   margin: 0;
   padding: 0.5rem 0.75rem;

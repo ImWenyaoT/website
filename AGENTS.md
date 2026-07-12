@@ -21,3 +21,7 @@ Default vocabulary — `needs-triage` / `needs-info` / `ready-for-agent` / `read
 ### Domain docs
 
 Single-context — one `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Style guide
+
+Code and documentation follow the repository adaptation of Google Style Guides. See `docs/agents/style-guide.md`.

@@ -48,7 +48,9 @@ describe('Deep learning figures', () => {
     const titles = deepLearningFigures.map((figure) => figure.title);
 
     expect(new Set(titles).size).toBe(titles.length);
-    expect(deepLearningFigures.every((figure) => existsSync(pathForImport(figure.importPath)))).toBe(true);
+    expect(
+      deepLearningFigures.every((figure) => existsSync(pathForImport(figure.importPath))),
+    ).toBe(true);
   });
 
   it('records compact figures explicitly', () => {

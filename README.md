@@ -13,6 +13,8 @@ pnpm dev                # http://localhost:4321/website/
 
 ```bash
 pnpm test               # 单元测试
+pnpm lint               # ESLint 静态检查
+pnpm format:check       # Prettier 格式检查
 pnpm dictionary:audit   # Dictionary term 候选审计，只报告、不改写
 pnpm check              # Astro / TypeScript 检查
 pnpm build              # Astro 构建 + Starlight 坏链校验（断链/断锚点失败退出）
