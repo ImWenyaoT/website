@@ -63,12 +63,12 @@ def gradient_descent_step(w, x, y, lr):
 
 ## 关键操作
 
-| 代码 | 作用 |
-| --- | --- |
-| `requires_grad=True` | 告诉 PyTorch 这个张量需要梯度。 |
-| `loss.backward()` | 从损失开始反向计算梯度。 |
-| `with torch.no_grad()` | 更新参数时不要记录计算图。 |
-| `w.grad.zero_()` | 清空梯度，避免下一轮累加旧梯度。 |
+| 代码                   | 作用                             |
+| ---------------------- | -------------------------------- |
+| `requires_grad=True`   | 告诉 PyTorch 这个张量需要梯度。  |
+| `loss.backward()`      | 从损失开始反向计算梯度。         |
+| `with torch.no_grad()` | 更新参数时不要记录计算图。       |
+| `w.grad.zero_()`       | 清空梯度，避免下一轮累加旧梯度。 |
 
 ## 直观理解
 
@@ -85,11 +85,11 @@ flowchart TD
 
 ### 批量、随机和小批量
 
-| 方法 | 每次用多少数据算梯度 | 特点 |
-| --- | --- | --- |
-| Batch gradient descent | 全部 [training](https://www.aihero.dev/ai-coding-dictionary/training) 集 | 稳定但贵。 |
-| Stochastic gradient descent | 一个样本 | 便宜但噪声大。 |
-| Mini-batch gradient descent | 一小批样本 | 深度学习里最常见。 |
+| 方法                        | 每次用多少数据算梯度                                                     | 特点               |
+| --------------------------- | ------------------------------------------------------------------------ | ------------------ |
+| Batch gradient descent      | 全部 [training](https://www.aihero.dev/ai-coding-dictionary/training) 集 | 稳定但贵。         |
+| Stochastic gradient descent | 一个样本                                                                 | 便宜但噪声大。     |
+| Mini-batch gradient descent | 一小批样本                                                               | 深度学习里最常见。 |
 
 小批量方法不是数学上最干净的版本，但工程上最实用：它既能利用矩阵计算，又能引入适度噪声，帮助 [training](https://www.aihero.dev/ai-coding-dictionary/training) 从某些糟糕区域走出来。
 

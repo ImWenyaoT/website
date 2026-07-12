@@ -3,7 +3,6 @@ title: 'Codex 的 Agent 设计'
 description: Codex 的 Agent 设计笔记，围绕核心功能、tool calling 与 Claude Code 对照梳理 harness 机制。
 ---
 
-
 **Codex** 是 OpenAI 的命令行编码 [agent](https://www.aihero.dev/ai-coding-dictionary/agent),核心用 Rust 实现、走 OpenAI 的 **Responses API**(一种把 **Reasoning** 与 [tool call](https://www.aihero.dev/ai-coding-dictionary/tool-call) 收进一个 loop 的 **LLM API**)。本文围绕 8 个问题——分成 [agent](https://www.aihero.dev/ai-coding-dictionary/agent) 的**核心功能**(5 个)与 **[tool](https://www.aihero.dev/ai-coding-dictionary/tool) calling**(3 个)——梳理 Codex 的设计,末尾与 **Claude Code** 对照。
 
 > 这 8 个角度既是从源码里提炼、供学习的**设计参考**,也刚好串起 [agent](https://www.aihero.dev/ai-coding-dictionary/agent) 的一批基本机制。写法偏概念、不涉及源码符号,复杂处交给图;术语冲突以 OpenAI 的说法为准。
@@ -290,16 +289,16 @@ flowchart TB
 
 Codex 和 Claude Code 骨架相同(都是 [model](https://www.aihero.dev/ai-coding-dictionary/model) + [harness](https://www.aihero.dev/ai-coding-dictionary/harness)、都走同一个 **[agent](https://www.aihero.dev/ai-coding-dictionary/agent) Loop**),但几乎每个问题上都做了相反的选择,而且各自都自洽:
 
-| 问题 | Codex | Claude Code |
-|---|---|---|
-| task scheduling | **[subagent](https://www.aihero.dev/ai-coding-dictionary/subagent)** 默认可**递归**,用 depth/数量上限兜底;plan mode 切出即默许 | **[subagent](https://www.aihero.dev/ai-coding-dictionary/subagent)** 单层用后即抛,靠不给递归 [tool](https://www.aihero.dev/ai-coding-dictionary/tool) 封顶;plan mode 要显式批准 |
-| loop | **不设 max turns**,靠 [autocompact](https://www.aihero.dev/ai-coding-dictionary/autocompact) 防膨胀;**Reasoning** 服务端隐藏、只回 summary | 有 **max turns** 兜底 + 恢复分支;**Reasoning** 是明文 thinking block |
-| input 拼接 | history **只增不改**,靠不动 prefix 让服务端**自动命中 KV Cache** | history 多级压缩,靠**手工标 cache 断点**显式命中 |
-| output parser | **[tool](https://www.aihero.dev/ai-coding-dictionary/tool) Use** + 强类型(反序列化成功即校验通过) | **[tool](https://www.aihero.dev/ai-coding-dictionary/tool) Use** + Zod(结构 + 语义两段) |
-| executor | **[sandbox](https://www.aihero.dev/ai-coding-dictionary/sandbox) 优先**:审批/[sandbox](https://www.aihero.dev/ai-coding-dictionary/sandbox)/重试收进统一 orchestrator | **hook 优先**:每个 [tool](https://www.aihero.dev/ai-coding-dictionary/tool) 自带 concurrency/权限标记 |
-| terminal 执行 | **[stateful](https://www.aihero.dev/ai-coding-dictionary/stateful) PTY [session](https://www.aihero.dev/ai-coding-dictionary/session)**,能跑交互式程序 | **[stateless](https://www.aihero.dev/ai-coding-dictionary/stateless) shell**(只保留目录)+ 后台任务,劝退 bash |
-| terminal 读 output | 按预算截断塞进本轮,**优先保 stderr** | 太大就**落盘**,让 [model](https://www.aihero.dev/ai-coding-dictionary/model) 改用 Read 分页 |
-| file I/O | **几乎没有专用 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)**:读靠 shell、写靠 `apply_patch` | **Read/Write/Edit/Grep/Glob 一整套专用 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)** + 硬约束 |
+| 问题               | Codex                                                                                                                                                                 | Claude Code                                                                                                                                                                     |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| task scheduling    | **[subagent](https://www.aihero.dev/ai-coding-dictionary/subagent)** 默认可**递归**,用 depth/数量上限兜底;plan mode 切出即默许                                        | **[subagent](https://www.aihero.dev/ai-coding-dictionary/subagent)** 单层用后即抛,靠不给递归 [tool](https://www.aihero.dev/ai-coding-dictionary/tool) 封顶;plan mode 要显式批准 |
+| loop               | **不设 max turns**,靠 [autocompact](https://www.aihero.dev/ai-coding-dictionary/autocompact) 防膨胀;**Reasoning** 服务端隐藏、只回 summary                            | 有 **max turns** 兜底 + 恢复分支;**Reasoning** 是明文 thinking block                                                                                                            |
+| input 拼接         | history **只增不改**,靠不动 prefix 让服务端**自动命中 KV Cache**                                                                                                      | history 多级压缩,靠**手工标 cache 断点**显式命中                                                                                                                                |
+| output parser      | **[tool](https://www.aihero.dev/ai-coding-dictionary/tool) Use** + 强类型(反序列化成功即校验通过)                                                                     | **[tool](https://www.aihero.dev/ai-coding-dictionary/tool) Use** + Zod(结构 + 语义两段)                                                                                         |
+| executor           | **[sandbox](https://www.aihero.dev/ai-coding-dictionary/sandbox) 优先**:审批/[sandbox](https://www.aihero.dev/ai-coding-dictionary/sandbox)/重试收进统一 orchestrator | **hook 优先**:每个 [tool](https://www.aihero.dev/ai-coding-dictionary/tool) 自带 concurrency/权限标记                                                                           |
+| terminal 执行      | **[stateful](https://www.aihero.dev/ai-coding-dictionary/stateful) PTY [session](https://www.aihero.dev/ai-coding-dictionary/session)**,能跑交互式程序                | **[stateless](https://www.aihero.dev/ai-coding-dictionary/stateless) shell**(只保留目录)+ 后台任务,劝退 bash                                                                    |
+| terminal 读 output | 按预算截断塞进本轮,**优先保 stderr**                                                                                                                                  | 太大就**落盘**,让 [model](https://www.aihero.dev/ai-coding-dictionary/model) 改用 Read 分页                                                                                     |
+| file I/O           | **几乎没有专用 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)**:读靠 shell、写靠 `apply_patch`                                                              | **Read/Write/Edit/Grep/Glob 一整套专用 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)** + 硬约束                                                                      |
 
 几处最能说明问题、也最值得琢磨的差异:
 

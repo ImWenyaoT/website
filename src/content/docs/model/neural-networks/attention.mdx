@@ -10,10 +10,10 @@ import AttentionHeatmapFigure from '@/components/deep-learning-figures/Attention
 
 在 Transformer 里，注意力通常写成 Query、Key、Value：
 
-| 名称 | 直观含义 |
-| --- | --- |
-| Query | 当前位置想找什么。 |
-| Key | 每个位置提供的索引标签。 |
+| 名称  | 直观含义                 |
+| ----- | ------------------------ |
+| Query | 当前位置想找什么。       |
+| Key   | 每个位置提供的索引标签。 |
 | Value | 每个位置真正携带的信息。 |
 
 Query 和 Key 的相似度越高，对应 Value 的权重越大。
@@ -79,14 +79,14 @@ def make_causal_mask(seq_len):
 
 假设 batch 为 `B`，序列长度为 `T`，每个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 的表示维度为 `D`：
 
-| 张量 | 形状 | 说明 |
-| --- | --- | --- |
-| `q` | `[B, T, D]` | 每个位置的查询向量。 |
-| `k` | `[B, T, D]` | 每个位置的键向量。 |
-| `v` | `[B, T, D]` | 每个位置的值向量。 |
-| `scores` | `[B, T, T]` | 每个位置对每个位置的相似度。 |
-| `weights` | `[B, T, T]` | softmax 后的注意力权重。 |
-| `output` | `[B, T, D]` | 加权汇总后的新表示。 |
+| 张量      | 形状        | 说明                         |
+| --------- | ----------- | ---------------------------- |
+| `q`       | `[B, T, D]` | 每个位置的查询向量。         |
+| `k`       | `[B, T, D]` | 每个位置的键向量。           |
+| `v`       | `[B, T, D]` | 每个位置的值向量。           |
+| `scores`  | `[B, T, T]` | 每个位置对每个位置的相似度。 |
+| `weights` | `[B, T, T]` | softmax 后的注意力权重。     |
+| `output`  | `[B, T, D]` | 加权汇总后的新表示。         |
 
 ## 直观理解
 

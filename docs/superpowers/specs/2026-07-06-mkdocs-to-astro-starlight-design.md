@@ -65,15 +65,15 @@ website/
 
 - 内容迁入 `src/content/docs/`，**镜像现有相对路径**以保 URL（配 `[...slug]` 默认路由 + `base:/website`）。映射：
 
-| 现状 | 目标 |
-|------|------|
-| `docs/index.md` | `src/content/docs/index.mdx`（首页，见 §16-①） |
-| `docs/about.md` | `src/content/docs/about.mdx` |
-| `docs/model/index.md`、`docs/model/linear-algebra/index.md` | 同路径 `.mdx` |
-| `docs/model/neural-networks/*.md`（7） | 同路径 `.mdx` |
-| `docs/harness/*.md`（3）+ `minimal-swe-agent-main.py` | 同路径；.py 作代码包含源 |
-| `docs/papers/*.md`（2） | 同路径 `.mdx` |
-| `docs/paper/*.pdf`（3） | `public/paper/*.pdf` |
+| 现状                                                        | 目标                                           |
+| ----------------------------------------------------------- | ---------------------------------------------- |
+| `docs/index.md`                                             | `src/content/docs/index.mdx`（首页，见 §16-①） |
+| `docs/about.md`                                             | `src/content/docs/about.mdx`                   |
+| `docs/model/index.md`、`docs/model/linear-algebra/index.md` | 同路径 `.mdx`                                  |
+| `docs/model/neural-networks/*.md`（7）                      | 同路径 `.mdx`                                  |
+| `docs/harness/*.md`（3）+ `minimal-swe-agent-main.py`       | 同路径；.py 作代码包含源                       |
+| `docs/papers/*.md`（2）                                     | 同路径 `.mdx`                                  |
+| `docs/paper/*.pdf`（3）                                     | `public/paper/*.pdf`                           |
 
 - **Schema**（`src/content.config.ts`）：以 Starlight `docsSchema()` 为基。frontmatter：
   - `title`（**Starlight 必填**；从现 `nav:` 标签/H1 给 16 页补齐，如 `"ReAct（原文）"`）

@@ -21,35 +21,21 @@
 每个提交都让 Astro 侧 `pnpm build` 保持绿（迁移期 mkdocs 文件仍在、inert，直到 C15 清理 + 合并）。
 
 **阶段 0 · 脚手架**
+
 1. **C1 scaffold**：`package.json`/`pnpm-lock`、`astro.config`（`site`/`base:'/website'`/`trailingSlash:'always'`/`build.format:'directory'` + Starlight 集成）、`tsconfig`、`src/content.config.ts`（`docsSchema`）、占位 `src/content/docs/index.mdx`、`.gitignore += node_modules/ dist/ .astro/`。mkdocs 不动。验：`pnpm install && pnpm build` 绿（单页 Starlight 站）。
 2. **C2 link-check**：接入 `starlight-links-validator`——断链即构建失败（承接旧 `--strict`）。验：绿。
 
-**阶段 1 · 设计系统**
-3. **C3 tokens-light**：`src/styles/geist.css` 用 Geist light token 覆盖 `--sl-*`，经 `customCss` 引入。验：占位页呈 Geist 亮色。
-4. **C4 tokens-dark**：Geist dark token（取自 `design.dark.md`）+ 焦点环 `0 0 0 2px #fff,0 0 0 4px #006bff` + 圆角 6/12/16 + 间距 4/8/…/40 + 动效 `cubic-bezier(0.175,0.885,0.32,1.1)` 150–300ms（尊重 `prefers-reduced-motion`）。验：亮/暗都是 Geist。
-5. **C5 fonts**：Geist Sans/Mono 自托管（`public/fonts/` woff2 + `@font-face` + Starlight 字体变量），CJK 系统回退。验：离线加载。
-6. **C6 dl-figures-css**：`.dl-*` 图示样式从旧 `extra.css` 移植进 `geist.css`，`--md-*` 依赖 → Geist/语义色（蓝/绿/橙）。验：绿（样式就绪，亮/暗留待内容页验）。
+**阶段 1 · 设计系统** 3. **C3 tokens-light**：`src/styles/geist.css` 用 Geist light token 覆盖 `--sl-*`，经 `customCss` 引入。验：占位页呈 Geist 亮色。4. **C4 tokens-dark**：Geist dark token（取自 `design.dark.md`）+ 焦点环 `0 0 0 2px #fff,0 0 0 4px #006bff` + 圆角 6/12/16 + 间距 4/8/…/40 + 动效 `cubic-bezier(0.175,0.885,0.32,1.1)` 150–300ms（尊重 `prefers-reduced-motion`）。验：亮/暗都是 Geist。5. **C5 fonts**：Geist Sans/Mono 自托管（`public/fonts/` woff2 + `@font-face` + Starlight 字体变量），CJK 系统回退。验：离线加载。6. **C6 dl-figures-css**：`.dl-*` 图示样式从旧 `extra.css` 移植进 `geist.css`，`--md-*` 依赖 → Geist/语义色（蓝/绿/橙）。验：绿（样式就绪，亮/暗留待内容页验）。
 
-**阶段 2 · 组件与图**
-7. **C7 mermaid**：客户端 Mermaid 集成（Starlight 兼容插件，免 Playwright）。验：dev 验一张图渲染 + 版本兼容。
-8. **C8 pdfviewer**：`src/data/papers.ts`（slug→{arxiv_id,title}）+ `src/components/PdfViewer.astro`（据 slug 派生 arXiv 链接 + `public/paper/…` 路径，发射 `<figure class="pdf-viewer">…<iframe>`，未知 slug 构建期报错）；3 个 PDF 迁 `public/paper/`。验：样例 `<PdfViewer slug="react"/>` 渲染。
+**阶段 2 · 组件与图** 7. **C7 mermaid**：客户端 Mermaid 集成（Starlight 兼容插件，免 Playwright）。验：dev 验一张图渲染 + 版本兼容。8. **C8 pdfviewer**：`src/data/papers.ts`（slug→{arxiv_id,title}）+ `src/components/PdfViewer.astro`（据 slug 派生 arXiv 链接 + `public/paper/…` 路径，发射 `<figure class="pdf-viewer">…<iframe>`，未知 slug 构建期报错）；3 个 PDF 迁 `public/paper/`。验：样例 `<PdfViewer slug="react"/>` 渲染。
 
-**阶段 3 · 内容迁移（按 nav 分组，每组构建绿 + 链接解析）**
-9. **C9 home+about**：`index.mdx`（普通文档页作首页）、`about.mdx`；补 `title`/`sidebar`；**反转内链**（文件相对 `.md` → 路由式）。验：绿、链接解析。
-10. **C10 model/neural-networks**：7 页（6 页 dl-SVG + `attention-paper` 用 `<PdfViewer slug="attention"/>`）；反转链接；验 dl-SVG 亮/暗、kebab-case SVG 属性透传、PDF 内嵌。验：绿。
-11. **C11 model/rest**：`model/index` + `linear-algebra/index`。验：绿。
-12. **C12 harness**：`papers/{react-paper,swe-agent-paper}`（PdfViewer）+ `harness/minimal-swe-agent`（`<Aside>` 承接 admonition + `--8<--` → 代码包含）+ `harness/{openai,anthropic}`；反转链接；验 ~34 张 mermaid + 代码包含。验：绿。
+**阶段 3 · 内容迁移（按 nav 分组，每组构建绿 + 链接解析）** 9. **C9 home+about**：`index.mdx`（普通文档页作首页）、`about.mdx`；补 `title`/`sidebar`；**反转内链**（文件相对 `.md` → 路由式）。验：绿、链接解析。10. **C10 model/neural-networks**：7 页（6 页 dl-SVG + `attention-paper` 用 `<PdfViewer slug="attention"/>`）；反转链接；验 dl-SVG 亮/暗、kebab-case SVG 属性透传、PDF 内嵌。验：绿。11. **C11 model/rest**：`model/index` + `linear-algebra/index`。验：绿。12. **C12 harness**：`papers/{react-paper,swe-agent-paper}`（PdfViewer）+ `harness/minimal-swe-agent`（`<Aside>` 承接 admonition + `--8<--` → 代码包含）+ `harness/{openai,anthropic}`；反转链接；验 ~34 张 mermaid + 代码包含。验：绿。
 
-**阶段 4 · 侧边栏平替**
-13. **C13 sidebar**：Starlight `sidebar` autogenerate + 各页 `sidebar.order/label` 对齐现 nav 顺序与策展标签（`"ReAct（原文）"` 等）→ nav 变派生、单一真源。验：结构 = 现导航。
+**阶段 4 · 侧边栏平替** 13. **C13 sidebar**：Starlight `sidebar` autogenerate + 各页 `sidebar.order/label` 对齐现 nav 顺序与策展标签（`"ReAct（原文）"` 等）→ nav 变派生、单一真源。验：结构 = 现导航。
 
 **阶段 5 · 平替验收门**（非提交，检查点，见 Testing Decisions）
 
-**阶段 6 · 切换**
-14. **C14 ci**：改写 `.github/workflows/deploy.yml`：`mkdocs build` → `pnpm install --frozen-lockfile` + `pnpm build` + 传 `dist`（去 uv/mkdocs/chromium）。
-15. **C15 cleanup**：删 mkdocs 残留（`mkdocs.yml`/`pyproject.toml`/`uv.lock`/`.python-version`/已迁的 `docs/` 站点内容/`site/`/caches）；`docs/` 只留工作文档（`superpowers/`/`agents/`/`topics/`）。验：`pnpm build` 仍绿、仓库纯 Astro。
-16. **C16 governance**：改写 `README`（pnpm/Astro）；轻改 `AGENTS/CLAUDE`（**保留 `## Agent skills` 段**，仅更新 mkdocs 提法）。
-17. **合并 `migrate/astro` → `main`（= 切换）**：核对 Actions 绿 + 各页可达 + URL 逐一对应。
+**阶段 6 · 切换** 14. **C14 ci**：改写 `.github/workflows/deploy.yml`：`mkdocs build` → `pnpm install --frozen-lockfile` + `pnpm build` + 传 `dist`（去 uv/mkdocs/chromium）。15. **C15 cleanup**：删 mkdocs 残留（`mkdocs.yml`/`pyproject.toml`/`uv.lock`/`.python-version`/已迁的 `docs/` 站点内容/`site/`/caches）；`docs/` 只留工作文档（`superpowers/`/`agents/`/`topics/`）。验：`pnpm build` 仍绿、仓库纯 Astro。16. **C16 governance**：改写 `README`（pnpm/Astro）；轻改 `AGENTS/CLAUDE`（**保留 `## Agent skills` 段**，仅更新 mkdocs 提法）。17. **合并 `migrate/astro` → `main`（= 切换）**：核对 Actions 绿 + 各页可达 + URL 逐一对应。
 
 ## Decision Document
 

@@ -39,23 +39,23 @@ flowchart LR
 
 每章都按同一条路径组织：
 
-| 部分 | 作用 |
-| --- | --- |
-| 直觉 | 先解释这个机制解决什么问题。 |
-| 图解 | 用朴素图形把数据流、参数流或梯度流画出来。 |
-| PyTorch 代码 | 保留一个最小可运行骨架，代码尽量短。 |
-| 形状表 | 把张量维度写清楚，减少“能跑但不理解”。 |
-| 边界 | 说明这个简化版本没有覆盖什么。 |
+| 部分         | 作用                                       |
+| ------------ | ------------------------------------------ |
+| 直觉         | 先解释这个机制解决什么问题。               |
+| 图解         | 用朴素图形把数据流、参数流或梯度流画出来。 |
+| PyTorch 代码 | 保留一个最小可运行骨架，代码尽量短。       |
+| 形状表       | 把张量维度写清楚，减少“能跑但不理解”。     |
+| 边界         | 说明这个简化版本没有覆盖什么。             |
 
 ## 写作约定
 
 专题里的代码有三种层次：
 
-| 类型 | 目的 | 是否必须能直接运行 |
-| --- | --- | --- |
-| 公式代码 | 用 PyTorch 风格写出公式和数据流。 | 不要求。 |
-| 骨架代码 | 展示 `Module`、[training](https://www.aihero.dev/ai-coding-dictionary/training) 循环、attention 函数的大形状。 | 基本能读懂即可。 |
-| 实验代码 | 以后如果加入图像生成或小实验，会单独标注依赖和运行方式。 | 需要能复现。 |
+| 类型     | 目的                                                                                                           | 是否必须能直接运行 |
+| -------- | -------------------------------------------------------------------------------------------------------------- | ------------------ |
+| 公式代码 | 用 PyTorch 风格写出公式和数据流。                                                                              | 不要求。           |
+| 骨架代码 | 展示 `Module`、[training](https://www.aihero.dev/ai-coding-dictionary/training) 循环、attention 函数的大形状。 | 基本能读懂即可。   |
+| 实验代码 | 以后如果加入图像生成或小实验，会单独标注依赖和运行方式。                                                       | 需要能复现。       |
 
 当前版本主要采用前两种。这样读者不会被环境、依赖、随机数和 [training](https://www.aihero.dev/ai-coding-dictionary/training) 细节打断，可以把注意力放在概念本身。
 
@@ -67,20 +67,20 @@ flowchart LR
 
 这句话拆开就是五篇 article：
 
-| Article | 第一性问题 | 最小 [tool](https://www.aihero.dev/ai-coding-dictionary/tool) |
-| --- | --- | --- |
-| 神经网络的结构 | 什么样的函数可以被调整？ | 矩阵乘法 + 非线性 |
-| 梯度下降法 | 如果函数错了，参数往哪边动？ | 损失曲线 + 反方向更新 |
-| 反向传播算法 | 参数很多时，梯度怎么高效算？ | 链式法则 + 计算图 |
-| GPT / Transformer | 处理语言时，函数结构该长什么样？ | [token](https://www.aihero.dev/ai-coding-dictionary/token) + 位置 + block |
-| 注意力机制 | 一个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 如何从 [context](https://www.aihero.dev/ai-coding-dictionary/context) 取信息？ | Q/K/V + softmax |
+| Article           | 第一性问题                                                                                                                                     | 最小 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)             |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 神经网络的结构    | 什么样的函数可以被调整？                                                                                                                       | 矩阵乘法 + 非线性                                                         |
+| 梯度下降法        | 如果函数错了，参数往哪边动？                                                                                                                   | 损失曲线 + 反方向更新                                                     |
+| 反向传播算法      | 参数很多时，梯度怎么高效算？                                                                                                                   | 链式法则 + 计算图                                                         |
+| GPT / Transformer | 处理语言时，函数结构该长什么样？                                                                                                               | [token](https://www.aihero.dev/ai-coding-dictionary/token) + 位置 + block |
+| 注意力机制        | 一个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 如何从 [context](https://www.aihero.dev/ai-coding-dictionary/context) 取信息？ | Q/K/V + softmax                                                           |
 
 ## 两个学习视角
 
-| 视角 | 对这个 topic 的影响 |
-| --- | --- |
-| Karpathy 式 | 从一个小标量、一个小字符 [model](https://www.aihero.dev/ai-coding-dictionary/model)、一个小计算图开始，把东西搭出来。 |
-| Scale 式 | 不把单个 trick 神化；深度学习真正厉害的是同一套 [training](https://www.aihero.dev/ai-coding-dictionary/training) 机制能随数据、算力和 [model](https://www.aihero.dev/ai-coding-dictionary/model) 规模继续变强。 |
+| 视角        | 对这个 topic 的影响                                                                                                                                                                                             |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Karpathy 式 | 从一个小标量、一个小字符 [model](https://www.aihero.dev/ai-coding-dictionary/model)、一个小计算图开始，把东西搭出来。                                                                                           |
+| Scale 式    | 不把单个 trick 神化；深度学习真正厉害的是同一套 [training](https://www.aihero.dev/ai-coding-dictionary/training) 机制能随数据、算力和 [model](https://www.aihero.dev/ai-coding-dictionary/model) 规模继续变强。 |
 
 所以这里会同时保留两个层次：每篇 article 先用小例子讲清楚机制，再说明它在大 [model](https://www.aihero.dev/ai-coding-dictionary/model) 里扮演什么角色。
 
@@ -92,10 +92,10 @@ Transformer 只是这条主线上的一种强大 [model](https://www.aihero.dev/
 
 这个 topic 里的图分三类：
 
-| 图形 | 用途 |
-| --- | --- |
-| 流程图 | 解释数据、损失、梯度、参数更新的方向。 |
-| 矩阵图 | 解释 batch、权重、attention score、mask 的形状。 |
+| 图形       | 用途                                                       |
+| ---------- | ---------------------------------------------------------- |
+| 流程图     | 解释数据、损失、梯度、参数更新的方向。                     |
+| 矩阵图     | 解释 batch、权重、attention score、mask 的形状。           |
 | 小型状态图 | 把复杂概念拆成几个离散阶段，例如 forward/backward/update。 |
 
 图的目标是减少文字，不是增加装饰。读者应该能只看图和伪代码，就复述出本页的大意。

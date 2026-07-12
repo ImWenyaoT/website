@@ -125,13 +125,13 @@ stateDiagram-v2
 
 ### 符号表
 
-| 符号 | 在代码里的样子 | 含义 |
-| --- | --- | --- |
-| `a_l` | `activation` | 第 `l` 层输出，也就是下一层的输入。 |
-| `z_l` | `pre_activation` | 激活函数之前的线性结果。 |
-| `W_l` | `weight` | 第 `l` 层权重矩阵。 |
-| `b_l` | `bias` | 第 `l` 层偏置。 |
-| `delta_l` | `grad_z` | 损失对 `z_l` 的梯度，也可理解为这一层收到的误差信号。 |
+| 符号      | 在代码里的样子   | 含义                                                  |
+| --------- | ---------------- | ----------------------------------------------------- |
+| `a_l`     | `activation`     | 第 `l` 层输出，也就是下一层的输入。                   |
+| `z_l`     | `pre_activation` | 激活函数之前的线性结果。                              |
+| `W_l`     | `weight`         | 第 `l` 层权重矩阵。                                   |
+| `b_l`     | `bias`           | 第 `l` 层偏置。                                       |
+| `delta_l` | `grad_z`         | 损失对 `z_l` 的梯度，也可理解为这一层收到的误差信号。 |
 
 ### 反向传播的核心递推
 
@@ -213,10 +213,10 @@ W1 -> z1 -> a1 -> z2 -> a2 -> loss
 
 从后往前则更经济：先知道损失对输出的梯度，再逐层把这个误差信号传回去。每一层只需要两类信息：
 
-| 信息 | 来源 | 作用 |
-| --- | --- | --- |
-| 上游梯度 | 后一层传回来的 `delta` | 告诉当前层输出对最终损失有多重要。 |
-| 本地导数 | 当前层前向时缓存的 `z` 或 `a` | 告诉当前层内部的局部变化率。 |
+| 信息     | 来源                          | 作用                               |
+| -------- | ----------------------------- | ---------------------------------- |
+| 上游梯度 | 后一层传回来的 `delta`        | 告诉当前层输出对最终损失有多重要。 |
+| 本地导数 | 当前层前向时缓存的 `z` 或 `a` | 告诉当前层内部的局部变化率。       |
 
 二者相乘，就是链式法则。
 
@@ -282,12 +282,12 @@ grad_x = delta @ W.T      # [B, H] @ [H, D] -> [B, D]
 
 ## 反向传播缓存了什么
 
-| 节点 | 前向时的值 | 反向时需要的东西 |
-| --- | --- | --- |
-| `prediction = w * x + b` | 预测值 | `x`、`w`、上游梯度 |
-| `loss = (prediction - y) ** 2` | 损失值 | `prediction - y` |
-| 参数 `w` | 当前权重 | `loss` 对 `w` 的梯度 |
-| 参数 `b` | 当前偏置 | `loss` 对 `b` 的梯度 |
+| 节点                           | 前向时的值 | 反向时需要的东西     |
+| ------------------------------ | ---------- | -------------------- |
+| `prediction = w * x + b`       | 预测值     | `x`、`w`、上游梯度   |
+| `loss = (prediction - y) ** 2` | 损失值     | `prediction - y`     |
+| 参数 `w`                       | 当前权重   | `loss` 对 `w` 的梯度 |
+| 参数 `b`                       | 当前偏置   | `loss` 对 `b` 的梯度 |
 
 PyTorch 的 autograd 会记录这些计算关系。调用 `backward()` 时，它沿着图反向执行局部梯度计算，并按链式法则把它们乘起来。
 
@@ -295,7 +295,7 @@ PyTorch 的 autograd 会记录这些计算关系。调用 `backward()` 时，它
 
 ### 学习作为一个优化问题
 
-[training](https://www.aihero.dev/ai-coding-dictionary/training)  [model](https://www.aihero.dev/ai-coding-dictionary/model) 就是在参数空间里找一个点，使损失尽量低。反向传播不负责决定“去哪一个低点”，它只告诉优化器当前位置的坡度。
+[training](https://www.aihero.dev/ai-coding-dictionary/training) [model](https://www.aihero.dev/ai-coding-dictionary/model) 就是在参数空间里找一个点，使损失尽量低。反向传播不负责决定“去哪一个低点”，它只告诉优化器当前位置的坡度。
 
 可以把流程想成：
 
@@ -353,7 +353,7 @@ for batch in data:
 
 ### 需要可微结构
 
-反向传播依赖局部导数。ReLU 在 0 点不可导，但工程上可以选一个约定的次梯度；真正麻烦的是离散采样、硬判断、外部 [tool call](https://www.aihero.dev/ai-coding-dictionary/tool-call) 这类不可微操作。现代 [model](https://www.aihero.dev/ai-coding-dictionary/model)  [training](https://www.aihero.dev/ai-coding-dictionary/training) 会用各种替代目标、松弛技巧或强化学习方法绕过这些问题。
+反向传播依赖局部导数。ReLU 在 0 点不可导，但工程上可以选一个约定的次梯度；真正麻烦的是离散采样、硬判断、外部 [tool call](https://www.aihero.dev/ai-coding-dictionary/tool-call) 这类不可微操作。现代 [model](https://www.aihero.dev/ai-coding-dictionary/model) [training](https://www.aihero.dev/ai-coding-dictionary/training) 会用各种替代目标、松弛技巧或强化学习方法绕过这些问题。
 
 ### 内存开销不小
 

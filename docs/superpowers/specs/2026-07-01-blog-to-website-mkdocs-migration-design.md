@@ -95,6 +95,7 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
 - `exclude_docs: |`（mkdocs ≥1.5 原生）→ 排除 `superpowers/`，本设计文档不发布
 - `validation:`（mkdocs ≥1.5 原生）→ 把链接/anchor/nav 问题从默认 info 提级为 warn，配合
   `--strict` 令其**失败退出**（否则断锚点/未识别链接只是静默 info）：
+
   ```yaml
   validation:
     nav:
@@ -107,6 +108,7 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
       unrecognized_links: warn
       anchors: warn
   ```
+
 - `theme:`
   - `name: material`
   - `language: zh`
@@ -133,20 +135,20 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
 
 ### D. 内容迁移映射（`src/content/docs/**` → `docs/**`）
 
-| 源 | 目标 | 处理 |
-| --- | --- | --- |
-| `index.md` | `docs/index.md` | 留 `title`/`description`；两条导读链接改 `.md`（见下） |
-| `about.mdoc` | `docs/about.md` | Markdoc → 纯 Markdown |
-| `deep-learning/index.md` | 同路径 | 5 条 `./xxx/` 链接 → `xxx.md` |
-| `deep-learning/{neural-network-structure,gradient-descent,backpropagation,gpt-transformer,attention}.md` | 同路径 | 直接迁；`\`\`\`mermaid` 保持；内链规范化 |
-| `deep-learning/attention-paper.mdx` | `deep-learning/attention-paper.md` | `PdfViewer` → HTML 内嵌（见 E②） |
-| `ai-agent/index.md` | 同路径 | 内链规范化 |
-| `topics/{agent-basics,implementation-boundaries,long-term-memory}.md` | 同路径 | 直接迁 |
-| `papers/{react,swe-agent}.md` | 同路径 | 直接迁；内链规范化 |
-| `papers/{react-paper,swe-agent-paper}.mdx` | `papers/*.md` | `PdfViewer` → HTML 内嵌 |
-| `public/paper/*.pdf` | `docs/paper/*.pdf` | 原样搬 |
-| `public/favicon.*` | `docs/assets/` | 原样搬 |
-| `src/styles/notes.css` 的 `.dl-*` | `docs/stylesheets/extra.css` | 见 E③ |
+| 源                                                                                                       | 目标                               | 处理                                                   |
+| -------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| `index.md`                                                                                               | `docs/index.md`                    | 留 `title`/`description`；两条导读链接改 `.md`（见下） |
+| `about.mdoc`                                                                                             | `docs/about.md`                    | Markdoc → 纯 Markdown                                  |
+| `deep-learning/index.md`                                                                                 | 同路径                             | 5 条 `./xxx/` 链接 → `xxx.md`                          |
+| `deep-learning/{neural-network-structure,gradient-descent,backpropagation,gpt-transformer,attention}.md` | 同路径                             | 直接迁；`\`\`\`mermaid` 保持；内链规范化               |
+| `deep-learning/attention-paper.mdx`                                                                      | `deep-learning/attention-paper.md` | `PdfViewer` → HTML 内嵌（见 E②）                       |
+| `ai-agent/index.md`                                                                                      | 同路径                             | 内链规范化                                             |
+| `topics/{agent-basics,implementation-boundaries,long-term-memory}.md`                                    | 同路径                             | 直接迁                                                 |
+| `papers/{react,swe-agent}.md`                                                                            | 同路径                             | 直接迁；内链规范化                                     |
+| `papers/{react-paper,swe-agent-paper}.mdx`                                                               | `papers/*.md`                      | `PdfViewer` → HTML 内嵌                                |
+| `public/paper/*.pdf`                                                                                     | `docs/paper/*.pdf`                 | 原样搬                                                 |
+| `public/favicon.*`                                                                                       | `docs/assets/`                     | 原样搬                                                 |
+| `src/styles/notes.css` 的 `.dl-*`                                                                        | `docs/stylesheets/extra.css`       | 见 E③                                                  |
 
 **frontmatter**：仅保留 `title`/`description`，删除 Starlight 专有键（`template`、
 `sidebar`、`tableOfContents`、`hero` 等，本仓实际只有 title/description，基本无需删）。
@@ -155,6 +157,7 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
 `/deep-learning/attention/`），mkdocs `.md` 链接是**源文件相对**。二者在"同目录兄弟页"
 上不等价，必须按**目标页**逐条重推，不能机械把 `/`→`.md`。规则：每条内链改写为指向正确
 目标页的源相对 `.md` 路径。示例：
+
 - `deep-learning/gpt-transformer.md` 内 `../attention/` → `attention.md`（同目录兄弟）
 - `deep-learning/index.md` 内 `./backpropagation/` → `backpropagation.md`
 - `ai-agent/index.md` 内 `../topics/agent-basics/` → `../topics/agent-basics.md`
@@ -169,12 +172,13 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
 钩子。**关键前提**：现有 17 篇内容**无正文 H1**，标题全由 frontmatter `title` 渲染（Starlight
 行为）；vanilla Material 不会把 frontmatter title 自动注入正文 H1，若不处理则页面**既无可见
 大标题、也无处挂阅读时间**。因此 hook 同时负责「合成标题」与「阅读时间」：
+
 - **合成 H1**：钩子入参 `markdown` 已剥除 frontmatter，`page.meta` 保有 frontmatter。判断
-  `markdown` 首个非空行是否为 `# ` 开头（只看首行，避开代码块里 `#` 注释的误判——如
+  `markdown` 首个非空行是否为 `#` 开头（只看首行，避开代码块里 `#` 注释的误判——如
   `backpropagation.md` 的 `# forward:` 在文件深处）：
   - 无 H1（当前全部情况）：在正文最前注入 `# {page.meta['title']}`，再接阅读时间行。
   - 有 H1（未来页）：在该 H1 之后插入阅读时间行。
-  合成的 H1 会被 mkdocs `_set_title()` 采纳为 `page.title`，与 nav/frontmatter 一致，无双标题。
+    合成的 H1 会被 mkdocs `_set_title()` 采纳为 `page.title`，与 nav/frontmatter 一致，无双标题。
 - **阅读时间**：统计 `markdown` 中 CJK 字符数与拉丁词数（正则），估时
   `minutes = max(1, ceil(cjk/350 + words/220))`；注入一行
   `⏱ 约 N 分钟阅读{ .reading-time }`（`attr_list` → `<p class="reading-time">`，muted 样式并入
@@ -185,12 +189,18 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
 
 **② 论文内嵌 PDF** — 3 个 `*-paper` 页把 `<PdfViewer src="paper/x.pdf" title=… arxiv=…/>`
 换成 `md_in_html` 允许的原生 HTML：
+
 ```html
-<object class="pdf-embed" data="../../paper/2405.15793.pdf#view=FitH"
-        type="application/pdf" title="…">
+<object
+  class="pdf-embed"
+  data="../../paper/2405.15793.pdf#view=FitH"
+  type="application/pdf"
+  title="…"
+>
   <p>浏览器无法内嵌 PDF，<a href="../../paper/2405.15793.pdf">点此下载/查看</a>。</p>
 </object>
 ```
+
 - 3 个 `*-paper` 页在目录 URL 下均为深度 2（`/deep-learning/attention-paper/`、
   `/papers/{react,swe-agent}-paper/`），到站点根 `paper/` 统一用 `../../paper/`，可复用。
 - 高度靠 `.pdf-embed` 样式（并入 `extra.css`）。以 `serve` 实测 3 个 PDF 均可载。
@@ -203,6 +213,7 @@ Python 质量门（针对 `hooks/`）：`uv run ruff format` + `uv run ruff chec
 ### F. 部署 CI（`.github/workflows/deploy.yml`）
 
 沿用现有 Pages「source: Actions」（build → deploy），构建换成 uv + mkdocs：
+
 - `on: push: branches: [main]` + `workflow_dispatch`；`permissions: pages:write, id-token:write`。
 - **lint job**（先决）：`actions/checkout` → `astral-sh/setup-uv` → `uv sync --frozen` →
   `uv run ruff format --check` + `uv run ruff check` + `uv run ty check`（守住 `hooks/` 的 Python）。
