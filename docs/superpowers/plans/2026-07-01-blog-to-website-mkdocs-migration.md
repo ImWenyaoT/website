@@ -1,6 +1,8 @@
 # blog → website（mkdocs-material）迁移 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **已归档，不再执行。** 本文包含删除 Git 历史与强推等危险历史步骤，仅供追溯。
+> 当前平台决策见
+> [`../../adr/0003-retain-astro-starlight.md`](../../adr/0003-retain-astro-starlight.md)。
 
 **Goal:** 把 `projects/blog`（Astro Starlight）改名并迁移为 `projects/website`（mkdocs-material），改 GitHub 远端名，并把 git 历史压平为单个干净初始提交。
 

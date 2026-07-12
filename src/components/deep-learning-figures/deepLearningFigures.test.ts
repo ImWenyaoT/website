@@ -1,15 +1,18 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { deepLearningFigures } from './registry';
 
 const neuralNetworkDocsDir = join(process.cwd(), 'src/content/docs/model/neural-networks');
+const figuresDir = join(process.cwd(), 'src/components/deep-learning-figures');
 
 /**
  * Converts a project alias import into the file path used by inventory checks.
  */
-function pathForImport(importPath: string): string {
-  return join(process.cwd(), importPath.replace('@/', 'src/'));
+function figureNames(): string[] {
+  return readdirSync(figuresDir)
+    .filter((file) => file.endsWith('Figure.astro'))
+    .map((file) => file.replace('.astro', ''))
+    .sort();
 }
 
 /**
@@ -28,45 +31,35 @@ function readNeuralNetworkDocs(): string[] {
 
 describe('Deep learning figures', () => {
   it('tracks the migrated figure inventory behind one module', () => {
-    expect(deepLearningFigures).toHaveLength(11);
-    expect(deepLearningFigures.map((figure) => figure.name)).toEqual([
-      'TrainingLoopFigure',
-      'NeuronComputationFigure',
-      'MinimalMlpFigure',
-      'GradientDescentPathFigure',
-      'LearningRateComparisonFigure',
-      'BackpropagationGraphFigure',
-      'NextTokenShiftFigure',
-      'TransformerPipelineFigure',
-      'CausalMaskFigure',
+    expect(figureNames()).toEqual([
       'AttentionFlowFigure',
       'AttentionHeatmapFigure',
+      'BackpropagationGraphFigure',
+      'CausalMaskFigure',
+      'GradientDescentPathFigure',
+      'LearningRateComparisonFigure',
+      'MinimalMlpFigure',
+      'NeuronComputationFigure',
+      'NextTokenShiftFigure',
+      'TrainingLoopFigure',
+      'TransformerPipelineFigure',
     ]);
   });
 
-  it('keeps figure titles unique and addressable', () => {
-    const titles = deepLearningFigures.map((figure) => figure.title);
-
-    expect(new Set(titles).size).toBe(titles.length);
-    expect(
-      deepLearningFigures.every((figure) => existsSync(pathForImport(figure.importPath))),
-    ).toBe(true);
-  });
-
   it('records compact figures explicitly', () => {
-    expect(
-      deepLearningFigures
-        .filter((figure) => figure.size === 'compact')
-        .map((figure) => figure.name),
-    ).toEqual(['CausalMaskFigure', 'AttentionHeatmapFigure']);
+    const compactFigures = figureNames().filter((name) =>
+      readFileSync(join(figuresDir, `${name}.astro`), 'utf8').includes('dl-compact-figure'),
+    );
+
+    expect(compactFigures).toEqual(['AttentionHeatmapFigure', 'CausalMaskFigure']);
   });
 
   it('keeps neural-network MDX pages from owning raw dl-figure SVG implementation', () => {
     const docs = readNeuralNetworkDocs();
 
     expect(docs.every((doc) => !doc.includes('<svg class="dl-figure'))).toBe(true);
-    for (const figure of deepLearningFigures) {
-      expect(docs.some((doc) => doc.includes(`<${figure.name} />`))).toBe(true);
+    for (const figure of figureNames()) {
+      expect(docs.some((doc) => doc.includes(`<${figure} />`))).toBe(true);
     }
   });
 });

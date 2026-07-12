@@ -1,5 +1,6 @@
 # 构建产物
 dist/
+coverage/
 .astro/
 
 # Node / pnpm

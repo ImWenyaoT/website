@@ -377,14 +377,14 @@ header.header {
   }
 }
 
-/* Mermaid 客户端渲染容器（astro-mermaid 输出 class="mermaid"）：居中、限宽、图能在正文内读清。 */
-.sl-markdown-content .mermaid {
+/* 构建期生成的静态流程图：居中、限宽，并随 Starlight CSS 变量切换主题。 */
+.sl-markdown-content .mermaid-static {
   margin: 1.25rem auto;
   max-width: 680px;
   text-align: center;
 }
 
-.sl-markdown-content .mermaid svg {
+.sl-markdown-content .mermaid-static svg {
   display: block;
   width: 100%;
   height: auto;

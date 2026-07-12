@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { auditDictionaryTerms } from './audit';
-import type { DictionaryTerm } from './terms';
+import { dictionaryTerms, type DictionaryTerm } from './terms';
 
 const terms: DictionaryTerm[] = [
   {
@@ -16,6 +16,19 @@ const terms: DictionaryTerm[] = [
 ];
 
 describe('Dictionary term audit', () => {
+  it('keeps canonical terms, URLs, and aliases unique', () => {
+    const canonicals = dictionaryTerms.map((term) => term.canonical);
+    const urls = dictionaryTerms.map((term) => term.url);
+
+    expect(new Set(canonicals).size).toBe(canonicals.length);
+    expect(new Set(urls).size).toBe(urls.length);
+    expect(dictionaryTerms.every((term) => term.aliases.length > 0)).toBe(true);
+    expect(
+      dictionaryTerms.every((term) =>
+        term.url.startsWith('https://www.aihero.dev/ai-coding-dictionary/'),
+      ),
+    ).toBe(true);
+  });
   it('reports every unlinked semantic candidate in body prose', () => {
     const source = '这个模型的上下文窗口决定模型能读取多少内容。';
 
@@ -40,6 +53,18 @@ flowchart LR
 `;
 
     expect(auditDictionaryTerms(source, terms)).toEqual([]);
+  });
+
+  it('audits prose nested inside MDX components and HTML captions', () => {
+    const source = `<Aside>这个模型需要人工判断。</Aside>
+
+<figure><figcaption>模型结构</figcaption></figure>
+`;
+
+    expect(auditDictionaryTerms(source, terms)).toEqual([
+      { canonical: 'model', matched: '模型', line: 1, column: 10 },
+      { canonical: 'model', matched: '模型', line: 3, column: 21 },
+    ]);
   });
 
   it('prefers a compound term over a nested shorter alias', () => {

@@ -12,6 +12,7 @@ export interface DictionaryAuditHit {
 
 interface MdastNode {
   type: string;
+  name?: string | null;
   value?: string;
   lang?: string | null;
   children?: MdastNode[];
@@ -28,9 +29,6 @@ const excludedNodeTypes = new Set([
   'code',
   'inlineCode',
   'definition',
-  'html',
-  'mdxJsxFlowElement',
-  'mdxJsxTextElement',
   'mdxFlowExpression',
   'mdxTextExpression',
   'yaml',
@@ -97,43 +95,50 @@ export function auditDictionaryTerms(
   const hits: DictionaryAuditHit[] = [];
 
   /**
+   * Audits a visible text fragment while retaining its offset in the source node.
+   */
+  function auditText(node: MdastNode, value: string, sourceOffset = 0): void {
+    let cursor = 0;
+    const lowerValue = value.toLowerCase();
+    const protectedSourceRanges = protectedRanges(value);
+    while (cursor < value.length) {
+      const protectedRange = protectedSourceRanges.find(
+        (range) => cursor >= range.start && cursor < range.end,
+      );
+      if (protectedRange) {
+        cursor = protectedRange.end;
+        continue;
+      }
+      const candidate = aliases.find(({ alias }) => {
+        if (!lowerValue.startsWith(alias.toLowerCase(), cursor)) return false;
+        return /[A-Za-z0-9]/.test(alias) ? hasAsciiBoundaries(value, cursor, alias.length) : true;
+      });
+      if (!candidate) {
+        cursor += 1;
+        continue;
+      }
+      const position = sourcePosition(node, node.value ?? value, sourceOffset + cursor);
+      hits.push({
+        canonical: candidate.term.canonical,
+        matched: value.slice(cursor, cursor + candidate.alias.length),
+        ...position,
+      });
+      cursor += candidate.alias.length;
+    }
+  }
+
+  /**
    * Walks eligible prose nodes while preserving exclusion boundaries.
    */
   function visit(node: MdastNode, excluded = false): void {
     const nextExcluded =
       excluded ||
       excludedNodeTypes.has(node.type) ||
+      ((node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') &&
+        node.name?.toLowerCase() === 'svg') ||
       (node.type === 'code' && node.lang === 'mermaid');
     if (!nextExcluded && node.type === 'text' && node.value) {
-      let cursor = 0;
-      const lowerValue = node.value.toLowerCase();
-      const protectedSourceRanges = protectedRanges(node.value);
-      while (cursor < node.value.length) {
-        const protectedRange = protectedSourceRanges.find(
-          (range) => cursor >= range.start && cursor < range.end,
-        );
-        if (protectedRange) {
-          cursor = protectedRange.end;
-          continue;
-        }
-        const candidate = aliases.find(({ alias }) => {
-          if (!lowerValue.startsWith(alias.toLowerCase(), cursor)) return false;
-          return /[A-Za-z0-9]/.test(alias)
-            ? hasAsciiBoundaries(node.value ?? '', cursor, alias.length)
-            : true;
-        });
-        if (!candidate) {
-          cursor += 1;
-          continue;
-        }
-        const position = sourcePosition(node, node.value, cursor);
-        hits.push({
-          canonical: candidate.term.canonical,
-          matched: node.value.slice(cursor, cursor + candidate.alias.length),
-          ...position,
-        });
-        cursor += candidate.alias.length;
-      }
+      auditText(node, node.value);
     }
     node.children?.forEach((child) => visit(child, nextExcluded));
   }

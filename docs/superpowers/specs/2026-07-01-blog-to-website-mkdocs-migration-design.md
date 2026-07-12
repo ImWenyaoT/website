@@ -1,8 +1,11 @@
 # 迁移设计：`blog` → `website`（Astro Starlight → mkdocs-material）
 
 - 日期：2026-07-01
-- 状态：已批准，待实现
+- 状态：已归档，不再执行
 - 范围：目录/仓库改名 + git 清史 + 技术栈整体迁移到 mkdocs-material。内容 1:1 搬运（不改笔记正文）。
+
+> 本方案不再执行，仅保留为历史记录。当前平台决策见
+> [`../../adr/0003-retain-astro-starlight.md`](../../adr/0003-retain-astro-starlight.md)。
 
 ## 背景
 

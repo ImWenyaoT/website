@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { siteChrome } from './siteChrome';
@@ -57,6 +57,9 @@ describe('Site chrome', () => {
     expect(siteChrome()).toMatchObject({
       title: 'Tian "Edward" Wenyao',
       description: 'Model、Harness 与更多学习笔记。',
+      locales: {
+        root: { label: '简体中文', lang: 'zh-CN' },
+      },
     });
   });
 
@@ -97,5 +100,30 @@ describe('Site chrome', () => {
 
     expect(slugs.map(contentPathsForSlug).every(hasPublishedNote)).toBe(true);
     expect(links.map(contentPathsForLink).every(hasPublishedNote)).toBe(true);
+  });
+
+  it('keeps every paper registry entry backed by a PDF and published MDX usage', async () => {
+    const { papers } = await import('../data/papers');
+    const publishedSource =
+      readFileSync(
+        join(process.cwd(), 'src/content/docs/model/neural-networks/attention-paper.mdx'),
+        'utf8',
+      ) +
+      readFileSync(join(process.cwd(), 'src/content/docs/papers/react-paper.mdx'), 'utf8') +
+      readFileSync(join(process.cwd(), 'src/content/docs/papers/swe-agent-paper.mdx'), 'utf8');
+
+    for (const slug of Object.keys(papers)) {
+      expect(existsSync(join(process.cwd(), 'public/paper', `${slug}.pdf`))).toBe(true);
+      expect(publishedSource).toContain(`<PdfViewer slug="${slug}" />`);
+    }
+  });
+
+  it('does not allow Dictionary audit failures to be ignored by CI', () => {
+    const workflow = readFileSync(join(process.cwd(), '.github/workflows/deploy.yml'), 'utf8');
+    const auditStep = workflow.match(/- name: Audit Dictionary terms[\s\S]*?(?=\n\s+- name:)/)?.[0];
+
+    expect(auditStep).toBeDefined();
+    expect(auditStep).not.toContain('continue-on-error');
+    expect(auditStep).toContain('run: pnpm dictionary:audit');
   });
 });

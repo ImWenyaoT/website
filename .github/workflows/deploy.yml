@@ -31,18 +31,19 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
       - name: Test
-        run: pnpm test
+        run: pnpm test:coverage
       - name: Lint
         run: pnpm lint
       - name: Check formatting
         run: pnpm format:check
       - name: Audit Dictionary terms
-        continue-on-error: true
         run: pnpm dictionary:audit
       - name: Check
         run: pnpm check
       - name: Build (Astro)
         run: pnpm build
+      - name: Audit generated site
+        run: pnpm test:dist
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5.0.0
         with:
