@@ -1,5 +1,7 @@
 # Retain Astro; treat Starlight as replaceable infrastructure
 
+> Superseded by [0004: Adopt MkDocs Material](./0004-adopt-mkdocs-material.md) on 2026-07-17.
+
 Keep Astro as the website's long-term platform. Do not execute the proposed parity migration back to MkDocs Material. Starlight remains the current documentation layer, but it is not an architectural invariant: retain the parts that earn their maintenance cost and replace individual surfaces when they materially limit the website.
 
 The website should earn the additional platform surface by using it deliberately: keep Markdown-first content and static output, while using Astro components only where they materially improve navigation, teaching figures, document presentation, or reader interaction. Avoid adding React or another client framework for visual polish that CSS and Astro can provide. Do not preserve Starlight behavior merely for framework identity.

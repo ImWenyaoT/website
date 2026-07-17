@@ -1,37 +1,35 @@
-# 项目风格规范
+# Style guide
 
-本项目参考 [Google Style Guides](https://github.com/google/styleguide)，并按 Astro、Starlight 与中文内容的实际约束执行。
+本项目参考 [Google Style Guides](https://github.com/google/styleguide)，并按 MkDocs、Python、CSS
+与中文技术内容的实际约束执行。
 
-## TypeScript 与 JavaScript
+## Markdown 与内容
 
-- 参考 [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)。
-- 使用 `const` 和 `let`，禁止 `var`；使用严格相等比较。
-- 公共函数和非直观的内部函数必须有函数级注释。
-- ESLint 是静态规则的自动化入口；Astro 官方文档推荐社区维护的 `eslint-plugin-astro`，规则以 `eslint.config.js` 为准。
+- 每个公开页面必须有 frontmatter `title` 和正文 H1。
+- 内链使用相对当前源文件的 `.md` 路径，让严格构建校验文件与锚点。
+- HTML 只用于 Markdown 难以表达的内联 SVG、PDF iframe 和首页语义布局。
+- Learn 页面必须使用 `mkdocs.yml` 中声明的封闭 Tags 词表。
+- 中文正文不强制 80 字符换行；代码、表格和链接以可读性为准。
 
-## Astro、HTML 与 CSS
+## Python 与配置
 
-- 参考 [Google HTML/CSS Style Guide](https://google.github.io/styleguide/htmlcssguide.html)。
-- 优先使用语义化 HTML，并保持可访问性属性完整。
-- 样式优先复用 Starlight 原生变量，避免无必要的全局覆盖。
-- Stylelint 使用标准规则；允许按组件分组书写选择器，不强制跨组件按 specificity 排序。
-- Prettier 使用 Astro 官方的 `prettier-plugin-astro`，并按官方模板为 `.astro` 文件指定 `astro` parser。
-- Prettier 负责可机械化的排版，不以手工对齐覆盖格式化结果。
+- Python 函数必须有说明职责的 docstring。
+- 依赖只通过 uv 管理，并提交 `uv.lock`。
+- CI 必须固定具体 uv 版本并使用 `uv sync --locked`，禁止静默重写锁文件。
+- Ruff 是 Python lint 和格式的唯一入口；ty 是静态类型检查入口。
+- `mkdocs.yml` 负责导航、主题、扩展、插件和严格验证，不在脚本中复制配置。
 
-## Markdown 与 MDX
+## CSS
 
-- 参考 [Google Markdown Style Guide](https://google.github.io/styleguide/docguide/style.html)。
-- 使用 ATX 标题和围栏代码块；能准确判断语言时必须声明，无法判断的旧资料允许暂不声明。
-- 标题必须唯一、完整；链接文本必须能说明目标，避免“这里”“链接”等空泛文字。
-- 不使用行尾空格；需要强制换行时优先调整段落结构。
-- 长篇中文 MDX、表格、链接和嵌入组件不强制按 80 字符换行。
-- Markdown 与 MDX 纳入 Prettier 和 Markdownlint 自动改写。
-- 适配规则允许中文长行、链接、表格和 MDX 组件；不强制 80 字符换行，也不要求 Starlight 内容页另写 H1。
+- 优先使用 Material 的 `--md-*` 语义 token。
+- 站点样式集中在 `docs/stylesheets/extra.css`。
+- 教学图不能只靠颜色区分语义；交互必须保留键盘焦点与 reduced-motion 行为。
 
-## 自动化命令
+## 自动化
 
-- `pnpm lint`：运行 ESLint、Markdownlint 和 Stylelint。
-- `pnpm format`：运行 Prettier，并自动修复 Markdown 与 CSS。
-- `pnpm format:check`：验证格式，不写入文件。
-- `pnpm check`：运行 Astro 类型与内容检查。
-- CI 必须运行测试、Lint、格式检查、Astro 检查和构建。
+- `uv run ruff check .`：执行 Python lint。
+- `uv run ruff format --check .`：验证 Python 格式，不写入文件。
+- `uv run ty check`：执行 Python 静态类型检查。
+- `uv run pytest`：运行内容与配置契约测试，并维持 100% 测试代码覆盖率。
+- `uv run mkdocs build --strict`：验证配置、导航、链接、锚点、资源和生产构建。
+- CI 必须在部署前依次运行以上全部门禁。

@@ -1,42 +1,47 @@
 # Website
 
-基于 [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) 的个人知识库，沉淀 model、harness 相关笔记。视觉尽量沿用 Starlight 默认设计，仅为首页、教学图与文档阅读体验增加少量站点样式。
+基于 [MkDocs](https://www.mkdocs.org/) + [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
+的中文个人知识库，沉淀 Model、Harness 与 AI coding 相关学习笔记。
 
 ## 开发
 
 ```bash
-pnpm install            # 装依赖
-pnpm dev                # http://localhost:4321/website/
+UV_CACHE_DIR=.cache/uv uv sync --locked
+UV_CACHE_DIR=.cache/uv uv run mkdocs serve
 ```
 
-## 构建
+本地站点默认位于 `http://127.0.0.1:8000/website/`。
+
+## 质量门禁
 
 ```bash
-pnpm test               # 单元测试
-pnpm test:coverage      # 单元测试 + 覆盖率门禁
-pnpm test:dist          # 验证构建产物是静态 SVG 且没有 Mermaid runtime
-pnpm lint               # ESLint 静态检查
-pnpm format:check       # Prettier 格式检查
-pnpm dictionary:audit   # Dictionary term 候选审计，只报告、不改写
-pnpm check              # Astro / TypeScript 检查
-pnpm build              # Astro 构建 + Starlight 坏链校验（断链/断锚点失败退出）
-pnpm preview            # 本地预览 dist
+UV_CACHE_DIR=.cache/uv uv run ruff check .
+UV_CACHE_DIR=.cache/uv uv run ruff format --check .
+UV_CACHE_DIR=.cache/uv uv run ty check
+UV_CACHE_DIR=.cache/uv uv run pytest
+UV_CACHE_DIR=.cache/uv uv run mkdocs build --strict
 ```
 
-审计结果必须由作者或 agent 逐项判断语义，再通过普通内容编辑添加链接；构建和 CI 不会自动改写内容。发现候选项时审计会阻断部署，必须完成人工判断后再继续。
+Ruff 负责 Python lint 与格式，ty 负责静态类型检查；pytest 锁住公开页面集合、标题、受控 Tags、
+MDX 清理、11 个教学图、51 个 Mermaid、3 个 PDF 和关键 MkDocs 配置；严格构建负责验证导航、
+内链、锚点、资源与最终静态输出。
 
 ## 部署
 
-推送到 `main` 后，GitHub Actions 依次运行测试、Dictionary term 审计、类型检查和生产构建，再部署到 GitHub Pages（`https://imwenyaot.github.io/website/`）。
+推送到 `main` 后，GitHub Actions 使用锁定依赖运行 Ruff、ty、测试与严格构建，再把 `site/`
+部署到 GitHub Pages：`https://imwenyaot.github.io/website/`。
 
 ## 结构
 
-- `src/content/docs/`：站点内容（Content Collections，`.mdx`）
-  - `model/`：Model 笔记（Neural Networks + Linear Algebra）
-  - `harness/`、`papers/`：Harness 笔记（minimal SWE Agent、Codex、Claude Code、ReAct/SWE-agent 原文）
-- `src/components/PdfViewer.astro` + `src/data/papers.ts`：论文 PDF 内嵌组件与 registry（slug → arXiv/路径）
-- `src/styles/site.css`：首页与阅读布局 + 手绘 SVG 图示（`.dl-*`）+ PDF 内嵌样式
-- `public/paper/`：论文原文 PDF；`public/favicon.svg`
-- `src/integrations/staticMermaid.ts`：构建期把 Mermaid 源码渲染为零客户端 JS 的静态 SVG
-- `astro.config.mjs`：站点配置、侧边栏、静态图集成、坏链校验
-- `docs/`：仓库工作文档（`superpowers/` specs/plans、`agents/` 技能配置、`topics/` 草稿；不发布上站）
+- `docs/`：公开 Markdown 内容与仓库内部文档。
+  - `model/`：Model 笔记。
+  - `harness/`、`papers/`：Harness 笔记与论文入口。
+  - `paper/`：本地论文 PDF。
+  - `stylesheets/extra.css`：首页、教学图与 PDF 的站点样式。
+  - `adr/`、`agents/`、`superpowers/`、`topics/`：不发布的仓库文档。
+- `mkdocs.yml`：站点、导航、Markdown 扩展、Tags 与严格校验配置。
+- `tests/`：迁移后的内容与构建契约测试。
+- `pyproject.toml`、`uv.lock`：Python 工具链及可复现依赖。
+
+CI 固定使用 uv `0.11.29`。Ruff 使用稳定版本线；ty 仍处于 beta，因此二者都通过
+`uv.lock` 固定到经过本仓库质量门禁验证的具体版本。项目不假设这些工具存在官方 LTS channel。

@@ -19,35 +19,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.0
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v6
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v8.2.0
         with:
-          version: 11
-      - name: Set up Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: pnpm
-      - name: Install deps
-        run: pnpm install --frozen-lockfile
-      - name: Test
-        run: pnpm test:coverage
+          enable-cache: true
+          version: "0.11.29"
+      - name: Install dependencies
+        run: uv sync --locked
       - name: Lint
-        run: pnpm lint
+        run: uv run ruff check .
       - name: Check formatting
-        run: pnpm format:check
-      - name: Audit Dictionary terms
-        run: pnpm dictionary:audit
-      - name: Check
-        run: pnpm check
-      - name: Build (Astro)
-        run: pnpm build
-      - name: Audit generated site
-        run: pnpm test:dist
+        run: uv run ruff format --check .
+      - name: Type check
+        run: uv run ty check
+      - name: Test
+        run: uv run pytest
+      - name: Build (strict)
+        run: uv run mkdocs build --strict
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5.0.0
         with:
-          path: dist
+          path: site
 
   deploy:
     needs: build

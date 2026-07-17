@@ -1,0 +1,139 @@
+site_name: 'Tian "Edward" Wenyao'
+site_description: Model、Harness 与更多学习笔记。
+site_url: https://imwenyaot.github.io/website/
+repo_url: https://github.com/ImWenyaoT/website
+repo_name: ImWenyaoT/website
+edit_uri: edit/main/docs/
+
+exclude_docs: |
+  adr/
+  agents/
+  superpowers/
+  topics/
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: warn
+  links:
+    not_found: warn
+    absolute_links: warn
+    unrecognized_links: warn
+    anchors: warn
+
+theme:
+  name: material
+  language: zh
+  favicon: favicon.svg
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.instant.preview
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - content.action.edit
+    - content.action.view
+    - content.code.copy
+    - content.code.annotate
+    - content.tooltips
+    - search.suggest
+    - search.highlight
+    - search.share
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: 切换到浅色模式
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: 切换到跟随系统
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path:
+        - .
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - tags:
+      tags_allowed:
+        - The Model
+        - Sessions, Context Windows & Turns
+        - Tools & Environment
+        - Failure Modes
+        - Handoffs
+        - Memory and Steering
+        - Patterns of Work
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ImWenyaoT
+
+nav:
+  - Home: index.md
+  - Learn:
+      - Model:
+          - model/index.md
+          - Neural Networks:
+              - model/neural-networks/index.md
+              - model/neural-networks/neural-network-structure.md
+              - model/neural-networks/gradient-descent.md
+              - model/neural-networks/backpropagation.md
+              - model/neural-networks/gpt-transformer.md
+              - model/neural-networks/attention.md
+              - model/neural-networks/attention-paper.md
+          - Linear Algebra:
+              - model/linear-algebra/index.md
+      - Harness:
+          - ReAct（原文）: papers/react-paper.md
+          - SWE-agent（原文）: papers/swe-agent-paper.md
+          - minimal SWE Agent: harness/minimal-swe-agent.md
+          - Codex 的 Agent 设计: harness/openai.md
+          - Claude Code 的 Agent 设计: harness/anthropic.md
+      - Tags: tags.md
+  - About: about.md

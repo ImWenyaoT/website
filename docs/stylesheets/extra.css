@@ -1,0 +1,494 @@
+/* 站点首页、深度学习 SVG、Mermaid 与论文 PDF 样式。
+ * 全部接入 Material --md-* 语义令牌；教学语义色额外叠加线型。 */
+/* ============================================================
+   WEBSITE DESIGN SYSTEM —— Material + HIG
+   · 排版 = Material 默认 Roboto/Roboto Mono + 系统 CJK 回退
+   · 配色 = Vercel Geist Light/Dark，直接取自 vercel.com/design.md 与 design.dark.md
+     （浅色 bg #fff/文字 #171717；深色 bg #000/文字 #ededed；边框/代码底见各档）
+   · 强调色 = Vercel blue-700 #006bff(浅)/#006efe(深)；单一真源 = --ds-accent-rgb
+   · 分隔 = 1px hairline(--md-default-fg-color--lightest)
+   · 原则 = 别只靠颜色(图示叠线型)、对比≥4.5:1；其余以本 token 自洽。详见根目录 DESIGN.md。
+   ============================================================ */
+:root {
+  /* 唯一强调色的单一真源：链接 / UI 交互 / 图示蓝 全部由它派生（改这一处即全站生效） */
+  --ds-accent-rgb: 0 107 255; /* Vercel blue-700 #006bff（浅色档；深色档 slate 覆盖为 #006efe） */
+  --ds-accent: rgb(var(--ds-accent-rgb));
+
+  --dl-blue: var(--ds-accent-rgb); /* 图示蓝 = 强调色，随明暗自动跟随 */
+  --dl-green: 28 193 53; /* 语义色（图示专用）：正向/成功 */
+  --dl-orange: 243 137 0; /* 语义色（图示专用）：反向/警示 */
+  --dl-gray: 130 130 135;
+}
+
++   Home —— 学习入口页。借鉴 OpenAI Learn 的强导语与路径卡片，不复制品牌样式。
+   ============================================================ */
+
+.home-intro {
+  max-width: 46rem;
+  padding: 1rem 0 2.75rem;
+}
+
+.home-eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+}
+
+.home-lede {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: clamp(1.12rem, 2vw, 1.35rem);
+  line-height: 1.65;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1.75rem;
+}
+
+.home-action {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 9999px;
+  padding: 0.55rem 1rem;
+  color: var(--md-default-fg-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform var(--ds-duration-fast) var(--ds-ease-out),
+    border-color var(--ds-duration-fast) ease,
+    background-color var(--ds-duration-fast) ease;
+}
+
+.home-action:hover {
+  border-color: var(--md-default-fg-color--lighter);
+  background: var(--md-default-bg-color--light);
+}
+
+.home-action:active {
+  transform: scale(0.97);
+}
+
+.home-action-primary {
+  border-color: var(--md-default-fg-color);
+  background: var(--md-default-fg-color);
+  color: var(--md-default-bg-color);
+}
+
+.home-action-primary:hover {
+  border-color: var(--md-default-fg-color);
+  background: color-mix(in srgb, var(--md-default-fg-color) 88%, transparent);
+}
+
+.home-section {
+  margin-top: 2rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.home-section-heading {
+  max-width: 40rem;
+  margin-bottom: 1.5rem;
+}
+
+.home-section-heading h2 {
+  margin: 0;
+  font-size: clamp(1.45rem, 3vw, 1.85rem);
+  letter-spacing: -0.035em;
+}
+
+.home-section-heading > p:last-child:not(.home-eyebrow) {
+  margin: 0.65rem 0 0;
+  color: var(--md-default-fg-color--light);
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.home-card {
+  position: relative;
+  display: grid;
+  min-height: 15rem;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--ds-accent) 6%, transparent),
+      transparent 48%
+    ),
+    var(--md-default-bg-color);
+  transition:
+    transform 180ms var(--ds-ease-out),
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.home-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--md-default-fg-color--lighter);
+}
+
+.home-card:has(a:active) {
+  transform: translateY(0) scale(0.99);
+}
+
+.home-card-index {
+  color: var(--md-default-fg-color--lighter);
+  font-family: var(--md-code-font-family);
+  font-size: 0.72rem;
+}
+
+.home-card > div:nth-child(2) {
+  align-self: end;
+}
+
+.home-card-kicker {
+  margin: 0 0 0.5rem;
+  color: var(--ds-accent);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+}
+
+.home-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: -0.025em;
+}
+
+.home-card h3 a {
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+}
+
+.home-card h3 a::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+}
+
+.home-card p:last-child {
+  margin: 0.65rem 0 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.home-card-arrow {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--md-default-fg-color--lighter);
+  transition:
+    color var(--ds-duration-fast) ease,
+    transform var(--ds-duration-fast) var(--ds-ease-out);
+}
+
+.home-card:hover .home-card-arrow {
+  transform: translate(2px, -2px);
+  color: var(--md-default-fg-color);
+}
+
+.home-section-quiet {
+  margin-bottom: 2rem;
+}
+
+.home-principles {
+  display: grid;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.home-principles p {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.6fr) 1.4fr;
+  gap: 1rem;
+  margin: 0;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.home-principles strong {
+  font-size: 0.9rem;
+}
+
+.home-principles span {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.9rem;
+}
+
+@media (width <= 42rem) {
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-card {
+    min-height: 12.5rem;
+  }
+
+  .home-principles p {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-action,
+  .home-card,
+  .home-card-arrow {
+    transition: none;
+  }
+
+  .home-card:hover,
+  .home-card:has(a:active),
+  .home-card:hover .home-card-arrow {
+    transform: none;
+  }
+}
+
+.dl-figure {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 1.1rem auto 1.35rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.4rem;
+  background: var(--md-default-bg-color);
+}
+.dl-compact-figure { max-width: 520px; }
+.dl-box,
+.dl-token {
+  fill: var(--md-default-bg-color);
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.5;
+}
+.dl-box-accent,
+.dl-token-accent {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 1.8;
+}
+.dl-token-muted {
+  fill: rgb(var(--dl-gray) / 10%);
+  stroke: rgb(var(--dl-gray) / 72%);
+  stroke-width: 1.3;
+}
+.dl-node {
+  fill: var(--md-default-bg-color);
+  stroke: rgb(var(--dl-gray));
+  stroke-width: 1.5;
+}
+.dl-node-accent {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 1.6;
+}
+.dl-label {
+  fill: var(--md-default-fg-color);
+  font-size: 15px;
+  font-weight: 600;
+}
+.dl-small { fill: var(--md-default-fg-color); font-size: 12.5px; }
+.dl-arrow,
+.dl-axis {
+  stroke: rgb(var(--dl-blue));
+  stroke-width: 2;
+  fill: none;
+}
+.dl-muted-arrow { stroke: rgb(var(--dl-gray)); stroke-width: 1.8; fill: none; }
+/* 反向=橙 + 虚线：不靠颜色也能与前向(蓝实线)区分（HIG「别只靠颜色」）。 */
+.dl-back-arrow { stroke: rgb(var(--dl-orange)); stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+.dl-thin { stroke: rgb(var(--dl-gray)); stroke-width: 1.2; fill: none; }
+.dl-curve { stroke: var(--md-default-fg-color); stroke-width: 2.5; }
+.dl-curve-muted { stroke: rgb(var(--dl-gray)); stroke-width: 2; }
+.dl-point { fill: rgb(var(--dl-blue)); }
+.dl-point-warn { fill: rgb(var(--dl-orange)); }
+/* 三线图：除颜色外再用线型区分（蓝实线 / 绿长虚线 / 橙点线），色盲也可读。 */
+.dl-line-blue { stroke: rgb(var(--dl-blue)); stroke-width: 2.5; }
+.dl-line-green { stroke: rgb(var(--dl-green)); stroke-width: 2.5; stroke-dasharray: 8 5; }
+.dl-line-orange { stroke: rgb(var(--dl-orange)); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
+.dl-blue { fill: rgb(var(--dl-blue)); }
+.dl-green { fill: rgb(var(--dl-green)); }
+.dl-orange { fill: rgb(var(--dl-orange)); }
+.dl-cell-on {
+  fill: rgb(var(--dl-blue) / 8%);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+.dl-cell-off {
+  fill: rgb(var(--dl-gray) / 10%);
+  stroke: var(--md-default-bg-color);
+  stroke-width: 2;
+}
+
+/* 论文原文 PDF 内嵌（替代旧 PdfViewer.astro） */
+.pdf-viewer {
+  margin: 1.5rem 0;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.pdf-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.8rem;
+}
+.pdf-title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pdf-open {
+  margin-inline-start: auto;
+  color: var(--md-primary-fg-color);
+  white-space: nowrap;
+}
+.pdf-frame { display: block; width: 100%; height: 80vh; border: 0; }
+.pdf-fallback {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ============================================================
+   Apple-HIG 配色与排版
+   配色 = 中性(墨/灰/白，来自 Material white/black/slate) + 唯一强调色 Apple 蓝（≤3 色）。
+   顶栏白/近黑走 Material 内置 primary=white/black；此处只把强调色与链接钉成 Apple 蓝。
+   系统蓝 #007AFF(浅)/#0A84FF(深)；链接用 apple.com web 蓝 #0066cc(浅)/#2997ff(深，对比更佳)。
+   ============================================================ */
+/* 浅色 = Vercel Geist Light（vercel.com/design.md） */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #ffffff; /* background-100 页面底 */
+  --md-default-bg-color--light: #fafafa; /* background-200 次级面 */
+  --md-default-fg-color: #171717; /* gray-1000 主文字 */
+  --md-default-fg-color--light: #4d4d4d; /* gray-900 次要文字 */
+  --md-default-fg-color--lighter: #8f8f8f; /* gray-700 弱文字 */
+  --md-default-fg-color--lightest: #ebebeb; /* gray-200 边框/分隔 */
+  --md-primary-fg-color: #ffffff; /* 白顶栏 */
+  --md-primary-fg-color--light: #fafafa;
+  --md-primary-fg-color--dark: #ebebeb;
+  --md-primary-bg-color: #171717; /* 顶栏文字/搜索 */
+  --md-primary-bg-color--light: #8f8f8f;
+  --md-code-bg-color: #fafafa; /* 代码底 */
+  --md-accent-fg-color: var(--ds-accent);
+  --md-typeset-a-color: var(--ds-accent);
+}
+/* 深色 = Vercel Geist Dark（vercel.com/design.dark.md） */
+[data-md-color-scheme="slate"] {
+  --ds-accent-rgb: 0 110 254; /* blue-700 #006efe（深色链接/图示蓝自动跟随） */
+  --md-default-bg-color: #000000; /* background-100 纯黑 */
+  --md-default-bg-color--light: #1a1a1a; /* gray-100 次级面 */
+  --md-default-fg-color: #ededed; /* gray-1000 主文字（高对比，夜间清晰） */
+  --md-default-fg-color--light: #a0a0a0; /* gray-900 次要 */
+  --md-default-fg-color--lighter: #878787; /* gray-600 弱 */
+  --md-default-fg-color--lightest: #2e2e2e; /* gray-400 边框/分隔 */
+  --md-primary-fg-color: #000000; /* 黑顶栏（与页同色，靠发丝线分隔，Vercel 风） */
+  --md-primary-fg-color--light: #1a1a1a;
+  --md-primary-fg-color--dark: #000000;
+  --md-primary-bg-color: #ededed; /* 顶栏文字/搜索 */
+  --md-primary-bg-color--light: #a0a0a0;
+  --md-code-bg-color: #1a1a1a; /* 代码底（纯黑上可见） */
+  --md-accent-fg-color: var(--ds-accent);
+  --md-typeset-a-color: var(--ds-accent);
+}
+
+/* 顶栏滚动分隔：把 Material 默认那团柔和投影换成 Apple 式 1px 发丝线（更干净、不糊、不加高度）。
+ * 想彻底去掉这条线，把下面整条规则的 box-shadow 改成 none 即可。 */
+.md-header--shadow {
+  box-shadow: 0 1px 0 var(--md-default-fg-color--lightest);
+}
+
+/* 排版：舒展行距 + 克制的粗体层级。
+ * 刻意不设 -webkit-font-smoothing: antialiased——它把字渲染得更细更淡，深色模式下夜间可读性变差。 */
+.md-typeset {
+  line-height: 1.7; /* CJK 充足行距，阅读更松弛 */
+}
+
+/* 正文链接统一使用强调色与下划线；导航、首页卡片和按钮保留组件语义。 */
+.md-typeset a:not(.home-action, .home-card a) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+/* 键盘可见焦点：强调色描边 + 2px 间隙（HIG「焦点管理」+ Vercel 焦点环观感），随明暗自适配。
+ * 仅 :focus-visible，鼠标点击不显、键盘 Tab 才显——无障碍必备。 */
+.md-typeset a:focus-visible,
+.md-nav__link:focus-visible,
+.md-header__button:focus-visible,
+.md-search__input:focus-visible,
+.md-tabs__link:focus-visible {
+  outline: 2px solid var(--ds-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* 图示直接在正文内读清楚：收紧容器、放大节点文字，避免依赖点击放大。 */
+.md-typeset .mermaid {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 760px;
+  margin: 1rem auto 1.25rem;
+  text-align: center;
+}
+.md-typeset .mermaid svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+.md-typeset .mermaid text {
+  font-size: 15px !important;
+}
+.md-typeset .mermaid .edgeLabel,
+.md-typeset .mermaid .label {
+  line-height: 1.35;
+}
+@media screen and (max-width: 44.9844em) {
+  .dl-label {
+    font-size: 22px;
+  }
+  .dl-small {
+    font-size: 17px;
+  }
+  .md-typeset .mermaid text {
+    font-size: 16px !important;
+  }
+}
+.md-typeset h1 {
+  font-weight: 700;
+}
+.md-typeset h2 {
+  font-weight: 700;
+  margin-top: 2.4rem; /* 章节间呼吸感 */
+}
+.md-typeset h3 {
+  font-weight: 600;
+}

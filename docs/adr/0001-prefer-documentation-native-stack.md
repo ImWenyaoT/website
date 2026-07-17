@@ -1,6 +1,7 @@
 # Prefer a documentation-native stack
 
-> Superseded by [0003: Retain Astro and Starlight](./0003-retain-astro-starlight.md) on 2026-07-11.
+> Superseded by [0003: Retain Astro and Starlight](./0003-retain-astro-starlight.md) on 2026-07-11;
+> its documentation-native direction was adopted by [0004](./0004-adopt-mkdocs-material.md) on 2026-07-17.
 
 Use MkDocs Material instead of Astro and Starlight for the published knowledge site. The site is a static, Markdown-centered Chinese knowledge base, so Astro's components, TypeScript surface, Node dependencies, and custom site chrome impose more maintenance than their product value justifies; the migration remains a Parity migration so post-Astro content and reader-facing improvements are preserved. Prefer relevant native Material capabilities over custom code, except where a native feature adds disproportionate build, runtime, privacy, or maintenance cost.
 

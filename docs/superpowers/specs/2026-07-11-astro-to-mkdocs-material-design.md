@@ -1,11 +1,11 @@
 # 迁移设计：Astro Starlight → MkDocs Material
 
 - 日期：2026-07-11
-- 状态：已否决（2026-07-11，保留 Astro/Starlight 并继续打磨）
+- 状态：已执行（2026-07-17）
 - 取代：[`2026-07-06-mkdocs-to-astro-starlight-design.md`](./2026-07-06-mkdocs-to-astro-starlight-design.md)
 
-> 本方案不再执行，仅保留为架构讨论记录。当前决策见
-> [`../../adr/0003-retain-astro-starlight.md`](../../adr/0003-retain-astro-starlight.md)。
+> 2026-07-11 曾否决本方案；2026-07-17 重新采纳并完成迁移。当前决策见
+> [`../../adr/0004-adopt-mkdocs-material.md`](../../adr/0004-adopt-mkdocs-material.md)。
 
 ## 1. 设计概念
 
@@ -29,8 +29,8 @@
 
 - 最新稳定版 `mkdocs-material` + `jieba`
 - Python/依赖统一由 `uv` 管理，提交 `uv.lock`
-- 使用最新稳定依赖，主动升级；CI 始终 `uv sync --frozen`
-- `mkdocs build --strict` 是长期唯一质量门，不保留无对应程序逻辑的 Vitest、Playwright 或自有 Python 测试框架
+- 使用最新稳定依赖，主动升级；CI 固定 uv 版本并始终 `uv sync --locked`
+- Ruff 负责 lint/格式，ty 负责类型检查，pytest 锁住页面、元数据、Tags、图示与资源 parity；`mkdocs build --strict` 负责配置、导航、链接和生产构建
 - 在 `codex/migrate-back-to-mkdocs` 分支完成平替，`main` 在验收前继续部署 Astro
 - 切换后彻底删除 Astro/Node/TypeScript 工具链与 `src/` 组件实现，不并存两套站点
 
@@ -85,7 +85,7 @@ Learn 是纯导航分组，没有 `/learn/` 落地页。现有 Model 与 Harness
 
 ## 8. 构建、CI 与切换
 
-CI 流程：checkout → setup-uv（精确 tag）→ 安装稳定 Python → `uv sync --frozen` → `uv run mkdocs build --strict` → 上传 `site/` → GitHub Pages 部署。
+CI 流程：checkout → setup-uv（精确 tag 与 uv 版本）→ `uv sync --locked` → Ruff → ty → pytest → `uv run mkdocs build --strict` → 上传 `site/` → GitHub Pages 部署。
 
 切换前执行一次完整 Parity migration 验收：
 

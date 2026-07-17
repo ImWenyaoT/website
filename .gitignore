@@ -1,11 +1,18 @@
 # 构建产物
+site/
 dist/
 coverage/
 .astro/
-
-# Node / pnpm
 node_modules/
 .pnpm-store/
+
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+.cache/
 
 # 工具产物
 .remember/

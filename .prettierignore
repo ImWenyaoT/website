@@ -1,7 +1,0 @@
-dist/
-.astro/
-.cache/
-.venv/
-coverage/
-node_modules/
-public/
