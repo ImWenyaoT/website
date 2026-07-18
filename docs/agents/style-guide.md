@@ -7,7 +7,7 @@
 
 - 每个公开页面必须有 frontmatter `title` 和正文 H1。
 - 内链使用相对当前源文件的 `.md` 路径，让严格构建校验文件与锚点。
-- HTML 只用于 Markdown 难以表达的内联 SVG、PDF iframe 和首页语义布局。
+- HTML 只用于 Markdown 难以表达的内联 SVG 和 PDF iframe；首页使用 Material 原生结构。
 - Learn 页面必须使用 `mkdocs.yml` 中声明的封闭 Tags 词表。
 - 中文正文不强制 80 字符换行；代码、表格和链接以可读性为准。
 
@@ -23,7 +23,8 @@
 
 - 优先使用 Material 的 `--md-*` 语义 token。
 - 站点样式集中在 `docs/stylesheets/extra.css`。
-- 教学图不能只靠颜色区分语义；交互必须保留键盘焦点与 reduced-motion 行为。
+- 自定义 CSS 只服务教学 SVG、PDF 和 Mermaid 尺寸，不覆盖主题结构或注入动效。
+- 教学图不能只靠颜色区分语义。
 
 ## 自动化
 

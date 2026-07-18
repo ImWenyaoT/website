@@ -7,20 +7,21 @@
 
 1. 正文优先，主文字与背景对比不低于 4.5:1。
 2. 语义差异同时使用颜色和线型或形状表达。
-3. 动效尊重 `prefers-reduced-motion`。
-4. 键盘 `:focus-visible` 保持清晰焦点环。
-5. 设计决策收敛为 CSS token，避免散落硬编码。
+3. 站点不维护自定义动效，交互反馈使用 Material 原生行为。
+4. 键盘焦点、主题切换和响应式导航由 Material 管理。
+5. 自定义样式只解决正文内容无法由主题表达的问题。
 
 ## Tokens
 
-- UI 使用 Material 的 `--md-*` 语义 token。
-- `--ds-accent-rgb` 是链接、交互和教学图蓝色的单一真源。
+- UI 直接使用 Material 的 `--md-*` 语义 token，不覆盖主题 primitive。
+- 教学图蓝色从 Material accent 派生。
 - `--dl-green` 与 `--dl-orange` 仅用于教学语义，并必须叠加线型。
 - 正文使用 Material 默认 Roboto；中文自然走系统 CJK 字体回退。
 
 ## 自定义边界
 
-- 首页路径卡片、内联教学 SVG 和 PDF 阅读器允许局部样式。
+- 首页使用 Material 原生按钮和 Cards，不维护独立组件样式。
+- 内联教学 SVG、PDF 阅读器和 Mermaid 尺寸允许最小内容样式。
 - Mermaid 使用 Material 原生集成，不维护自定义运行时。
-- 新颜色优先从现有强调色、透明度层级或教学语义色派生。
+- 不增加自定义 JavaScript、动效或主题覆盖。
 - 样式集中在 `docs/stylesheets/extra.css`，主题能力集中在 `mkdocs.yml`。

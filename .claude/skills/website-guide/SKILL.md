@@ -11,10 +11,10 @@ description: >-
 
 ## 设计约束
 
-- UI 使用 Material `--md-*` token；强调色从 `--ds-accent-rgb` 派生。
+- UI、首页和交互使用 Material 原生结构与 `--md-*` token，不维护自定义动效。
 - 中文使用系统字体回退，不引入 CJK webfont。
 - 教学图的语义色必须同时叠加线型或形状。
-- 首页、教学 SVG 和 PDF 样式集中在 `docs/stylesheets/extra.css`。
+- `docs/stylesheets/extra.css` 只保留教学 SVG、PDF 和 Mermaid 尺寸样式。
 - 主题、导航、Markdown 扩展、Tags 和校验集中在 `mkdocs.yml`。
 
 ## 内容约束

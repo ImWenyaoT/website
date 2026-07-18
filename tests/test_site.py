@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import re
+import subprocess
+import sys
 from pathlib import Path
 from typing import cast
 
@@ -118,3 +120,31 @@ def test_mkdocs_config_keeps_strict_contracts() -> None:
         "topics/note.md",
     ):
         assert config["exclude_docs"].match_file(internal_path)
+
+
+def test_home_uses_material_native_surface_without_custom_motion(tmp_path: Path) -> None:
+    """生成首页应使用 Material 原生结构，且本站 CSS 不再注入自定义动效。"""
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "mkdocs",
+            "build",
+            "--strict",
+            "--site-dir",
+            str(tmp_path),
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    home = (tmp_path / "index.html").read_text(encoding="utf-8")
+    stylesheet = (tmp_path / "stylesheets/extra.css").read_text(encoding="utf-8")
+
+    assert "home-card" not in home
+    assert "home-action" not in home
+    assert "transition:" not in stylesheet
+    assert "animation:" not in stylesheet
+    assert "@keyframes" not in stylesheet
+    assert "--ds-" not in stylesheet

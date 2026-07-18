@@ -10,6 +10,10 @@ catalog, content semantics, accessible teaching figures, Mermaid sources and PDF
 Tags index backed by the seven Dictionary sections. Keep repository-internal documents excluded
 from publication.
 
+Use Material's native homepage structures, controls, palette behavior and interaction feedback.
+Keep custom CSS content-only: teaching SVGs, PDF frames and Mermaid sizing. Do not maintain custom
+site motion or JavaScript.
+
 The executable quality gates are `uv run ruff check .`, `uv run ruff format --check .`,
 `uv run ty check`, `uv run pytest` and `uv run mkdocs build --strict`. Python dependencies are
 managed exclusively through uv and locked in `uv.lock`; GitHub Pages deploys only the generated
