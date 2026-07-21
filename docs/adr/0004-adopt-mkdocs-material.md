@@ -12,7 +12,9 @@ from publication.
 
 Use Material's native homepage structures, controls, palette behavior and interaction feedback.
 Keep custom CSS content-only: teaching SVGs, PDF frames and Mermaid sizing. Do not maintain custom
-site motion or JavaScript.
+site motion or JavaScript. Resolve UI needs in this order: MkDocs defaults, Material's documented
+features, then the smallest content-level extension. Keep Material's responsive navigation, tables
+and code blocks; on narrow screens, replace embedded PDF viewing with direct open/download access.
 
 The executable quality gates are `uv run ruff check .`, `uv run ruff format --check .`,
 `uv run ty check`, `uv run pytest` and `uv run mkdocs build --strict`. Python dependencies are

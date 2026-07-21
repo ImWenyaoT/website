@@ -21,9 +21,11 @@
 
 ## CSS
 
+- 实现优先级为 MkDocs 默认能力、Material 官方能力、最小自定义 CSS。
 - 优先使用 Material 的 `--md-*` 语义 token。
 - 站点样式集中在 `docs/stylesheets/extra.css`。
 - 自定义 CSS 只服务教学 SVG、PDF 和 Mermaid 尺寸，不覆盖主题结构或注入动效。
+- 响应式导航、表格和代码块不得复制 Material 已有规则；移动端 PDF 只提供直接访问入口。
 - 教学图不能只靠颜色区分语义。
 
 ## 自动化

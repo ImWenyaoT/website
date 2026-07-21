@@ -205,6 +205,11 @@
 }
 
 @media screen and (max-width: 44.9844em) {
+  /* 移动端浏览器的内嵌 PDF 阅读器会裁切页面；保留上方直接打开链接。 */
+  .pdf-frame {
+    display: none;
+  }
+
   .dl-label {
     font-size: 22px;
   }

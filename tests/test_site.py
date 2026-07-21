@@ -148,3 +148,32 @@ def test_home_uses_material_native_surface_without_custom_motion(tmp_path: Path)
     assert "animation:" not in stylesheet
     assert "@keyframes" not in stylesheet
     assert "--ds-" not in stylesheet
+
+
+def test_mobile_pdf_falls_back_to_direct_access(tmp_path: Path) -> None:
+    """窄屏生成站点应隐藏不可用的 PDF iframe，并保留直接访问入口。"""
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "mkdocs",
+            "build",
+            "--strict",
+            "--site-dir",
+            str(tmp_path),
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    page = (tmp_path / "papers" / "react-paper" / "index.html").read_text(encoding="utf-8")
+    stylesheet = (tmp_path / "stylesheets" / "extra.css").read_text(encoding="utf-8")
+
+    assert 'class="pdf-open"' in page
+    assert 'class="pdf-fallback"' in page
+    assert re.search(
+        r"@media screen and \(max-width: 44\.9844em\).*?\.pdf-frame\s*\{\s*display:\s*none;",
+        stylesheet,
+        re.DOTALL,
+    )
