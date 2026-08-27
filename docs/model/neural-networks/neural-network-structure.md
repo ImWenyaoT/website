@@ -1,8 +1,6 @@
 ---
 title: "神经网络的结构"
 description: "把神经网络理解成一串带参数的函数组合，并用最小 MLP 说明层、参数与激活的作用。"
-tags:
-  - "The Model"
 ---
 # 神经网络的结构
 
@@ -16,7 +14,7 @@ tags:
 
 ## 动机
 
-传统程序通常由人写规则：如果条件 A 成立，就执行动作 B。神经网络换了一种路线：人只规定 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的大致结构和 [training](https://www.aihero.dev/ai-coding-dictionary/training) 目标，具体规则藏在参数里，由数据来调整。
+传统程序通常由人写规则：如果条件 A 成立，就执行动作 B。神经网络换了一种路线：人只规定 Model 的大致结构和 Training 目标，具体规则藏在参数里，由数据来调整。
 
 ```mermaid
 flowchart LR
@@ -35,7 +33,7 @@ flowchart LR
 | 参数 | 哪些数字可以被学习？ | `W`、`b`                   |
 | 结构 | 这些函数如何组合？   | `Linear -> ReLU -> Linear` |
 
-这也是为什么神经网络适合放在深度学习专题第一章：它先回答“我们到底在 [training](https://www.aihero.dev/ai-coding-dictionary/training) 什么”。
+这也是为什么神经网络适合放在深度学习专题第一章：它先回答“我们到底在 Training 什么”。
 
 ## 从单个神经元开始
 
@@ -63,7 +61,7 @@ flowchart LR
   <text x="755" y="150" text-anchor="middle" class="dl-small">非线性</text>
 </svg>
 
-如果没有激活函数，多层线性层叠起来仍然等价于一层线性层。ReLU、Sigmoid 这类激活函数的作用，是让 [model](https://www.aihero.dev/ai-coding-dictionary/model) 能表达弯曲边界和更复杂的模式。
+如果没有激活函数，多层线性层叠起来仍然等价于一层线性层。ReLU、Sigmoid 这类激活函数的作用，是让 model 能表达弯曲边界和更复杂的模式。
 
 ## 一个最小 MLP
 
@@ -86,7 +84,7 @@ class TinyMLP(nn.Module):
         return probability
 ```
 
-这个 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的输入是二维点，输出是一个 0 到 1 之间的概率。此时它还没有 [training](https://www.aihero.dev/ai-coding-dictionary/training)，所以输出只是随机初始化参数下的结果。
+这个 model 的输入是二维点，输出是一个 0 到 1 之间的概率。此时它还没有 training，所以输出只是随机初始化参数下的结果。
 
 ## 层结构
 
@@ -145,7 +143,7 @@ class TinyMLP(nn.Module):
 
 ### 参数不是规则，而是规则的压缩表示
 
-[training](https://www.aihero.dev/ai-coding-dictionary/training) 完成后，网络不会显式写出“如果 x1 大于某个值就怎样”。它只是保存大量权重。每个权重本身不一定有清晰语义，但所有权重组合起来，会形成一个从输入到输出的复杂函数。
+Training 完成后，网络不会显式写出“如果 x1 大于某个值就怎样”。它只是保存大量权重。每个权重本身不一定有清晰语义，但所有权重组合起来，会形成一个从输入到输出的复杂函数。
 
 ```mermaid
 flowchart TD
@@ -184,10 +182,10 @@ out = relu(relu(x @ W1) @ W2) @ W3
 
 ## 阅读更多
 
-下一章读 [梯度下降法](gradient-descent.md)，重点从“[model](https://www.aihero.dev/ai-coding-dictionary/model) 是什么”转到“参数如何被更新”。
+下一章读 [梯度下降法](gradient-descent.md)，重点从“Model 是什么”转到“参数如何被更新”。
 
 ## 小结
 
 - 神经网络是函数组合，不是手写规则集合。
 - `nn.Linear` 保存权重和偏置，`ReLU` 引入非线性。
-- [training](https://www.aihero.dev/ai-coding-dictionary/training) 前的网络只是随机函数；[training](https://www.aihero.dev/ai-coding-dictionary/training) 会通过损失和梯度调整参数。
+- Training 前的网络只是随机函数；Training 会通过损失和梯度调整参数。

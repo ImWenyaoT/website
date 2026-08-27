@@ -6,7 +6,6 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import cast
 
 import yaml
 from mkdocs.config import load_config
@@ -16,7 +15,6 @@ DOCS = ROOT / "docs"
 PUBLISHED_PAGES = {
     "index.md",
     "about.md",
-    "tags.md",
     "model/index.md",
     "model/linear-algebra/index.md",
     "model/neural-networks/index.md",
@@ -28,20 +26,11 @@ PUBLISHED_PAGES = {
     "model/neural-networks/attention-paper.md",
     "papers/react-paper.md",
     "papers/swe-agent-paper.md",
-    "harness/minimal-swe-agent.md",
-    "harness/openai.md",
-    "harness/anthropic.md",
+    "harness/index.md",
+    "harness/claude-code.md",
+    "harness/deepseek.md",
 }
 LEARN_PREFIXES = ("model/", "papers/", "harness/")
-ALLOWED_TAGS = {
-    "The Model",
-    "Sessions, Context Windows & Turns",
-    "Tools & Environment",
-    "Failure Modes",
-    "Handoffs",
-    "Memory and Steering",
-    "Patterns of Work",
-}
 
 
 def load_page(path: str) -> tuple[dict[str, object], str]:
@@ -53,14 +42,27 @@ def load_page(path: str) -> tuple[dict[str, object], str]:
 
 
 def test_published_page_set_is_complete() -> None:
-    """公开内容必须完整保留 16 个旧页面并新增唯一的 Tags 索引。"""
+    """公开内容必须完整保留 16 个页面。"""
     actual = {
-        path.relative_to(DOCS).as_posix()
+        rel_posix
         for path in DOCS.rglob("*.md")
-        if path.relative_to(DOCS).as_posix().startswith(LEARN_PREFIXES)
-        or path.name in {"index.md", "about.md", "tags.md"}
+        if (rel_posix := path.relative_to(DOCS).as_posix()).startswith(LEARN_PREFIXES)
+        or rel_posix in {"index.md", "about.md"}
     }
     assert actual == PUBLISHED_PAGES
+
+
+def test_published_internal_markdown_links_are_valid() -> None:
+    """公开页面中的 Markdown 相对内部链接必须均指向实际存在的源文件。"""
+    for page_path in PUBLISHED_PAGES:
+        content = (DOCS / page_path).read_text(encoding="utf-8")
+        current_dir = (DOCS / page_path).parent
+        for match in re.finditer(r"\[([^\]]+)\]\(([^)]+)\)", content):
+            link = match.group(2).split("#")[0].split("?")[0]
+            if not link or link.startswith(("http://", "https://", "mailto:", "javascript:")):
+                continue
+            target = (current_dir / link).resolve()
+            assert target.exists(), f"{page_path} 中的内部链接 {link} 指向不存在的文件"
 
 
 def test_every_page_has_title_and_heading() -> None:
@@ -72,15 +74,10 @@ def test_every_page_has_title_and_heading() -> None:
         assert re.search(r"^# .+", body, re.MULTILINE), path
 
 
-def test_learn_tags_use_closed_vocabulary() -> None:
-    """每个 Learn 页面必须至少有一个且只能使用受控标签。"""
-    for path in PUBLISHED_PAGES:
-        if not path.startswith(LEARN_PREFIXES):
-            continue
-        metadata, _ = load_page(path)
-        tags = set(cast(list[str], metadata.get("tags", [])))
-        assert tags, path
-        assert tags <= ALLOWED_TAGS, path
+def test_external_dictionary_links_are_removed() -> None:
+    """公开页面不得残留指向外部 AI 字典的冗余噪音超链接。"""
+    sources = "\n".join((DOCS / path).read_text(encoding="utf-8") for path in PUBLISHED_PAGES)
+    assert "ai-coding-dictionary" not in sources
 
 
 def test_component_syntax_was_fully_removed() -> None:
@@ -96,7 +93,7 @@ def test_visual_and_pdf_parity() -> None:
     """教学图、Mermaid 与论文 PDF 数量必须保持迁移前的读者能力。"""
     sources = "\n".join((DOCS / path).read_text(encoding="utf-8") for path in PUBLISHED_PAGES)
     assert sources.count('class="dl-figure') == 11
-    assert sources.count("```mermaid") == 51
+    assert sources.count("```mermaid") == 21
     assert sources.count('class="pdf-viewer"') == 3
     assert {path.name for path in (DOCS / "paper").glob("*.pdf")} == {
         "attention.pdf",

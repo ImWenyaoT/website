@@ -1,13 +1,10 @@
 ---
 title: "直观解释注意力机制，Transformer 的核心"
-description: "把注意力理解成带权重的信息汇总，用 Q/K/V 与 softmax 解释上下文信息路由。"
-tags:
-  - "The Model"
-  - "Sessions, Context Windows & Turns"
+description: "把注意力理解成带权重的信息汇总，用 Q/K/V 与 softmax 解释 Context 信息路由。"
 ---
 # 直观解释注意力机制，Transformer 的核心
 
-注意力机制可以理解成带权重的信息汇总。当前位置不是只看一个词，而是给 [context](https://www.aihero.dev/ai-coding-dictionary/context) 中的每个位置分配权重，再把这些位置的信息加权求和。
+注意力机制可以理解成带权重的信息汇总。当前位置不是只看一个词，而是给 Context 中的每个位置分配权重，再把这些位置的信息加权求和。
 
 在 Transformer 里，注意力通常写成 Query、Key、Value：
 
@@ -21,7 +18,7 @@ Query 和 Key 的相似度越高，对应 Value 的权重越大。
 
 ## 动机
 
-序列里的一个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 往往需要参考其他 [token](https://www.aihero.dev/ai-coding-dictionary/token) 才能理解。比如“它”指代谁、“学习”修饰什么、“not” 是否改变后面动词的含义，都依赖 [context](https://www.aihero.dev/ai-coding-dictionary/context)。
+序列里的一个 Token 往往需要参考其他 Token 才能理解。比如“它”指代谁、“学习”修饰什么、“not” 是否改变后面动词的含义，都依赖 Context。
 
 注意力机制提供了一种可微的查找方式：
 
@@ -34,7 +31,7 @@ Query 和 Key 的相似度越高，对应 Value 的权重越大。
 ```mermaid
 flowchart LR
   Current["当前位置"] --> Query["提出 Query"]
-  Context["上下文 token"] --> Key["提供 Key"]
+  Context["上下文 Token"] --> Key["提供 Key"]
   Context --> Value["携带 Value"]
   Query --> Match["匹配分数"]
   Key --> Match
@@ -81,10 +78,10 @@ flowchart LR
 def scaled_dot_product_attention(q, k, v, mask=None):
     """用 PyTorch-like 公式表达缩放点积注意力。"""
     dim = q.size(-1)
-    scores = q @ k.transpose(-2, -1) / dim ** 0.5
+    scores = q @ k.transpose(-2, -1) / dim**0.5
 
     if mask is not None:
-        scores = scores.masked_fill(mask == 0, float('-inf'))
+        scores = scores.masked_fill(mask == 0, float("-inf"))
 
     weights = F.softmax(scores, dim=-1)
     output = weights @ v
@@ -100,7 +97,7 @@ def make_causal_mask(seq_len):
 
 ## 注意力热力图
 
-下面这个朴素热力图展示一个位置如何给 [context](https://www.aihero.dev/ai-coding-dictionary/context) 分配权重。颜色越深，权重越大。
+下面这个朴素热力图展示一个位置如何给 context 分配权重。颜色越深，权重越大。
 
 <svg
   class="dl-figure dl-compact-figure"
@@ -145,7 +142,7 @@ def make_causal_mask(seq_len):
 
 ## 张量形状
 
-假设 batch 为 `B`，序列长度为 `T`，每个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 的表示维度为 `D`：
+假设 batch 为 `B`，序列长度为 `T`，每个 token 的表示维度为 `D`：
 
 | 张量      | 形状        | 说明                         |
 | --------- | ----------- | ---------------------------- |
@@ -160,7 +157,7 @@ def make_causal_mask(seq_len):
 
 ### Query 是问题，Key 是索引，Value 是内容
 
-可以把一段 [context](https://www.aihero.dev/ai-coding-dictionary/context) 想成一个小型资料库。当前 [token](https://www.aihero.dev/ai-coding-dictionary/token) 的 Query 像是在问“我需要哪类信息”；每个 [context](https://www.aihero.dev/ai-coding-dictionary/context) [token](https://www.aihero.dev/ai-coding-dictionary/token) 的 Key 像是目录索引；Value 才是真正要取回的内容。
+可以把一段 Context 想成一个小型资料库。当前 Token 的 Query 像是在问“我需要哪类信息”；每个 Context Token 的 Key 像是目录索引；Value 才是真正要取回的内容。
 
 ### softmax 为什么必要
 
@@ -173,7 +170,7 @@ output = weights @ values
 
 ### Multi-head 不是重复劳动
 
-一个注意力头只能在一个表示子空间里匹配关系。多头注意力让 [model](https://www.aihero.dev/ai-coding-dictionary/model) 并行学习不同关系：有的头可能更关注局部搭配，有的头可能更关注长距离指代，有的头可能关注语法角色。
+一个注意力头只能在一个表示子空间里匹配关系。多头注意力让 Model 并行学习不同关系：有的头可能更关注局部搭配，有的头可能更关注长距离指代，有的头可能关注语法角色。
 
 ```mermaid
 flowchart TD
@@ -187,9 +184,9 @@ flowchart TD
 
 ## 限制
 
-- 注意力热力图有解释价值，但不能直接等同于 [model](https://www.aihero.dev/ai-coding-dictionary/model) 真正的因果解释。
-- 自注意力的计算量随序列长度近似平方增长，长 [context](https://www.aihero.dev/ai-coding-dictionary/context) 会变贵。
-- 注意力只是一层的信息汇总机制，Transformer 的能力还来自残差、归一化、MLP、[training](https://www.aihero.dev/ai-coding-dictionary/training) 数据和优化。
+- 注意力热力图有解释价值，但不能直接等同于 Model 真正的因果解释。
+- 自注意力的计算量随序列长度近似平方增长，长 Context 会变贵。
+- 注意力只是一层的信息汇总机制，Transformer 的能力还来自残差、归一化、MLP、Training 数据和优化。
 
 ## 阅读更多
 
@@ -200,5 +197,5 @@ flowchart TD
 - 注意力权重来自 Query 和 Key 的相似度。
 - softmax 把任意分数变成可解释的权重分布。
 - Value 是真正被汇总的信息。
-- causal mask 让语言 [model](https://www.aihero.dev/ai-coding-dictionary/model) 不能看未来。
-- multi-head attention 让 [model](https://www.aihero.dev/ai-coding-dictionary/model) 并行学习多种关系，而不是重复做同一件事。
+- causal mask 让语言 Model 不能看未来。
+- multi-head attention 让 Model 并行学习多种关系，而不是重复做同一件事。

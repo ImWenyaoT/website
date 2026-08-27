@@ -45,6 +45,7 @@ theme:
     - content.action.view
     - content.code.copy
     - content.code.annotate
+    - content.tabs.link
     - content.tooltips
     - search.suggest
     - search.highlight
@@ -99,15 +100,6 @@ plugins:
       lang:
         - zh
         - en
-  - tags:
-      tags_allowed:
-        - The Model
-        - Sessions, Context Windows & Turns
-        - Tools & Environment
-        - Failure Modes
-        - Handoffs
-        - Memory and Steering
-        - Patterns of Work
 
 extra:
   social:
@@ -130,10 +122,9 @@ nav:
           - Linear Algebra:
               - model/linear-algebra/index.md
       - Harness:
+          - harness/index.md
           - ReAct（原文）: papers/react-paper.md
           - SWE-agent（原文）: papers/swe-agent-paper.md
-          - minimal SWE Agent: harness/minimal-swe-agent.md
-          - Codex 的 Agent 设计: harness/openai.md
-          - Claude Code 的 Agent 设计: harness/anthropic.md
-      - Tags: tags.md
+          - Claude Code 架构解析: harness/claude-code.md
+          - DeepSeek-Harness 实战: harness/deepseek.md
   - About: about.md

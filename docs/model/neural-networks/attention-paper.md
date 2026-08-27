@@ -1,8 +1,6 @@
 ---
 title: "Attention Is All You Need（原文）"
 description: "Transformer 原始论文 Attention Is All You Need 的原文 PDF。"
-tags:
-  - "The Model"
 ---
 # Attention Is All You Need（原文）
 

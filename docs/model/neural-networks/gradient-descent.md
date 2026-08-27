@@ -1,13 +1,10 @@
 ---
 title: "梯度下降法"
 description: "把训练看成在损失曲面上沿梯度反方向调整参数，并解释学习率与小批量的作用。"
-tags:
-  - "The Model"
-  - "Patterns of Work"
 ---
 # 梯度下降法
 
-[training](https://www.aihero.dev/ai-coding-dictionary/training) 神经网络时，我们先定义一个损失函数。损失越小，[model](https://www.aihero.dev/ai-coding-dictionary/model) 越接近目标。梯度下降的想法很直接：梯度指向损失上升最快的方向，所以参数更新时往梯度的反方向走。
+Training 神经网络时，我们先定义一个损失函数。损失越小，Model 越接近目标。梯度下降的想法很直接：梯度指向损失上升最快的方向，所以参数更新时往梯度的反方向走。
 
 ```text
 新参数 = 旧参数 - 学习率 * 梯度
@@ -25,7 +22,7 @@ tags:
 找到一组参数，使 loss(parameters) 尽量小
 ```
 
-这里的关键不是“[model](https://www.aihero.dev/ai-coding-dictionary/model) 像人一样理解了数据”，而是“参数被不断调整，使 [training](https://www.aihero.dev/ai-coding-dictionary/training) 目标下降”。
+这里的关键不是“Model 像人一样理解了数据”，而是“参数被不断调整，使 Training 目标下降”。
 
 ```mermaid
 flowchart LR
@@ -128,11 +125,11 @@ flowchart TD
 
 | 方法                        | 每次用多少数据算梯度                                                     | 特点               |
 | --------------------------- | ------------------------------------------------------------------------ | ------------------ |
-| Batch gradient descent      | 全部 [training](https://www.aihero.dev/ai-coding-dictionary/training) 集 | 稳定但贵。         |
+| Batch gradient descent      | 全部 Training 集 | 稳定但贵。         |
 | Stochastic gradient descent | 一个样本                                                                 | 便宜但噪声大。     |
 | Mini-batch gradient descent | 一小批样本                                                               | 深度学习里最常见。 |
 
-小批量方法不是数学上最干净的版本，但工程上最实用：它既能利用矩阵计算，又能引入适度噪声，帮助 [training](https://www.aihero.dev/ai-coding-dictionary/training) 从某些糟糕区域走出来。
+小批量方法不是数学上最干净的版本，但工程上最实用：它既能利用矩阵计算，又能引入适度噪声，帮助 Training 从某些糟糕区域走出来。
 
 ## 限制
 

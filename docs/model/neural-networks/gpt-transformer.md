@@ -1,16 +1,13 @@
 ---
 title: "GPT 是什么？直观讲解 Transformer"
-description: "把 GPT 理解成做下一个 token 预测的语言模型，并拆解 Transformer 主干与 causal mask。"
-tags:
-  - "The Model"
-  - "Sessions, Context Windows & Turns"
+description: "把 GPT 理解成做下一个 Token 预测的语言 Model，并拆解 Transformer 主干与 causal mask。"
 ---
 # GPT 是什么？直观讲解 Transformer
 
-GPT 可以先理解成一个做 [next-token prediction](https://www.aihero.dev/ai-coding-dictionary/next-token-prediction) 的语言 [model](https://www.aihero.dev/ai-coding-dictionary/model)：
+GPT 可以先理解成一个做 next-token prediction 的语言 Model：
 
 ```text
-给定前面的 token，预测下一个 token
+给定前面的 Token，预测下一个 Token
 ```
 
 例如：
@@ -19,38 +16,38 @@ GPT 可以先理解成一个做 [next-token prediction](https://www.aihero.dev/a
 我 喜欢 深度 -> 学习
 ```
 
-GPT 的底层结构是 Transformer。它不像传统循环网络那样把信息一个位置一个位置往后传，而是让每个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 通过注意力机制直接汇总前面相关 [token](https://www.aihero.dev/ai-coding-dictionary/token) 的信息。
+GPT 的底层结构是 Transformer。它不像传统循环网络那样把信息一个位置一个位置往后传，而是让每个 Token 通过注意力机制直接汇总前面相关 Token 的信息。
 
 ## 动机
 
-语言 [model](https://www.aihero.dev/ai-coding-dictionary/model) 的核心任务可以非常朴素：根据已经出现的 [context](https://www.aihero.dev/ai-coding-dictionary/context)，预测下一个 [token](https://www.aihero.dev/ai-coding-dictionary/token)。只要这个任务做得足够好，[model](https://www.aihero.dev/ai-coding-dictionary/model) 就会学到语法、事实、风格、推理模式和代码模式的统计结构。
+语言 Model 的核心任务可以非常朴素：根据已经出现的 Context，预测下一个 Token。只要这个任务做得足够好，Model 就会学到语法、事实、风格、推理模式和代码模式的统计结构。
 
 GPT 里的 “G” 是 generative，“P” 是 pre-trained，“T” 是 Transformer。直观地说：
 
 | 部分        | 含义                                                                                                                                               |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Generative  | 它可以一个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 接一个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 生成文本。 |
-| Pre-trained | 它先在大量文本上预 [training](https://www.aihero.dev/ai-coding-dictionary/training)，再按需要微调或对齐。                                          |
+| Generative  | 它可以一个 Token 接一个 Token 生成文本。 |
+| Pre-trained | 它先在大量文本上预 Training，再按需要微调或对齐。                                          |
 | Transformer | 它使用注意力机制处理序列。                                                                                                                         |
 
 ```mermaid
 flowchart LR
-  Text["大量文本"] --> Task["遮住下一个 token"]
-  Task --> Guess["模型猜下一个 token"]
+  Text["大量文本"] --> Task["遮住下一个 Token"]
+  Task --> Guess["Model 猜下一个 Token"]
   Guess --> Loss["猜错多少"]
   Loss --> Update["更新参数"]
   Update --> Guess
 ```
 
-从第一性原理看，GPT 没有一开始就需要被解释成“会聊天的 [agent](https://www.aihero.dev/ai-coding-dictionary/agent)”。更朴素的解释是：
+从第一性原理看，GPT 没有一开始就需要被解释成“会聊天的 Agent”。更朴素的解释是：
 
 ```text
-文本里有规律 -> 模型被迫预测下一个 token -> 预测错误变成梯度 -> 参数吸收这些规律
+文本里有规律 -> Model 被迫预测下一个 Token -> 预测错误变成梯度 -> 参数吸收这些规律
 ```
 
-当数据、[model](https://www.aihero.dev/ai-coding-dictionary/model) 和算力都变大时，这个简单目标会吸收越来越多语言和世界知识的统计结构。这也是为什么宏观上经常说 deep learning 的关键现象是 scale。
+当数据、Model 和算力都变大时，这个简单目标会吸收越来越多语言和世界知识的统计结构。这也是为什么宏观上经常说 deep learning 的关键现象是 scale。
 
-## 下一个 token 预测
+## 下一个 Token 预测
 
 <svg class="dl-figure" viewBox="0 0 920 260" role="img" aria-labelledby="next-token-title">
   <title id="next-token-title">输入序列和目标序列错开一位</title>
@@ -82,7 +79,7 @@ flowchart LR
   <line x1="465" y1="112" x2="585" y2="145" class="dl-arrow" marker-end="url(#arrow-next)"></line>
 </svg>
 
-[training](https://www.aihero.dev/ai-coding-dictionary/training) 时，输入和目标序列错开一位。[model](https://www.aihero.dev/ai-coding-dictionary/model) 在每个位置都要预测下一个 [token](https://www.aihero.dev/ai-coding-dictionary/token)。
+training 时，输入和目标序列错开一位。model 在每个位置都要预测下一个 token。
 
 ## 一个极小语言模型骨架
 
@@ -110,7 +107,7 @@ def make_toy_batch():
     return inputs, targets
 ```
 
-这个 [model](https://www.aihero.dev/ai-coding-dictionary/model) 还不是 Transformer，因为它没有注意力层。它只展示语言建模的 [training](https://www.aihero.dev/ai-coding-dictionary/training) 目标：每个位置输出一个词表大小的分数向量。
+这个 model 还不是 Transformer，因为它没有注意力层。它只展示语言建模的 training 目标：每个位置输出一个词表大小的分数向量。
 
 ## Transformer 的流水线
 
@@ -141,7 +138,7 @@ def make_toy_batch():
 
 ## Causal mask
 
-GPT 只能看当前位置及其左边的 [context](https://www.aihero.dev/ai-coding-dictionary/context)，不能偷看未来 [token](https://www.aihero.dev/ai-coding-dictionary/token)。这靠 causal mask 实现。
+GPT 只能看当前位置及其左边的 context，不能偷看未来 token。这靠 causal mask 实现。
 
 <svg
   class="dl-figure dl-compact-figure"
@@ -191,12 +188,12 @@ GPT 只能看当前位置及其左边的 [context](https://www.aihero.dev/ai-cod
 
 | 组件                  | 作用                                                                                                                                                         |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Tokenizer             | 把文本切成 [token](https://www.aihero.dev/ai-coding-dictionary/token)，并映射成 id。                                                                         |
+| Tokenizer             | 把文本切成 Token，并映射成 id。                                                                         |
 | Embedding             | 把离散 id 变成连续向量。                                                                                                                                     |
-| Position              | 给 [model](https://www.aihero.dev/ai-coding-dictionary/model) 位置信息，否则同一组 [token](https://www.aihero.dev/ai-coding-dictionary/token) 的顺序会丢失。 |
-| Causal self-attention | 让当前位置汇总左侧 [context](https://www.aihero.dev/ai-coding-dictionary/context)。                                                                          |
+| Position              | 给 Model 位置信息，否则同一组 Token 的顺序会丢失。 |
+| Causal self-attention | 让当前位置汇总左侧 Context。                                                                          |
 | MLP                   | 对每个位置的表示做非线性变换。                                                                                                                               |
-| Logits                | 对词表中每个候选 [token](https://www.aihero.dev/ai-coding-dictionary/token) 给出分数。                                                                       |
+| Logits                | 对词表中每个候选 Token 给出分数。                                                                       |
 
 ## 直观理解
 
@@ -206,25 +203,25 @@ RNN 会把一个隐藏状态从左传到右。Transformer 则让每个位置直�
 
 ### 为什么需要位置
 
-注意力本身看的是一组向量之间的关系。如果不加入位置信息，[model](https://www.aihero.dev/ai-coding-dictionary/model) 很难区分“我喜欢深度学习”和“学习深度喜欢我”的顺序差异。因此 Transformer 必须把 [token](https://www.aihero.dev/ai-coding-dictionary/token) 内容和位置信息结合起来。
+注意力本身看的是一组向量之间的关系。如果不加入位置信息，Model 很难区分“我喜欢深度学习”和“学习深度喜欢我”的顺序差异。因此 Transformer 必须把 Token 内容和位置信息结合起来。
 
 ### 为什么需要 mask
 
-GPT 的 [training](https://www.aihero.dev/ai-coding-dictionary/training) 目标是预测下一个 [token](https://www.aihero.dev/ai-coding-dictionary/token)。如果第 3 个位置能看到第 4 个 [token](https://www.aihero.dev/ai-coding-dictionary/token)，任务就泄漏答案了。causal mask 的作用是让每个位置只能使用当前位置及之前的信息。
+GPT 的 Training 目标是预测下一个 Token。如果第 3 个位置能看到第 4 个 Token，任务就泄漏答案了。causal mask 的作用是让每个位置只能使用当前位置及之前的信息。
 
 ```mermaid
 flowchart LR
-  T1["token 1"] --> T2["token 2"]
-  T1 --> T3["token 3"]
+  T1["Token 1"] --> T2["Token 2"]
+  T1 --> T3["Token 3"]
   T2 --> T3
-  T4["future token"] -. "masked" .-> T3
+  T4["future Token"] -. "masked" .-> T3
 ```
 
 ## 限制
 
-- 这篇只解释 GPT 的主干结构，没有展开 tokenizer、预 [training](https://www.aihero.dev/ai-coding-dictionary/training) 数据、对齐、采样策略和 KV cache。
-- Transformer 能捕捉 [context](https://www.aihero.dev/ai-coding-dictionary/context) 关系，但不等于它拥有可靠事实库。
-- [next-token prediction](https://www.aihero.dev/ai-coding-dictionary/next-token-prediction) 是 [training](https://www.aihero.dev/ai-coding-dictionary/training) 目标，不是所有智能行为的完整解释。
+- 这篇只解释 GPT 的主干结构，没有展开 Tokenizer、预 Training 数据、对齐、采样策略和 KV cache。
+- Transformer 能捕捉 Context 关系，但不等于它拥有可靠事实库。
+- next-token prediction 是 Training 目标，不是所有智能行为的完整解释。
 
 ## 阅读更多
 
@@ -232,4 +229,4 @@ flowchart LR
 
 ## 小结
 
-GPT 的核心任务很简单：预测下一个 [token](https://www.aihero.dev/ai-coding-dictionary/token)。Transformer 的价值在于，它让每个位置能直接从 [context](https://www.aihero.dev/ai-coding-dictionary/context) 中取信息，而 causal mask 保证 [model](https://www.aihero.dev/ai-coding-dictionary/model) [training](https://www.aihero.dev/ai-coding-dictionary/training) 时不能看未来。
+GPT 的核心任务很简单：预测下一个 Token。Transformer 的价值在于，它让每个位置能直接从 Context 中取信息，而 causal mask 保证 Model 在 Training 时不能看未来。

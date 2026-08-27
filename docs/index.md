@@ -1,19 +1,19 @@
 ---
-description: "从模型原理到 AI coding harness 的结构化学习笔记。"
+description: "从 Model 原理到 AI Coding Harness 的结构化学习笔记。"
 hide:
   - toc
 ---
 
 # Tian "Edward" Wenyao
 
-从模型原理到 AI coding harness，把复杂系统拆成可以理解、验证和复用的知识。
+从 Model 原理到 AI Coding Harness，把复杂系统拆成可以理解、验证和复用的知识。
 
 [开始阅读](model/index.md){ .md-button .md-button--primary }
 [关于本站](about.md){ .md-button }
 
 ## 沿着两条主线阅读
 
-先建立模型侧直觉，再理解 harness 如何把模型变成可靠的软件系统。
+先建立 Model 侧直觉，再理解 Harness 如何把 Model 变成可靠的软件系统。
 
 <div class="grid cards" markdown>
 
@@ -21,9 +21,9 @@ hide:
 
     ---
 
-    ### 理解模型如何工作
+    ### 理解 Model 如何工作
 
-    从神经网络、梯度下降和反向传播，一路走到 Transformer 与 attention。
+    从神经网络、梯度下降和反向传播，一路走到 Transformer 与 Attention。
 
     [开始阅读 →](model/index.md)
 
@@ -33,9 +33,9 @@ hide:
 
     ### 理解 Agent 如何落地
 
-    从 ReAct、SWE-agent 到 minimal SWE Agent、Codex 与 Claude Code。
+    从学术奠基 ReAct、SWE-agent 到工业级实战 Claude Code 与 DeepSeek-Harness。
 
-    [开始阅读 →](papers/react-paper.md)
+    [开始阅读 →](harness/index.md)
 
 </div>
 

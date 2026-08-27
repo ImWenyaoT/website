@@ -1,22 +1,20 @@
 ---
 title: "Neural Networks"
 description: "从最小神经网络出发，沿第一性原理一路走到 Transformer 和注意力机制的学习路线。"
-tags:
-  - "The Model"
 ---
 # Neural Networks
 
-这个 topic 从最小的神经网络开始，一路走到 Transformer 和注意力机制。它不是百科目录，也不是公式速查表；更像 [model](https://www.aihero.dev/ai-coding-dictionary/model) 主题下的一条从第一性原理出发的学习路线：
+这个 topic 从最小的神经网络开始，一路走到 Transformer 和注意力机制。它不是百科目录，也不是公式速查表；更像 model 主题下的一条从第一性原理出发的学习路线：
 
 > 如果我们只允许自己使用“数字、函数、误差、微调”这几个概念，能不能一步步走到 GPT？
 
-这里的代码不追求“复制粘贴即可 [training](https://www.aihero.dev/ai-coding-dictionary/training) 一个 [model](https://www.aihero.dev/ai-coding-dictionary/model)”。更准确地说，代码是公式的替代写法：用 PyTorch 的张量、矩阵乘法、`backward`、`softmax` 等操作，把数学关系写成更容易读的程序片段。
+这里的代码不追求“复制粘贴即可 training 一个 model”。更准确地说，代码是公式的替代写法：用 PyTorch 的张量、矩阵乘法、`backward`、`softmax` 等操作，把数学关系写成更容易读的程序片段。
 
 ## Topic Map
 
 ```mermaid
 flowchart LR
-  X["输入: 数字向量"] --> F["模型: 带参数的函数"]
+  X["输入: 数字向量"] --> F["Model: 带参数的函数"]
   F --> Y["预测"]
   Y --> L["损失: 预测错了多少"]
   L --> G["梯度: 每个参数该往哪边动"]
@@ -31,10 +29,10 @@ flowchart LR
 阅读顺序固定为五个词条：
 
 1. [神经网络的结构](neural-network-structure.md)：神经网络是一串带参数的函数组合。
-2. [梯度下降法](gradient-descent.md)：[training](https://www.aihero.dev/ai-coding-dictionary/training) 是在损失曲面上调整参数。
+2. [梯度下降法](gradient-descent.md)：Training 是在损失曲面上调整参数。
 3. [反向传播算法](backpropagation.md)：反向传播负责高效计算每个参数的梯度。
-4. [GPT 是什么？直观讲解 Transformer](gpt-transformer.md)：GPT 用 Transformer 做 [next-token prediction](https://www.aihero.dev/ai-coding-dictionary/next-token-prediction)。
-5. [直观解释注意力机制，Transformer 的核心](attention.md)：注意力是带权重的信息汇总。
+4. [GPT 是什么？直观讲解 Transformer](gpt-transformer.md)：GPT 用 Transformer 做 next-token prediction。
+5. [直观解释注意力机制，Transformer 的核心](attention.md)：Attention 是带权重的信息汇总。
 
 ## 读法
 
@@ -55,10 +53,10 @@ flowchart LR
 | 类型     | 目的                                                                                                           | 是否必须能直接运行 |
 | -------- | -------------------------------------------------------------------------------------------------------------- | ------------------ |
 | 公式代码 | 用 PyTorch 风格写出公式和数据流。                                                                              | 不要求。           |
-| 骨架代码 | 展示 `Module`、[training](https://www.aihero.dev/ai-coding-dictionary/training) 循环、attention 函数的大形状。 | 基本能读懂即可。   |
+| 骨架代码 | 展示 `Module`、Training 循环、Attention 函数的大形状。 | 基本能读懂即可。   |
 | 实验代码 | 以后如果加入图像生成或小实验，会单独标注依赖和运行方式。                                                       | 需要能复现。       |
 
-当前版本主要采用前两种。这样读者不会被环境、依赖、随机数和 [training](https://www.aihero.dev/ai-coding-dictionary/training) 细节打断，可以把注意力放在概念本身。
+当前版本主要采用前两种。这样读者不会被环境、依赖、随机数和 Training 细节打断，可以把注意力放在概念本身。
 
 ## 第一性原理主线
 
@@ -68,22 +66,22 @@ flowchart LR
 
 这句话拆开就是五篇 article：
 
-| Article           | 第一性问题                                                                                                                                     | 最小 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)             |
+| Article           | 第一性问题                                                                                                                                     | 最小工具             |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | 神经网络的结构    | 什么样的函数可以被调整？                                                                                                                       | 矩阵乘法 + 非线性                                                         |
 | 梯度下降法        | 如果函数错了，参数往哪边动？                                                                                                                   | 损失曲线 + 反方向更新                                                     |
 | 反向传播算法      | 参数很多时，梯度怎么高效算？                                                                                                                   | 链式法则 + 计算图                                                         |
-| GPT / Transformer | 处理语言时，函数结构该长什么样？                                                                                                               | [token](https://www.aihero.dev/ai-coding-dictionary/token) + 位置 + block |
-| 注意力机制        | 一个 [token](https://www.aihero.dev/ai-coding-dictionary/token) 如何从 [context](https://www.aihero.dev/ai-coding-dictionary/context) 取信息？ | Q/K/V + softmax                                                           |
+| GPT / Transformer | 处理语言时，函数结构该长什么样？                                                                                                               | Token + 位置 + Block |
+| 注意力机制        | 一个 Token 如何从 Context 取信息？ | Q/K/V + softmax                                                           |
 
 ## 两个学习视角
 
 | 视角        | 对这个 topic 的影响                                                                                                                                                                                             |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Karpathy 式 | 从一个小标量、一个小字符 [model](https://www.aihero.dev/ai-coding-dictionary/model)、一个小计算图开始，把东西搭出来。                                                                                           |
-| Scale 式    | 不把单个 trick 神化；深度学习真正厉害的是同一套 [training](https://www.aihero.dev/ai-coding-dictionary/training) 机制能随数据、算力和 [model](https://www.aihero.dev/ai-coding-dictionary/model) 规模继续变强。 |
+| Karpathy 式 | 从一个小标量、一个小字符 Model、一个小计算图开始，把东西搭出来。                                                                                           |
+| Scale 式    | 不把单个 trick 神化；深度学习真正厉害的是同一套 Training 机制能随数据、算力和 Model 规模继续变强。 |
 
-所以这里会同时保留两个层次：每篇 article 先用小例子讲清楚机制，再说明它在大 [model](https://www.aihero.dev/ai-coding-dictionary/model) 里扮演什么角色。
+所以这里会同时保留两个层次：每篇 article 先用小例子讲清楚机制，再说明它在大 Model 里扮演什么角色。
 
 <svg class="dl-figure" viewBox="0 0 920 210" role="img" aria-labelledby="dl-overview-title">
   <title id="dl-overview-title">深度学习训练主线</title>
@@ -93,7 +91,7 @@ flowchart LR
     </marker>
   </defs>
   <rect x="30" y="55" width="190" height="90" rx="8" class="dl-box"></rect>
-  <text x="125" y="92" text-anchor="middle" class="dl-label">模型</text>
+  <text x="125" y="92" text-anchor="middle" class="dl-label">Model</text>
   <text x="125" y="120" text-anchor="middle" class="dl-small">带参数的函数</text>
   <line x1="230" y1="100" x2="335" y2="100" class="dl-arrow" marker-end="url(#arrow-overview)"
   ></line>
@@ -110,10 +108,10 @@ flowchart LR
     fill="none"
     class="dl-muted-arrow"
     marker-end="url(#arrow-overview)"></path>
-  <text x="445" y="190" text-anchor="middle" class="dl-small">重复很多次，模型逐渐变好</text>
+  <text x="445" y="190" text-anchor="middle" class="dl-small">重复很多次，Model 逐渐变好</text>
 </svg>
 
-Transformer 只是这条主线上的一种强大 [model](https://www.aihero.dev/ai-coding-dictionary/model) 结构。先把“参数如何学习”讲清楚，再看注意力机制，理解成本会低很多。
+Transformer 只是这条主线上的一种强大 Model 结构。先把“参数如何学习”讲清楚，再看注意力机制，理解成本会低很多。
 
 ## 可视化约定
 

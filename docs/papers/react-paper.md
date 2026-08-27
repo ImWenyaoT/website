@@ -1,9 +1,6 @@
 ---
 title: "ReAct（原文）"
 description: "ReAct 原始论文入口，包含本地 PDF、ar5iv HTML 与项目页。"
-tags:
-  - "Tools & Environment"
-  - "Patterns of Work"
 ---
 # ReAct（原文）
 

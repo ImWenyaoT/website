@@ -1,10 +1,6 @@
 ---
 title: "SWE-agent（原文）"
 description: "SWE-agent 原始论文入口，包含本地 PDF、arXiv、OpenReview、NeurIPS 与项目页。"
-tags:
-  - "Tools & Environment"
-  - "Failure Modes"
-  - "Patterns of Work"
 ---
 # SWE-agent（原文）
 

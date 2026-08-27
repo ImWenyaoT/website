@@ -1,0 +1,114 @@
+---
+title: "DeepSeek-Harness 实战与开源 Model 适配"
+description: "开源大 Model 工业级 Harness 设计：Chat Completions 接口适配、Tool Calling 护栏、Unix 本地隔离沙箱与评测闭环。"
+---
+# DeepSeek-Harness 实战与开源 Model 适配
+
+**DeepSeek-Harness** 是面向开源大语言 Model（如 DeepSeek-V3 / R1 等）构建的高可靠 Coding Agent 脚手架。
+
+在闭源商业 Model（如 Claude / GPT）上行之有效的高阶特性（例如服务端托管的 Lark 补丁文法、专有 Responses API、强语义结构化输出），在面对开放 API 与开源端点时往往面临**协议不兼容、格式漂移或指令遵循能力差异**。DeepSeek-Harness 的设计初衷就是探索：**如何通过轻量、健壮且通用的客户端 Harness 设计，让开源大 Model 稳定完成代码修复与端到端评测？**
+
+```mermaid
+flowchart TB
+    Task["代码仓库与缺陷描述"] --> DSH["DeepSeek-Harness 控制器"]
+
+    subgraph DSH["Harness 适配与护栏层"]
+        direction TB
+        Adapter["OpenAI 兼容 Chat Completions 适配器<br/>(通用 BaseURL / APIKey)"]
+        Guard["鲁棒 Tool Calling 护栏<br/>(Pydantic 容错解析 · 语法预体检)"]
+        Sandbox["Unix Local 独立工作区沙箱<br/>(PATH 注入 · 隔离文件树)"]
+        ShellDriver["Shell 文件驱动器<br/>(base64 安全写入 · Heredoc 编辑)"]
+    end
+
+    DSH <--> LLM["DeepSeek-V3 / R1 / 兼容 Model"]
+    DSH --> Eval["SWE-bench / 自动化回归验证闭环"]
+```
+
+---
+
+## 1. 核心挑战：开源 Model 在 Coding Harness 上的四大痛点
+
+| 痛点场景 | 典型失效表现 | 传统闭源 Harness 的脆弱点 | DeepSeek-Harness 应对方案 |
+| :--- | :--- | :--- | :--- |
+| **1. 专有文法不支持** | Model 无法稳定输出特定 AST 补丁格式（如 `apply_patch`）。 | 专有文法深度依赖模型后训练微调与服务端专有解析器。 | **回退到通用 Shell 驱动**：通过标准 `cat > file << 'EOF'` 或 `patch` 改写文件。 |
+| **2. 转义字符与语法破坏** | 在通过终端执行多行代码写入时，特殊符号与引号嵌套被 Shell 提前解析。 | 裸字符串拼接极易造成换行错乱与代码损坏。 | **Base64 编码注入**：用 `printf %s '...' \| base64 -d > path` 杜绝转义歧义。 |
+| **3. 沙箱环境隔离盲区** | 纯隔离沙箱由于 PATH 被系统级净化，无法调用宿主解释器环境。 | 默认隔离环境缺失项目所需的特定依赖与工具链。 | **Manifest 动态 PATH 注入**：将宿主解释器目录显式透传进沙箱环境变量。 |
+| **4. 参数类型幻觉与漂移** | Tool 参数类型微小不匹配或生成多余字段导致请求校验失败。 | 弱 Model 容易在复杂嵌套 JSON Schema 中产生细微格式错误。 | **双段 Pydantic 宽松校验 + 自纠回填机制**。 |
+
+---
+
+## 2. 架构设计：极简通用的沙箱与工具体系
+
+### 2.1 抛弃专用补丁，采用通用 Shell 驱动
+
+在 Python SDK 与 OpenAI Agents 体系中，`Filesystem().apply_patch` 属于服务端 Hosted Grammar 工具，Chat Completions 端点会直接抛出拒绝异常。DeepSeek-Harness 采取了**「以通用 Shell 为核心」**的极简抽象：
+
+```python
+def seed_command(path: str, content: str) -> str:
+    """使用 Base64 编码构造无转义歧义的文件写入命令。"""
+    b64 = b64encode(content.encode("utf-8")).decode("ascii")
+    return f"printf %s '{b64}' | base64 -d > {path}"
+```
+
+对于单文件或小模块编辑，Model 可直接在沙箱内使用经典的 Shell Heredoc 语法进行覆盖或利用 `sed/patch` 局部修改。这种方式对任何支持标准终端的 LLM 均具有 100% 的通用性。
+
+### 2.2 隔离工作区与环境透传
+
+为保证代码执行不污染真实工作区，Harness 将每一次运行隔离在临时目录：
+
+```mermaid
+flowchart LR
+    Host["宿主机环境 (sys.executable)"] --> Inject["注入 PATH: /venv/bin:/usr/bin:/bin"]
+    Inject --> Sandbox["UnixLocalSandboxClient (/tmp/workspace-xxx)"]
+    Sandbox --> Exec["在隔离工作区执行 pytest / unittest"]
+```
+
+```python
+def sandbox_manifest() -> Manifest:
+    """构造沙箱配置：注入当前解释器路径，保证沙箱内开箱即用运行测试。"""
+    python_dir = os.path.dirname(sys.executable)
+    path = f"{python_dir}:/usr/local/bin:/usr/bin:/bin"
+    return Manifest(environment=Environment(value={"PATH": path}))
+```
+
+---
+
+## 3. 护栏体系：语法预检与自纠回路
+
+在 Model 写入 Python 文件后、正式触发测试前，Harness 提供了一道轻量级的**静态语法预体检**：
+
+```mermaid
+sequenceDiagram
+    participant H as Harness
+    participant M as DeepSeek Model
+    participant S as Sandbox
+
+    M->>H: 写入代码 (Write / Shell)
+    H->>H: py_compile 静态语法解析
+    alt 存在 SyntaxError
+        H-->>M: 拦截并报错 (第 L 行存在语法错误: ...)
+        M->>H: 修正代码并重新写入
+    else 语法正确
+        H->>S: 写入沙箱文件
+        H->>S: 执行测试验证 (pytest)
+        S-->>H: 测试通过 (Exit Code 0)
+        H-->>M: 观察反馈：测试全部通过
+    end
+```
+
+这种本地轻量护栏能够大幅减少 Model 因为简单漏括号、缩进错误而在“跑测试 → 报错 → 重改”之间消耗的多余 Turn。
+
+---
+
+## 4. 工业级对照：Claude Code vs DeepSeek-Harness
+
+| 对比维度 | Claude Code (专有工业级) | DeepSeek-Harness (开源通用级) |
+| :--- | :--- | :--- |
+| **主要定位** | 与 Anthropic 生态深度绑定的交互式 CLI Agent | 适配任意 OpenAI 兼容端点的通用全自动化修复 Harness |
+| **语言与运行时** | TypeScript + Node.js (基于 Ink TUI) | Python + OpenAI Agents SDK (基于异步 AsyncIO) |
+| **文件编辑哲学** | 厚契约专用 Tool（必须先 Read，`old_string` 唯一匹配替换） | 通用 Shell 驱动（Heredoc / Base64 / Patch 覆盖） |
+| **安全机制** | 客户端 AST 语法树深度检测 + 内核级 Seatbelt 沙箱 | 临时目录隔离沙箱 + 环境变量净化 |
+| **交互模式** | 用户交互式驱动（人机协同、实时审批） | 自动化管道（给定 Issue 自动搜索/修复/跑测试至通过） |
+
+
+

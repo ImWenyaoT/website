@@ -1,12 +1,10 @@
 ---
 title: "反向传播算法"
 description: "把反向传播理解成链式法则在计算图上的实现，负责高效算出每个参数的梯度。"
-tags:
-  - "The Model"
 ---
 # 反向传播算法
 
-反向传播算法常被说成“神经网络学习的核心”，但这个说法容易让人误会。反向传播本身并不会让 [model](https://www.aihero.dev/ai-coding-dictionary/model) 变聪明，它只回答一个非常具体的问题：
+反向传播算法常被说成“神经网络学习的核心”，但这个说法容易让人误会。反向传播本身并不会让 Model 变聪明，它只回答一个非常具体的问题：
 
 > 这次预测错了以后，网络里每一个旋钮应该承担多少责任？
 
@@ -60,7 +58,7 @@ flowchart LR
 
 ## 概括
 
-一个 [training](https://www.aihero.dev/ai-coding-dictionary/training) 步骤可以拆成三个动作：先算错在哪里，再把责任传回去，最后更新旋钮。
+一个 training 步骤可以拆成三个动作：先算错在哪里，再把责任传回去，最后更新旋钮。
 
 ### 第 1 阶段：激励传播
 
@@ -100,9 +98,9 @@ grad_to_previous = upstream * local
 权重更新通常包括三步：
 
 ```python
-loss.backward()          # 反向传播：计算每个参数的梯度
-optimizer.step()         # 优化器：用梯度更新参数
-optimizer.zero_grad()    # 清空梯度：准备下一轮
+loss.backward()  # 反向传播：计算每个参数的梯度
+optimizer.step()  # 优化器：用梯度更新参数
+optimizer.zero_grad()  # 清空梯度：准备下一轮
 ```
 
 这里容易混淆：`backward()` 不直接“学习”，它只是把梯度填到每个参数的 `.grad` 字段里；真正改变权重的是 `optimizer.step()`。
@@ -171,7 +169,7 @@ stateDiagram-v2
 
 ### 反向传播的核心递推
 
-下面的代码不是为了 [training](https://www.aihero.dev/ai-coding-dictionary/training) 一个 [model](https://www.aihero.dev/ai-coding-dictionary/model)，而是把公式写成 PyTorch 风格。读它时只看两件事：`delta` 如何往前传，`grad_W` 如何由上一层激活和当前层误差信号组成。
+下面的代码不是为了 Training 一个 Model，而是把公式写成 PyTorch 风格。读它时只看两件事：`delta` 如何往前传，`grad_W` 如何由上一层激活和当前层误差信号组成。
 
 ```python
 # forward：保存每层需要的中间量
@@ -260,7 +258,7 @@ W1 -> z1 -> a1 -> z2 -> a2 -> loss
 
 ### 标量例子
 
-先看一个只有一个权重的例子。它像 Karpathy 在 micrograd 里常用的那种玩具标量图：小到可以手算，但结构和大 [model](https://www.aihero.dev/ai-coding-dictionary/model) 是一回事。
+先看一个只有一个权重的例子。它像 Karpathy 在 micrograd 里常用的那种玩具标量图：小到可以手算，但结构和大 model 是一回事。
 
 ```python
 x = tensor(2.0)
@@ -299,9 +297,9 @@ d loss / d b = -6 * 1 = -6
 
 ```python
 # B: batch size, D: input dim, H: hidden dim
-x.shape      == [B, D]
-W.shape      == [D, H]
-b.shape      == [H]
+x.shape == [B, D]
+W.shape == [D, H]
+b.shape == [H]
 z = x @ W + b
 a = relu(z)
 ```
@@ -309,9 +307,9 @@ a = relu(z)
 如果反向阶段已经得到 `delta = d loss / d z`，那么：
 
 ```python
-grad_W = x.T @ delta      # [D, B] @ [B, H] -> [D, H]
-grad_b = delta.sum(dim=0) # [B, H] -> [H]
-grad_x = delta @ W.T      # [B, H] @ [H, D] -> [B, D]
+grad_W = x.T @ delta  # [D, B] @ [B, H] -> [D, H]
+grad_b = delta.sum(dim=0)  # [B, H] -> [H]
+grad_x = delta @ W.T  # [B, H] @ [H, D] -> [B, D]
 ```
 
 这三行就是许多深度学习框架底层反复执行的模式。
@@ -331,17 +329,17 @@ PyTorch 的 autograd 会记录这些计算关系。调用 `backward()` 时，它
 
 ### 学习作为一个优化问题
 
-[training](https://www.aihero.dev/ai-coding-dictionary/training) [model](https://www.aihero.dev/ai-coding-dictionary/model) 就是在参数空间里找一个点，使损失尽量低。反向传播不负责决定“去哪一个低点”，它只告诉优化器当前位置的坡度。
+Training Model 就是在参数空间里找一个点，使损失尽量低。反向传播不负责决定“去哪一个低点”，它只告诉优化器当前位置的坡度。
 
 可以把流程想成：
 
 ```text
-模型当前参数 -> 产生预测 -> 产生损失 -> 反向传播算坡度 -> 优化器走一步
+Model 当前参数 -> 产生预测 -> 产生损失 -> 反向传播算坡度 -> 优化器走一步
 ```
 
 如果梯度下降是“下山策略”，反向传播就是“测量脚下坡度的仪器”。它不替你选择远方目的地，只告诉你脚下附近哪边更低。
 
-### 运用类比理解梯度下降法
+### 运用类比理解反向传播
 
 在多层网络里，输出层最容易知道自己错在哪里；隐藏层并没有直接目标。反向传播的作用，就是把输出层的错误逐层分摊给隐藏层：
 
@@ -364,14 +362,14 @@ optimizer.step: 用梯度更新参数
 zero_grad    : 清掉旧梯度，准备下一轮
 ```
 
-更像 PyTorch 的 [training](https://www.aihero.dev/ai-coding-dictionary/training) 循环可以写成：
+更像 PyTorch 的 Training 循环可以写成：
 
 ```python
 for batch in data:
     loss = model(batch).loss
 
-    loss.backward()      # 计算梯度
-    optimizer.step()     # 根据梯度更新参数
+    loss.backward()  # 计算梯度
+    optimizer.step()  # 根据梯度更新参数
     optimizer.zero_grad()
 ```
 
@@ -381,19 +379,14 @@ for batch in data:
 
 ### 不保证全局最优
 
-深度网络的损失曲面通常不是凸函数。梯度下降加反向传播只能沿当前梯度方向移动，不保证找到全局最低点。实际 [training](https://www.aihero.dev/ai-coding-dictionary/training) 能成功，往往依赖初始化、优化器、学习率调度、归一化、残差连接和大量工程经验。
+深度网络的损失曲面通常不是凸函数。梯度下降加反向传播只能沿当前梯度方向移动，不保证找到全局最低点。实际 Training 能成功，往往依赖初始化、优化器、学习率调度、归一化、残差连接和大量工程经验。
 
 ### 梯度可能消失或爆炸
+反向传播极其高效，但也有明显边界：
 
-反向传播沿着层层链式法则相乘。如果许多局部导数都小于 1，梯度可能越传越小；如果许多局部导数都大于 1，梯度可能越传越大。这就是深层网络早期 [training](https://www.aihero.dev/ai-coding-dictionary/training) 困难的重要原因之一。
-
-### 需要可微结构
-
-反向传播依赖局部导数。ReLU 在 0 点不可导，但工程上可以选一个约定的次梯度；真正麻烦的是离散采样、硬判断、外部 [tool call](https://www.aihero.dev/ai-coding-dictionary/tool-call) 这类不可微操作。现代 [model](https://www.aihero.dev/ai-coding-dictionary/model) [training](https://www.aihero.dev/ai-coding-dictionary/training) 会用各种替代目标、松弛技巧或强化学习方法绕过这些问题。
-
-### 内存开销不小
-
-为了反向传播，前向阶段要缓存中间激活。[model](https://www.aihero.dev/ai-coding-dictionary/model) 越深、序列越长、batch 越大，缓存越贵。[training](https://www.aihero.dev/ai-coding-dictionary/training) 大 [model](https://www.aihero.dev/ai-coding-dictionary/model) 时，activation checkpointing、混合精度和并行策略都和这个问题有关。
+- 它只负责计算梯度，不保证损失函数是凸的，也不保证一定收敛到好的局部最优。
+- 反向传播依赖局部导数。ReLU 在 0 点不可导，但工程上可以选一个约定的次梯度；真正麻烦的是离散采样、硬判断、外部 Tool Call 这类不可微操作。现代 Model Training 会用各种替代目标、松弛技巧或强化学习方法绕过这些问题。
+- 为了反向传播，前向阶段要缓存中间激活。 Model 越深、序列越长、batch 越大，缓存越贵。Training 大 Model 时，activation checkpointing、混合精度和并行策略都和这个问题有关。
 
 ## 历史
 
@@ -403,13 +396,13 @@ for batch in data:
 
 ### 现代反向传播
 
-现代神经网络语境下，反向传播在 1980 年代因多层感知机 [training](https://www.aihero.dev/ai-coding-dictionary/training) 而广为人知。后来它和更强的硬件、更大的数据集、更稳定的初始化与优化技术结合，成为深度学习 [training](https://www.aihero.dev/ai-coding-dictionary/training) 的基础 [tool](https://www.aihero.dev/ai-coding-dictionary/tool)。
+现代神经网络语境下，反向传播在 1980 年代因多层感知机 Training 而广为人知。后来它和更强的硬件、更大的数据集、更稳定的初始化与优化技术结合，成为深度学习 Training 的基础工具。
 
 ## 注释
 
 - 本文把 `loss` 和 `cost` 都翻译成损失；有些资料会区分单样本 loss 和全数据集 cost。
 - 本文里的代码是 PyTorch-like 公式代码，重点是表达张量关系，不承诺直接运行。
-- 反向传播常被口语化地等同于“[training](https://www.aihero.dev/ai-coding-dictionary/training) 神经网络”，但严格说它只是梯度计算部分。
+- 反向传播常被口语化地等同于“training 神经网络”，但严格说它只是梯度计算部分。
 
 ## 参见
 
@@ -435,11 +428,11 @@ for batch in data:
 
 ## 阅读更多
 
-下一步建议读 [GPT 是什么？直观讲解 Transformer](gpt-transformer.md)。Transformer 的 [training](https://www.aihero.dev/ai-coding-dictionary/training) 依然依赖反向传播，但它的 [model](https://www.aihero.dev/ai-coding-dictionary/model) 结构会把注意力、残差连接、LayerNorm 和 MLP 组合起来。
+下一步建议读 [GPT 是什么？直观讲解 Transformer](gpt-transformer.md)。Transformer 的 Training 依然依赖反向传播，但它的 Model 结构会把注意力、残差连接、LayerNorm 和 MLP 组合起来。
 
 ## 小结
 
 - 反向传播是链式法则在计算图上的实现。
 - 梯度是“损失对参数的敏感度”。
 - `backward()` 后，梯度保存在参数的 `.grad` 里。
-- 梯度默认会累加，所以 [training](https://www.aihero.dev/ai-coding-dictionary/training) 循环里要清空梯度。
+- 梯度默认会累加，所以 Training 循环里要清空梯度。
