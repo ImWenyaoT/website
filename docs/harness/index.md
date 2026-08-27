@@ -48,6 +48,79 @@ flowchart TB
 
 ---
 
+---
+
+## 运行时状态机：Agent 循环的微观流转
+
+一个工业级 Coding Harness 的核心在于**将不确定的 Model 推理包裹在确定性的有限状态机（FSM）中**：
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle: 等待用户输入 (Task)
+    Idle --> ContextAssembly: 组装 Prompt (注入 Rules/Tools/历史)
+    
+    ContextAssembly --> ModelInference: 流式调用 Model (Messages API)
+    state ModelInference {
+        [*] --> Thinking: 产生思考流 (Thinking Block)
+        Thinking --> TokenYield: 产生正文与决策
+        TokenYield --> [*]
+    }
+
+    ModelInference --> DecisionBranch: 检查是否生成 Tool Call
+    
+    DecisionBranch --> Completed: 无 Tool Call / 任务完成
+    Completed --> Idle: 呈现最终结论
+
+    DecisionBranch --> SecurityGuard: 检测到 Tool Call
+    state SecurityGuard {
+        [*] --> ASTCheck: 语法树解析 (Tree-sitter)
+        ASTCheck --> HumanApproval: 命中敏感指令?
+        HumanApproval --> SandboxExec: 人类确认通过
+        ASTCheck --> SandboxExec: 安全只读指令自动放行
+        SandboxExec --> [*]
+    }
+
+    SecurityGuard --> ToolExecution: 在沙箱中执行受控 Tool
+    ToolExecution --> ObservationFilter: 获取 stdout / stderr
+    
+    state ObservationFilter {
+        [*] --> BoundedTruncation: 观察结果硬截断
+        BoundedTruncation --> ErrorAsState: 错误转为 <tool_use_error>
+        ErrorAsState --> [*]
+    }
+
+    ObservationFilter --> ContextAssembly: 回填消息队列，推进下一 Turn
+```
+
+---
+
+## 内存与上下文：KV Cache 前缀保护模型
+
+在大 Model 交互中，Context 的编排直接决定了系统的成本与时延。Harness 必须像操作系统管理内存页一样管理 Token 窗口：
+
+```mermaid
+flowchart TD
+    subgraph ContextWindow["Context 窗口结构与 Cache 命中机制"]
+        direction TB
+        subgraph CachedPrefix["稳定前缀区 (100% 命中 KV Cache · 极低成本与延迟)"]
+            P1["1. 系统提示词 (System Prompt)"]
+            P2["2. 工具集定义 (Tool Schemas / ACI)"]
+            P3["3. 仓库全局规约 (CLAUDE.md / AGENTS.md)"]
+        end
+
+        subgraph DynamicHistory["动态历史区 (滑动窗口与微压缩)"]
+            H1["4. 用户原始任务 (Task)"]
+            H2["5. 往轮思考流与工具调用历史 (Turn History)"]
+            H3["6. 最新观察反馈 (Bounded Observations)"]
+        end
+    end
+
+    CachedPrefix -->|"保持前缀字节不变"| CacheHit["🚀 KV Cache 持续命中"]
+    DynamicHistory -->|"超出预算时触发"| Truncation["✂️ 多级渐进截断与折叠"]
+```
+
+---
+
 ## Harness 设计的五项基本法则
 
 | 法则 | 核心内涵 | 典型反模式 |

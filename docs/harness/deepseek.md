@@ -48,6 +48,17 @@ DeepSeek-Harness 采用基于 Python AsyncIO 的自动化流水线：
 - **编辑重构阶段**：执行文件修改与静态语法预体检。
 - **验证收敛阶段**：重新运行测试，根据 exit code 确定是否收敛退出。
 
+```mermaid
+flowchart LR
+    Start["收到缺陷 Issue"] --> Locate["1. 搜索与测试复现<br/>(pytest / rg)"]
+    Locate --> Patch["2. 局部代码改写<br/>(Heredoc / Base64)"]
+    Patch --> Precheck["3. 语法预体检<br/>(py_compile)"]
+    Precheck -->|"语法错误"| Fix["自纠修补"] --> Patch
+    Precheck -->|"语法通过"| Test["4. 沙箱执行回归测试<br/>(pytest)"]
+    Test -->|"测试挂了"| Analyze["分析报错日志"] --> Patch
+    Test -->|"测试全绿"| Pass["🎉 导出 Git Diff 补丁并收敛"]
+```
+
 ### 1.3 input 拼接与 Prompt 适配
 
 #### 如何适配通用 Chat Completions 接口
@@ -58,7 +69,18 @@ DeepSeek-Harness 采用基于 Python AsyncIO 的自动化流水线：
 
 #### 如何处理参数类型漂移与容错校验
 
-引入双段 Pydantic 容错解析机制，对微小的字段缺失或类型溢出提供默认值修补，大幅降低因格式漂移导致的崩溃。
+引入双段 Pydantic 容错解析机制，对微小的字段缺失或类型溢出提供默认值修补，大幅降低因格式漂移导致的崩溃：
+
+```mermaid
+flowchart TD
+    Raw["Model 返回原始 JSON Tool 参数"] --> Phase1["第一段：Pydantic 宽松模式 (Loose Model)"]
+    Phase1 --> Check{"是否缺少必需字段 / 类型偏差?"}
+    Check -->|"轻微偏差"| AutoFix["自动填充安全默认值 / 类型强转"]
+    Check -->|"严重损坏"| FailBack["封装为错误信息回传 Model 自纠"]
+    Check -->|"格式完好"| Strict["第二段：严格业务模型 (Strict Model)"]
+    AutoFix --> Strict
+    Strict --> Exec["交付沙箱安全执行"]
+```
 
 ---
 
@@ -125,7 +147,23 @@ sequenceDiagram
 
 ### 2.3 基本 file I/O（读、写、搜）
 
-对于单文件或小模块编辑，Model 可直接在沙箱内使用标准的 Shell Heredoc 语法覆盖或利用 `patch` 局部修改。这种方式对任何支持标准终端的 LLM 均具有 100% 的通用性。
+对于单文件或小模块编辑，Model 可直接在沙箱内使用标准的 Shell Heredoc 语法覆盖或利用 `patch` 局部修改。这种方式对任何支持标准终端的 LLM 均具有 100% 的通用性：
+
+```mermaid
+flowchart TB
+    subgraph ReadSearch["读与搜：通用 Shell 组合"]
+        R1["代码定位：rg -n --hidden 'pattern'"]
+        R2["内容审阅：cat -n filepath / head -n 50"]
+    end
+
+    subgraph SafeWrite["写与改：Base64 管道与 Heredoc"]
+        W1["全量安全写入：printf %s 'base64...' | base64 -d > path"]
+        W2["局部增量修补：patch -p1 < diff.patch 或 cat << 'EOF' > path"]
+    end
+
+    ReadSearch -->|"定位缺陷行"| SafeWrite
+    SafeWrite -->|"落盘"| Disk["工作区源码文件"]
+```
 
 ---
 
