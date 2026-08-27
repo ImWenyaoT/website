@@ -26,7 +26,11 @@ flowchart TB
 
 ---
 
-## 1. 核心挑战：开源 Model 在 Coding Harness 上的四大痛点
+## 1. 核心功能
+
+### 1.1 核心挑战与痛点剖析
+
+开源大 Model 在对接工业级 Coding Harness 时主要面临以下四大挑战：
 
 | 痛点场景 | 典型失效表现 | 传统闭源 Harness 的脆弱点 | DeepSeek-Harness 应对方案 |
 | :--- | :--- | :--- | :--- |
@@ -35,26 +39,36 @@ flowchart TB
 | **3. 沙箱环境隔离盲区** | 纯隔离沙箱由于 PATH 被系统级净化，无法调用宿主解释器环境。 | 默认隔离环境缺失项目所需的特定依赖与工具链。 | **Manifest 动态 PATH 注入**：将宿主解释器目录显式透传进沙箱环境变量。 |
 | **4. 参数类型幻觉与漂移** | Tool 参数类型微小不匹配或生成多余字段导致请求校验失败。 | 弱 Model 容易在复杂嵌套 JSON Schema 中产生细微格式错误。 | **双段 Pydantic 宽松校验 + 自纠回填机制**。 |
 
+### 1.2 loop 和流程控制
+
+#### 如何构建稳定的自动化修复循环
+
+DeepSeek-Harness 采用基于 Python AsyncIO 的自动化流水线：
+- **缺陷定位阶段**：引导 Model 执行测试或代码搜索，定位错误原因。
+- **编辑重构阶段**：执行文件修改与静态语法预体检。
+- **验证收敛阶段**：重新运行测试，根据 exit code 确定是否收敛退出。
+
+### 1.3 input 拼接与 Prompt 适配
+
+#### 如何适配通用 Chat Completions 接口
+
+面向支持 OpenAI API 标准的开源端点，构造结构精简的系统 Prompt，重点明确 Tool Calling 格式约束与终端命令输出规范，不假设服务端具备专有扩展。
+
+### 1.4 output parser
+
+#### 如何处理参数类型漂移与容错校验
+
+引入双段 Pydantic 容错解析机制，对微小的字段缺失或类型溢出提供默认值修补，大幅降低因格式漂移导致的崩溃。
+
 ---
 
-## 2. 架构设计：极简通用的沙箱与工具体系
+## 2. tool calling
 
-### 2.1 抛弃专用补丁，采用通用 Shell 驱动
+### 2.1 terminal 执行
 
-在 Python SDK 与 OpenAI Agents 体系中，`Filesystem().apply_patch` 属于服务端 Hosted Grammar 工具，Chat Completions 端点会直接抛出拒绝异常。DeepSeek-Harness 采取了**「以通用 Shell 为核心」**的极简抽象：
+#### 如何控制 sandbox 环境
 
-```python
-def seed_command(path: str, content: str) -> str:
-    """使用 Base64 编码构造无转义歧义的文件写入命令。"""
-    b64 = b64encode(content.encode("utf-8")).decode("ascii")
-    return f"printf %s '{b64}' | base64 -d > {path}"
-```
-
-对于单文件或小模块编辑，Model 可直接在沙箱内使用经典的 Shell Heredoc 语法进行覆盖或利用 `sed/patch` 局部修改。这种方式对任何支持标准终端的 LLM 均具有 100% 的通用性。
-
-### 2.2 隔离工作区与环境透传
-
-为保证代码执行不污染真实工作区，Harness 将每一次运行隔离在临时目录：
+为保证代码执行不污染真实工作区，Harness 将每一次运行隔离在临时目录，并通过 Manifest 动态注入 PATH：
 
 ```mermaid
 flowchart LR
@@ -71,9 +85,20 @@ def sandbox_manifest() -> Manifest:
     return Manifest(environment=Environment(value={"PATH": path}))
 ```
 
----
+#### 如何安全执行 Shell 脚本
 
-## 3. 护栏体系：语法预检与自纠回路
+在 Python SDK 与 OpenAI Agents 体系中，`Filesystem().apply_patch` 属于服务端 Hosted Grammar 工具，开源端点无法支持。DeepSeek-Harness 采取**「以通用 Shell 为核心」**的极简抽象：
+
+```python
+def seed_command(path: str, content: str) -> str:
+    """使用 Base64 编码构造无转义歧义的文件写入命令。"""
+    b64 = b64encode(content.encode("utf-8")).decode("ascii")
+    return f"printf %s '{b64}' | base64 -d > {path}"
+```
+
+### 2.2 静态语法预检与自纠
+
+#### 如何利用 py_compile 降低失败轮次
 
 在 Model 写入 Python 文件后、正式触发测试前，Harness 提供了一道轻量级的**静态语法预体检**：
 
@@ -98,9 +123,13 @@ sequenceDiagram
 
 这种本地轻量护栏能够大幅减少 Model 因为简单漏括号、缩进错误而在“跑测试 → 报错 → 重改”之间消耗的多余 Turn。
 
+### 2.3 基本 file I/O（读、写、搜）
+
+对于单文件或小模块编辑，Model 可直接在沙箱内使用标准的 Shell Heredoc 语法覆盖或利用 `patch` 局部修改。这种方式对任何支持标准终端的 LLM 均具有 100% 的通用性。
+
 ---
 
-## 4. 工业级对照：Claude Code vs DeepSeek-Harness
+## 3. 与 Claude Code 的对照
 
 | 对比维度 | Claude Code (专有工业级) | DeepSeek-Harness (开源通用级) |
 | :--- | :--- | :--- |
@@ -109,6 +138,13 @@ sequenceDiagram
 | **文件编辑哲学** | 厚契约专用 Tool（必须先 Read，`old_string` 唯一匹配替换） | 通用 Shell 驱动（Heredoc / Base64 / Patch 覆盖） |
 | **安全机制** | 客户端 AST 语法树深度检测 + 内核级 Seatbelt 沙箱 | 临时目录隔离沙箱 + 环境变量净化 |
 | **交互模式** | 用户交互式驱动（人机协同、实时审批） | 自动化管道（给定 Issue 自动搜索/修复/跑测试至通过） |
+
+---
+
+## 参见
+
+- 配套体系分析：[Claude Code 架构深度解析](claude-code.md)。
+- 理论与架构总览：[Harness 核心篇](index.md)。
 
 
 

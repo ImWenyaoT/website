@@ -93,7 +93,7 @@ def test_visual_and_pdf_parity() -> None:
     """教学图、Mermaid 与论文 PDF 数量必须保持迁移前的读者能力。"""
     sources = "\n".join((DOCS / path).read_text(encoding="utf-8") for path in PUBLISHED_PAGES)
     assert sources.count('class="dl-figure') == 11
-    assert sources.count("```mermaid") == 21
+    assert sources.count("```mermaid") == 28
     assert sources.count('class="pdf-viewer"') == 3
     assert {path.name for path in (DOCS / "paper").glob("*.pdf")} == {
         "attention.pdf",
