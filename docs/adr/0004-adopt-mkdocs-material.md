@@ -1,5 +1,7 @@
 # Adopt MkDocs Material as the publishing platform
 
+> Superseded by [0005: Adopt Astro and Starlight](./0005-adopt-astro-starlight.md) on 2026-09-26.
+
 Use MkDocs Material with uv as the website's publishing platform. The site is a static,
 Markdown-centered Chinese knowledge base; native documentation navigation, search, Tags and strict
 link validation provide the required reader capabilities with less framework-specific code than
