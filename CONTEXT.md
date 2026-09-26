@@ -29,7 +29,7 @@ A platform change that preserves the current published content, URLs, Curated ca
 _Avoid_: Rollback, rewrite, restore
 
 **Visual continuity**:
-Preservation of the site's restrained HIG-informed design principles, emphasis, teaching semantics, and information density while using Material's native Site chrome.
+Preservation of the site's restrained HIG-informed design principles, emphasis, teaching semantics, and information density while using Starlight's default Site chrome.
 _Avoid_: Pixel parity, theme cloning, DOM parity
 
 **Deep learning figure**:
