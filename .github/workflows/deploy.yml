@@ -1,8 +1,9 @@
-name: Deploy site to GitHub Pages
+name: CI
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -10,9 +11,11 @@ permissions:
   pages: write
   id-token: write
 
+# Pull requests get their own queue and cancel superseded runs.
+# Pushes to main keep the existing Pages group and are not cancelled.
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: ${{ github.event_name == 'pull_request' && format('ci-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -33,11 +36,13 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
