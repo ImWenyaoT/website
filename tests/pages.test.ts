@@ -82,6 +82,10 @@ describe("content css", () => {
 
   it("maps teaching styles onto Starlight tokens without custom motion", () => {
     expect(css).toContain("var(--sl-color-accent)");
+    expect(css).toContain("content-visibility: auto");
+    expect(css).toContain("contain-intrinsic-size:");
+    expect(css).toContain("--sl-font:");
+    expect(css).toContain("PingFang SC");
     expect(css).not.toContain("--md-");
     expect(css).not.toContain("--ds-");
     expect(css).not.toContain("transition:");
@@ -103,6 +107,7 @@ describe("astro config", () => {
     expect(config).toContain('site: "https://imwenyaot.github.io"');
     expect(config).toContain('base: "/website"');
     expect(config).toContain('trailingSlash: "always"');
+    expect(config).toContain("prefetchAll: true");
     expect(relative(".", join("src", "styles", "content.css"))).toBe(
       "src/styles/content.css",
     );

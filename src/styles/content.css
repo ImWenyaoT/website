@@ -1,11 +1,43 @@
-/* 教学图、Mermaid 与论文 PDF 的最小内容样式。
- * 站点结构、主题、导航、控件、排版和动效均交由 Starlight 管理。 */
+/* 内容阅读面与教学媒体样式。
+ * 导航外壳仍交 Starlight；此处只用 --sl-* token 提升中文阅读节奏与重块性能。 */
 
 :root {
   --dl-blue: var(--sl-color-accent);
   --dl-green: 28 193 53;
   --dl-orange: 243 137 0;
   --dl-gray: 130 130 135;
+
+  /* 平台原生无衬线：不拉远程字体，也不用同质化的通用网页字体栈。 */
+  --sl-font: "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI",
+    "Noto Sans SC", sans-serif;
+  --sl-font-mono: "SF Mono", ui-monospace, "Cascadia Code", "Menlo", "Consolas", monospace;
+  --sl-line-height: 1.75;
+  --sl-line-height-headings: 1.25;
+  --sl-content-width: 46rem;
+}
+
+/* 正文：更稳的中英混排与标题折行。 */
+.sl-markdown-content {
+  text-wrap: pretty;
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4) {
+  text-wrap: balance;
+  letter-spacing: -0.012em;
+}
+
+.sl-markdown-content :is(p, li) {
+  text-autospace: normal;
+}
+
+.sl-markdown-content hr {
+  border: 0;
+  border-top: 1px solid var(--sl-color-gray-5);
+  margin-block: 2rem;
+}
+
+.sl-markdown-content a:not(.sl-link-button) {
+  text-underline-offset: 0.18em;
 }
 
 /* 深度学习教学图。语义色同时叠加线型，避免只靠颜色表达。 */
@@ -15,14 +47,17 @@
   width: 100%;
   max-width: 760px;
   height: auto;
-  margin: 1.1rem auto 1.35rem;
+  margin: 1.25rem auto 1.5rem;
   border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.4rem;
+  border-radius: 0.35rem;
   background: var(--sl-color-bg);
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 280px;
 }
 
 .dl-compact-figure {
   max-width: 520px;
+  contain-intrinsic-size: auto none auto 200px;
 }
 
 .dl-box,
@@ -147,18 +182,20 @@
 /* 论文原文 PDF 内嵌。 */
 .pdf-viewer {
   overflow: hidden;
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
   border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.5rem;
+  border-radius: 0.35rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 640px;
 }
 
 .pdf-bar {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.55rem 0.85rem;
   border-bottom: 1px solid var(--sl-color-gray-5);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
 }
 
 .pdf-title {
@@ -183,18 +220,20 @@
 
 .pdf-fallback {
   margin: 0;
-  padding: 0.5rem 0.75rem;
+  padding: 0.55rem 0.85rem;
   color: var(--sl-color-gray-3);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
 }
 
-/* Mermaid 只做正文尺寸适配，渲染由客户端插件负责。 */
+/* Mermaid：尺寸 + 屏外延后渲染（含 intrinsic 占位，避免滚动跳动）。 */
 .mermaid {
   box-sizing: border-box;
   width: 100%;
   max-width: 760px;
-  margin: 1rem auto 1.25rem;
+  margin: 1.25rem auto 1.5rem;
   text-align: center;
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 360px;
 }
 
 .mermaid svg {
@@ -210,11 +249,23 @@
     display: none;
   }
 
+  .pdf-viewer {
+    contain-intrinsic-size: auto none auto 5rem;
+  }
+
   .dl-label {
     font-size: 22px;
   }
 
   .dl-small {
     font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-figure,
+  .pdf-viewer,
+  .mermaid {
+    content-visibility: visible;
   }
 }
