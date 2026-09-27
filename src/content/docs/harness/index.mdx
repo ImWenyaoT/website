@@ -1,20 +1,18 @@
 ---
-title: "Harness 核心篇"
-description: "AI Coding Agent 的脚手架与系统设计全景：从 Agent Loop、ACI 接口、Context 工程到工业级实战。"
+title: "Harness"
+description: "Coding Agent 的脚手架：Agent Loop、ACI、Context 与工业级实战。"
 ---
 
-在大语言 Model（LLM）能力日益通用的今天，构建一个能够自主完成真实复杂任务的 Coding Agent，其核心工程挑战已经从 Model 本身转移到了包裹 Model 的脚手架——**Harness**。
+当 LLM 足够通用，Coding Agent 的难点往往不在 Model，而在包住它的脚手架——**Harness**。
 
 ```text
 Agent = f(Model, Harness)
 ```
 
-- **Model** 负责局部的模式匹配、推理与决策，它无法直接读写文件、执行系统进程或主动感知时间。
-- **Harness** 负责驱动主循环、向 Model 暴露安全的计算机接口（ACI）、管理 Context 与 KV Cache 预算、施加沙箱隔离以及提供测试回归闭环。
+- **Model**：局部的模式匹配、推理与决策；它不能直接读写文件、起进程或感知真实时间。
+- **Harness**：驱动主循环，暴露有界的计算机接口（ACI），管理 Context / KV Cache，做沙箱隔离，并接上测试与回归。
 
-一个 Agent 在工业级场景下的可靠性、确定性与安全性，几乎全部取决于 Harness 的架构设计。
-
----
+工业场景里，可靠性与安全边界，大多落在 Harness 的设计上。
 
 ## 体系全景
 
@@ -36,22 +34,18 @@ flowchart TB
 
 ---
 
-## 核心章节导航
+## 阅读顺序
 
-建议按照 **「学术奠基 → 接口理论 → 专有工业级 → 开源通用级」** 的进阶顺序阅读：
+建议按 **学术奠基 → 接口理论 → 工业实现 → 开源适配** 读：
 
-1. **[ReAct 原始论文精读](/papers/react-paper/)**：Reasoning 与 Acting 的交织循环范式，理解 Agent Loop 的理论原点。
-2. **[SWE-agent 原始论文精读](/papers/swe-agent-paper/)**：Agent-Computer Interface (ACI) 的提出与有界接口设计准则。
-3. **[Claude Code 架构深度解析](/harness/claude-code/)**：Anthropic 官方编码 Agent 的客户端控制哲学——基于 Ink 的流式响应、Tree-sitter AST 语法树危险拦截、单层用后即抛 Subagent 与多级 Cache 友好压缩。
-4. **[DeepSeek-Harness 实战与适配](/harness/deepseek/)**：针对开源大 Model（DeepSeek-V3/R1）的生产级 Harness 实践——弱推理 Model 的 Tool Calling 护栏、Unix Local 隔离沙箱、Shell 驱动与真实 SWE-bench 评测闭环。
+1. **[ReAct 原文](/papers/react-paper/)**：Reasoning 与 Acting 交织，Agent Loop 的理论原点。
+2. **[SWE-agent 原文](/papers/swe-agent-paper/)**：Agent-Computer Interface（ACI）与有界接口。
+3. **[Claude Code 架构](/harness/claude-code/)**：流式响应、AST 危险拦截、Subagent 与 Cache 友好压缩。
+4. **[DeepSeek-Harness 实战](/harness/deepseek/)**：开源大 Model（DeepSeek-V3/R1）上的生产级实践——Tool Calling 护栏、本地沙箱、Shell 驱动与 SWE-bench 回归。
 
----
+## 运行时状态机
 
----
-
-## 运行时状态机：Agent 循环的微观流转
-
-一个工业级 Coding Harness 的核心在于**将不确定的 Model 推理包裹在确定性的有限状态机（FSM）中**：
+工业级 Coding Harness 的关键，是把不确定的 Model 推理收进确定性的有限状态机：
 
 ```mermaid
 stateDiagram-v2
@@ -93,9 +87,9 @@ stateDiagram-v2
 
 ---
 
-## 内存与上下文：KV Cache 前缀保护模型
+## 内存与上下文
 
-在大 Model 交互中，Context 的编排直接决定了系统的成本与时延。Harness 必须像操作系统管理内存页一样管理 Token 窗口：
+Context 编排直接决定成本与时延。Harness 要像 OS 管内存页一样管 Token 窗口：
 
 ```mermaid
 flowchart TD
@@ -114,11 +108,9 @@ flowchart TD
         end
     end
 
-    CachedPrefix -->|"保持前缀字节不变"| CacheHit["🚀 KV Cache 持续命中"]
-    DynamicHistory -->|"超出预算时触发"| Truncation["✂️ 多级渐进截断与折叠"]
+    CachedPrefix -->|"保持前缀字节不变"| CacheHit["KV Cache 持续命中"]
+    DynamicHistory -->|"超出预算时触发"| Truncation["多级渐进截断与折叠"]
 ```
-
----
 
 ## Harness 设计的五项基本法则
 

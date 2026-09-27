@@ -9,13 +9,17 @@ export default defineConfig({
   site: "https://imwenyaot.github.io",
   base: "/website",
   trailingSlash: "always",
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport",
+  },
   build: {
     format: "directory",
   },
   integrations: [
     starlight({
       title: 'Tian "Edward" Wenyao',
-      description: "Model、Harness 与更多学习笔记。",
+      description: "Model 与 Harness 的结构化笔记：从原理到可验证的工程实践。",
       defaultLocale: "root",
       locales: {
         root: {

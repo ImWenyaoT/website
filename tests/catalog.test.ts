@@ -21,15 +21,20 @@ describe("catalog", () => {
     }
   });
 
-  it("puts papers under Harness without inventing a Learn URL", () => {
-    const learn = sidebar.find((item) => item.label === "Learn");
-    expect(learn && "items" in learn).toBe(true);
-    if (!learn || !("items" in learn)) {
+  it("keeps Model and Harness as top-level tracks without a Learn shell", () => {
+    const labels = sidebar.map((item) => item.label);
+    expect(labels).toEqual(["Home", "Model", "Harness", "About"]);
+
+    const model = sidebar.find((item) => item.label === "Model");
+    expect(model && "items" in model).toBe(true);
+    if (!model || !("items" in model)) {
       return;
     }
-    const labels = learn.items.map((item) => item.label);
-    expect(labels).toEqual(["Model", "Harness"]);
-    const harness = learn.items.find((item) => item.label === "Harness");
+    expect(model.items[0]).toEqual({ label: "导读", link: "/model/" });
+    const networks = model.items.find((item) => item.label === "Neural Networks");
+    expect(networks && "items" in networks && networks.collapsed).toBe(true);
+
+    const harness = sidebar.find((item) => item.label === "Harness");
     expect(harness && "items" in harness).toBe(true);
     if (!harness || !("items" in harness)) {
       return;
